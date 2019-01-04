@@ -1,12 +1,14 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <router-link class="navbar-brand" to="/">Home</router-link>
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <router-link class="nav-link" to="/blogs">Blogs</router-link>
-      </li>
-    </ul>
-  </nav>
+  <header class="page-header">
+    <div class="page-header__items">
+      <div class="page-header__brand">
+        <span>Home</span>
+      </div>
+      <ul class="page-header__links">
+        <li class="page-header__link">Blogs</li>
+      </ul>
+    </div>
+  </header>
 </template>
 
 <script>
@@ -16,7 +18,29 @@ export default {};
 </script>
 
 <style>
-nav {
-  height: 90;
+.page-header {
+  height: 64px;
+  background: lightcoral;
+}
+
+.page-header__items {
+  height: 100%;
+}
+
+.page-header__brand {
+  font-size: 24px;
+  padding: 0px 24px;
+  display: inline-block;
+  vertical-align: middle;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 700;
+}
+.page-header__brand span {
+}
+
+.page-header__links {
+  list-style: none;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

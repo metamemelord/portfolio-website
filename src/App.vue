@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div id="app">
     <app-header/>
     <router-view></router-view>
     <app-footer/>
@@ -22,4 +22,12 @@ export default {
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+#app {
+  width: 65%;
+  height: 100vh;
+  margin: 0px auto;
+}
 </style>
