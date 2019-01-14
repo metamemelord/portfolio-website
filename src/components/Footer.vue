@@ -1,23 +1,41 @@
 <template>
   <footer class="page-footer">
-    <div class="page-footer__container">
-      <span class="page-footer__text">Made with ❤ using Vue.js | © 2019 Gaurav Saini</span>
-    </div>
+    <span class="page-footer__item page-footer__text-technologies">Made with
+      <font color="red">❤</font> using Vue.js
+    </span>
+    <span class="page-footer__item page-footer__text-seperator">|</span>
+    <span class="page-footer__item page-footer__text-copyright">© 2019 Gaurav Saini</span>
   </footer>
 </template>
 
 <style>
 .page-footer {
+  position: fixed;
+  width: 100%;
   bottom: 0;
-  background: yellow;
-  height: 48px;
+  display: flex;
+  flex-flow: column;
+  background: #000;
+  justify-content: center;
+  align-items: center;
 }
 
-.page-footer__container {
-  margin: 0px auto;
+.page-footer__item {
+  color: white;
+  padding: 0.3rem;
 }
-.page-footer__text {
-  display: inline-block;
-  vertical-align: middle;
+
+.page-footer__text-seperator {
+  display: none;
+}
+
+@media screen and (min-width: 550px) {
+  .page-footer {
+    flex-flow: row;
+  }
+
+  .page-footer__text-seperator {
+    display: block;
+  }
 }
 </style>
