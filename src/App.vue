@@ -22,6 +22,7 @@ export default {
     appFooter: Footer
   },
   created() {
+    this.$store.dispatch("initPosts");
     var dt = true,
       prev = -1;
     setInterval(() => {
@@ -61,6 +62,6 @@ body {
 }
 
 .active {
-  color: #228080 !important;
+  color: rgb(255, 161, 38) !important;
 }
 </style>

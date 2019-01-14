@@ -35,7 +35,7 @@ main {
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  margin: 0.6rem;
+  margin: 1rem;
   border-radius: 0.3rem;
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.15);
   transition: 0.2s all;
@@ -76,7 +76,7 @@ main {
 }
 
 .main__intro-information i {
-  color: #008080;
+  color: rgb(255, 161, 38);
   font-size: 2rem;
 }
 
@@ -87,23 +87,20 @@ main {
   .main__intro {
     flex-direction: row;
     max-width: 70rem;
-    margin: 0.6rem;
+    margin: 1rem;
   }
   .main__intro-image {
     margin: 2rem;
     height: 25vmin;
   }
-  /* .main__intro-content {
-    text-align: left;
-  } */
   .main__intro-content h1 {
     margin-top: inherit;
   }
 }
 
-@media screen and (min-width: 71rem) {
+@media screen and (min-width: 70rem) {
   .main__intro {
-    margin: 0.6rem auto;
+    margin: 1rem auto;
   }
 }
 </style>

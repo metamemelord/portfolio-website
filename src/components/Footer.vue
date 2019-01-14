@@ -1,6 +1,7 @@
 <template>
   <footer class="page-footer">
-    <span class="page-footer__item page-footer__text-technologies">Made with
+    <span class="page-footer__item page-footer__text-technologies">
+      Made with
       <font color="red">❤</font> using Vue.js
     </span>
     <span class="page-footer__item page-footer__text-seperator">|</span>
@@ -10,7 +11,6 @@
 
 <style>
 .page-footer {
-  position: fixed;
   width: 100%;
   bottom: 0;
   display: flex;

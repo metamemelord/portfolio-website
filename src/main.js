@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Vuex from "vuex";
 import VueResource from "vue-resource";
 import App from "./App.vue";
-import store from "./store";
+import store from "./store/store";
 import router from "./routes";
 
 Vue.use(VueResource);
