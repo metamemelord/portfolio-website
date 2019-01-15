@@ -27,7 +27,7 @@ export default {
       prev = -1;
     setInterval(() => {
       const hours = new Date().getHours();
-      dt = hours > 6 && hours < 20;
+      dt = hours > this.$store.state.day && hours < this.$store.state.night;
       if (prev != dt) {
         if (dt) {
           document.getElementsByTagName("html")[0].className = "";
@@ -57,11 +57,59 @@ html {
   color: #eee;
 }
 
+.light-a {
+  color: #333;
+}
+
+.dark-a {
+  color: #eee;
+}
+
 body {
   margin: 0;
 }
 
 .active {
   color: rgb(255, 161, 38) !important;
+}
+
+.float-animation {
+  animation: float-slow 10s linear infinite;
+}
+
+@keyframes float-slow {
+  0% {
+    transform: translateY(0);
+  }
+  10% {
+    transform: translateX(-6px);
+  }
+  20% {
+    transform: translateY(-6px);
+  }
+  30% {
+    transform: translateX(4px) translateY(2px);
+  }
+  40% {
+    transform: translateX(-2px) translateY(6px);
+  }
+  50% {
+    transform: translateX(2px) translateY(-2px);
+  }
+  60% {
+    transform: translateX(+4px) translateY(-1px);
+  }
+  70% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(+4px) translateY(+1px);
+  }
+  90% {
+    transform: translateX(-4px) translateY(+2px);
+  }
+  100% {
+    transform: translateX(+4px) translateY(-2px);
+  }
 }
 </style>
