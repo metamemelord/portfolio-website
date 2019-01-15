@@ -34,7 +34,7 @@ export default {
   padding: 1rem;
   margin: 1rem;
   border-radius: 0.3rem;
-  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 7px 4px rgba(0, 0, 0, 0.15);
   transition: 0.2s all;
   cursor: pointer;
 }

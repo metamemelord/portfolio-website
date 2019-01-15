@@ -2,7 +2,17 @@
   <div class="blog__post" :id="getPost.id">
     <h1>{{getPost.title}}</h1>
     <h3 v-if="getPost.subtitle">{{getPost.subtitle}}</h3>
-    <h3>{{getPostDate}}</h3>
+    <h4>
+      {{getPostDate}} by
+      <font>
+        <a
+          :href="getPostAuthorContact"
+          style="color:rgb(255, 161, 38);text-decoration: none;"
+          @click.stop
+          target="blank"
+        >{{getPostAuthor}}</a>
+      </font>
+    </h4>
     <p></p>
     <div class="blog__post-tags" v-if="getPost.tags">
       <b>Tags:</b>
@@ -12,20 +22,7 @@
 </template>
 
 <script>
-const months = {
-  0: "Janurary",
-  1: "February",
-  2: "March",
-  3: "April",
-  4: "May",
-  5: "June",
-  6: "July",
-  7: "August",
-  8: "September",
-  9: "October",
-  10: "November",
-  11: "December"
-};
+const moment = require("moment");
 export default {
   props: ["postId"],
   computed: {
@@ -33,10 +30,19 @@ export default {
       return this.$store.getters.blogPostById(this.postId);
     },
     getPostDate() {
-      var postDate = new Date(this.getPost.date);
-      return `${
-        months[postDate.getMonth()]
-      } ${postDate.getDay()}, ${postDate.getFullYear()}`;
+      var postDate = new moment(this.getPost.date);
+      return postDate.format("MMMM DD, YYYY");
+    },
+    getPostAuthor() {
+      return this.getPost.author ? this.getPost.author : "metamemelord";
+    },
+    getPostAuthorContact() {
+      const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return this.getPost.author_contact
+        ? emailPattern.test(this.getPost.author_contact)
+          ? `mailto:${this.getPost.author_contact}`
+          : this.getPost.author_contact
+        : "mailto:me@metamemelord.com";
     }
   },
   created() {
@@ -63,7 +69,8 @@ export default {
   text-align: center;
 }
 
-.blog__post > h3 {
+.blog__post > h3,
+.blog__post > h4 {
   margin: 0.2rem 0;
   text-align: center;
 }

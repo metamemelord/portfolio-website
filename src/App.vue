@@ -53,7 +53,7 @@ html {
 }
 
 .dark {
-  background: #2e3342;
+  background: #262d41;
   color: #eee;
 }
 
