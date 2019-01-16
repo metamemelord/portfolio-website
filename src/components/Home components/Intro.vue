@@ -1,7 +1,7 @@
 <template>
   <div class="main__intro">
     <div class="main__intro-image-container">
-      <img class="main__intro-image" src="../../assets/DP.png" alt="Gaurav Saini">
+      <img class="main__intro-image" src="../../assets/DP-min.png" alt="Gaurav Saini">
     </div>
     <div class="main__intro-content">
       <h1>Gaurav Saini</h1>
