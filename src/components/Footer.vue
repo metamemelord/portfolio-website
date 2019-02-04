@@ -5,9 +5,19 @@
       <font color="red">❤</font> using Vue.js
     </span>
     <span class="page-footer__item page-footer__text-seperator">|</span>
-    <span class="page-footer__item page-footer__text-copyright">© 2019 Gaurav Saini</span>
+    <span class="page-footer__item page-footer__text-copyright">© {{year}} Gaurav Saini</span>
   </footer>
 </template>
+
+<script>
+export default {
+  computed: {
+    year() {
+      return new Date().getFullYear();
+    }
+  }
+};
+</script>
 
 <style>
 .page-footer {
