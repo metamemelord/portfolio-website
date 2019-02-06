@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import introComponent from "./Home components/Intro.vue";
-import linkedinComponent from "./Home components/Linkedin.vue";
-import githubComponent from "./Home components/Github.vue";
+import introComponent from "./Home components/Intro";
+import linkedinComponent from "./Home components/Linkedin";
+import githubComponent from "./Home components/Github/index";
 export default {
   components: {
     introComponent,
