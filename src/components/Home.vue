@@ -21,6 +21,7 @@ export default {
 
 <style>
 main {
+  margin-top: 5rem;
   max-width: 70rem;
   min-width: 20rem;
 }
@@ -28,6 +29,7 @@ main {
 @media screen and (min-width: 550px) {
   main {
     margin: 0 auto;
+    margin-top: 5rem;
   }
 }
 </style>

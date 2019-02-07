@@ -3,7 +3,7 @@
     <div class="github__label">
       <a href="https://github.com/metamemelord" target="blank">
         <img
-          src="../../../assets/Octocat.png"
+          src="../../../assets/Octocat-min.png"
           alt="Github octocat"
           v-infocus="'saturate-image float-animation'"
         >
@@ -23,9 +23,9 @@
       </template>
       <template v-else>
         <h1>Repositories</h1>
-        <project-card v-for="(repo, idx) in ownedRepos" :key="idx" :cardData="repo"></project-card>
+        <project-card v-for="repo in ownedRepos" :key="repo.name" :cardData="repo"></project-card>
         <h1>Forked</h1>
-        <project-card v-for="(repo, idx) in forkedRepos" :key="idx" :cardData="repo"></project-card>
+        <project-card v-for="repo in forkedRepos" :key="repo.name" :cardData="repo"></project-card>
       </template>
     </div>
   </div>
@@ -33,6 +33,7 @@
 
 <script>
 import projectCard from "./ProjectCard";
+import * as moment from "moment";
 export default {
   data() {
     return {
@@ -40,9 +41,11 @@ export default {
     };
   },
   methods: {
-    loadUsers: function() {
+    loadUsers() {
       this.$http
-        .get("http://api.github.com/users/metamemelord/repos")
+        .get(
+          "http://api.github.com/users/metamemelord/repos?access_token=6fe70954c9c7e243d0605bac7435ea7d3a6b225c"
+        )
         .then(function(responseData) {
           if (responseData.status == 200) {
             this.repos = responseData.body;
@@ -59,7 +62,15 @@ export default {
   },
   computed: {
     ownedRepos() {
-      return this.repos.filter(repo => !repo.fork);
+      let ownedRepos = this.repos.filter(repo => !repo.fork);
+      ownedRepos.sort((repo1, repo2) => {
+        let key1 = moment().diff(repo1.updated_at);
+        let key2 = moment().diff(repo2.updated_at);
+        if (key1 > key2) return 1;
+        if (key1 < key2) return -1;
+        return 0;
+      });
+      return ownedRepos;
     },
     forkedRepos() {
       return this.repos.filter(repo => repo.fork);
@@ -68,7 +79,7 @@ export default {
   created() {
     setTimeout(() => {
       this.loadUsers();
-    }, 200);
+    }, 500);
   }
 };
 </script>

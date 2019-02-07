@@ -43,6 +43,6 @@
 
 .linkedin__interests p {
   max-width: 90%;
-  margin: 1rem auto;
+  margin: 0.5rem auto !important;
 }
 </style>

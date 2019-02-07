@@ -19,16 +19,30 @@ export default {
   filters: {
     getLastUpdateTime(time) {
       let duration = moment.duration(moment().diff(moment(time)));
-      if (Math.floor(duration.asYears())) {
-        return `Updated on ${moment(time).format("MMM DD, YYYY")}`;
+      let durationFromMidnight = moment.duration(
+        moment().diff(moment(time).startOf("day"))
+      );
+      time = moment(time);
+      if (Math.floor(duration.asYears()) || time.year() !== moment().year()) {
+        return `Updated on ${time.format("MMM DD, YYYY")}`;
       } else if (Math.floor(duration.asMonths())) {
-        return `Updated ${Math.ceil(duration.asMonths())} months ago`;
+        if (time.year() === moment().year() || duration.asMonths() < 3) {
+          return `Updated on ${time.format("MMM DD")}`;
+        } else {
+          return `Updated ${Math.floor(duration.asMonths())} months ago`;
+        }
       } else if (Math.floor(duration.asDays())) {
-        return `Updated ${Math.ceil(duration.asDays())} days ago`;
+        if (Math.floor(duration.asDays()) > 1)
+          return `Updated ${Math.floor(
+            durationFromMidnight.asDays()
+          )} days ago`;
+        return `Updated yesterday`;
       } else if (Math.floor(duration.asHours())) {
         return `Updated ${Math.ceil(duration.asHours())} hours ago`;
       } else if (Math.floor(duration.asMinutes())) {
-        return `Updated ${Math.ceil(duration.asMinutes())} minutes ago`;
+        if (Math.floor(duration.asMinutes()) > 2)
+          return `Updated ${Math.floor(duration.asMinutes())} minutes ago`;
+        return `Updated 1 minute ago`;
       } else {
         return "Updated a few moments ago";
       }
@@ -70,6 +84,7 @@ export default {
   text-align: center;
   padding: 0.5rem;
   margin: 0.5rem;
+  color: white;
   background: rgb(255, 161, 38);
   border-radius: 3px;
   max-width: calc(33.33% - 1rem);

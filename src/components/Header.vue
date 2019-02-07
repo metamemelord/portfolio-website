@@ -1,5 +1,5 @@
 <template>
-  <header class="main-header">
+  <header class="main-header" :class="{'main-header__shadow': isAtTop}">
     <div class="main-header__wrapper">
       <div class="main-header__nav">
         <div class="main-header__item main-header__home">
@@ -26,15 +26,37 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
-export default {};
+export default {
+  data() {
+    return { position: 0 };
+  },
+  created() {
+    let vm = this;
+    window.addEventListener("scroll", function(event) {
+      vm.position = this.scrollY;
+    });
+  },
+  computed: {
+    isAtTop() {
+      return this.position > 20;
+    }
+  }
+};
 </script>
-
 <style>
 .main-header {
+  top: 0;
+  position: fixed;
+  z-index: 100000;
+  width: 100%;
+  min-width: 20rem;
   color: white;
   background: #333;
+  transition: 0.4s box-shadow ease-out;
+}
+
+.main-header__shadow {
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.35) !important;
 }
 
 .main-header__wrapper {
@@ -44,6 +66,7 @@ export default {};
   max-width: 70rem;
   margin: 0 auto;
 }
+
 .main-header__nav {
   display: flex;
   justify-content: center;

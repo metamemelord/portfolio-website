@@ -1,24 +1,21 @@
 <template>
   <div id="app">
     <app-header/>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
     <app-footer/>
   </div>
 </template>
 
 <script>
-import Homepage from "./components/Home.vue";
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
 
 export default {
   name: "app",
-  data() {
-    return {};
-  },
   components: {
     appHeader: Header,
-    homepage: Homepage,
     appFooter: Footer
   },
   created() {

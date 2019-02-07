@@ -2,25 +2,21 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 
-import Home from "./components/Home.vue";
-import Blogs from "./components/Blog components/Blogs.vue";
-import ErrorPage from "./components/404.vue";
-
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
 const routes = [
   {
     path: "/",
-    component: Home
+    component: () => import("./components/Home")
   },
   {
     path: "/blogs",
-    component: Blogs
+    component: () => import("./components/Blog components/Blogs")
   },
   {
     path: "*",
-    component: ErrorPage
+    component: () => import("./components/404")
   }
 ];
 
