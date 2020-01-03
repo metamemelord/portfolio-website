@@ -4,17 +4,23 @@
       <img class="main__intro-image" src="../../assets/DP-min.png" alt="Gaurav Saini">
     </div>
     <div class="main__intro-content">
-      <h1>Gaurav Saini</h1>
-      <p>I learn things by doing.</p>
-      <div class="main__intro-information">
-        <span>
-          <i class="fa fa-mobile"></i>
-          <span>+91-99994-97257</span>
-        </span>
-        <span>
-          <i class="fa fa-location-arrow"></i>
-          <span>Bangalore</span>
-        </span>
+      <div style="margin:auto">
+        <vue-typed-js :cursorChar="'__'" :loop="true" :strings="['Gaurav', 'Developer', 'Foodie', 'Geek']">
+          <h1 class="typing"></h1>
+        </vue-typed-js>
+      </div>
+      <div>
+        <p>I learn things by doing.</p>
+        <div class="main__intro-information">
+          <span>
+            <i class="fa fa-mobile"></i>
+            <span>+91-99994-97257</span>
+          </span>
+          <span>
+            <i class="fa fa-location-arrow"></i>
+            <span>Bangalore</span>
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -38,27 +44,39 @@
 
 .main__intro-image {
   margin: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   height: 40vmin;
   max-height: 20rem;
   min-height: 10rem;
 }
 
 .main__intro-content {
+  display: flex;
+  flex-flow: column;
   text-align: center;
+  justify-content: space-around;
   padding: 1rem;
   padding-top: 0;
   flex-grow: 1;
 }
 
-.main__intro-content > h1 {
+.main__intro-content > div {
+  height: 5.5rem;
+}
+
+.main__intro-content > div > p {
   margin-top: 0;
-  font-size: 3rem;
+}
+
+.main__intro-content h1 {
+  margin-top: 0;
+  font-size: 3rem !important;
 }
 
 .main__intro-information {
   display: flex;
   justify-content: center;
+  margin: 1rem;
 }
 
 .main__intro-information > span * {

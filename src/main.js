@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 import VueResource from "vue-resource";
+import VueTypedJs from 'vue-typed-js'
 import App from "./App.vue";
 import store from "./store/store";
 import router from "./routes";
@@ -9,6 +10,7 @@ import router from "./routes";
 Vue.use(VueResource);
 Vue.use(Vuex);
 Vue.use(VueRouter);
+Vue.use(VueTypedJs);
 
 Vue.directive("infocus", {
   isLiteral: true,

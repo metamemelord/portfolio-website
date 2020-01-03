@@ -1,27 +1,35 @@
 <template>
-  <div class="linkedin__timeline">
+  <div class="linkedin__timeline" v-if="experiences.length != 0">
     <h1 style="margin: 0">Timeline</h1>
     <div class="linkedin__timeline-items">
-      <div class="linkedin__timeline-item">
-        <div class="linkedin__timeline-point linkedin__timeline-point-current"></div>
+      <div class="linkedin__timeline-item" v-for="(experience, idx) in experiences" :key="experience._id" :id="experience._id">
+        <div class="linkedin__timeline-point" :class="{'linkedin__timeline-point-current':idx==0}"></div>
         <div class="linkedin__timeline-item-content">
-          <h2>Philips India</h2>
-          <h3>Software Engineer 1</h3>
-          <h4>July, 2018 - present</h4>
-        </div>
-      </div>
-      <div class="linkedin__timeline-item">
-        <div class="linkedin__timeline-point"></div>
-        <div class="linkedin__timeline-item-content">
-          <h2>Philips India</h2>
-          <h3>Project Trainee</h3>
-          <h4>Jan, 2018 - May, 2018</h4>
+          <h2>{{experience.company}}</h2>
+          <h3>{{experience.title}}</h3>
+          <h4>{{experience.from_date}} - {{experience.to_date}}</h4>
         </div>
       </div>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+        experiences: []
+      }
+  },
+  created() {
+    this.$http.get("api/experiences").then(res => {
+      this.experiences = res.data
+    }).catch(err => {
+      this.experiences = []
+    });
+  }
+}
+</script>
 <style>
 .linkedin__timeline {
   text-align: center;
@@ -77,7 +85,7 @@
   content: "";
   position: absolute;
   bottom: 50%;
-  height: 50%;
+  height: 51%;
   left: -5%;
   width: 4px;
   background: #ccc;

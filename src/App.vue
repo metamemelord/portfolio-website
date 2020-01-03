@@ -24,7 +24,7 @@ export default {
           this.$store.dispatch("setPosts", res.body)
         }
       }).catch(err => {
-        this.$store.disptach("initPosts")
+        this.$store.dispatch("initPosts")
       });
     var dt = true,
       prev = -1;
