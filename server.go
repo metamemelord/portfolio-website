@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -13,22 +12,31 @@ import (
 )
 
 func init() {
-	rebuild := flag.Bool("rebuild", false, "Rebuild project and dependencies")
+	rebuildAllFlag := flag.Bool("rebuild-all", false, "Rebuild project and dependencies")
+	rebuildFlag := flag.Bool("rebuild", false, "Rebuild project")
+
 	flag.Parse()
 
+	rebuildAll := *rebuildAllFlag
+	rebuild := *rebuildFlag || rebuildAll
+
 	var err error
+
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatalln("Don't have permission to read FS")
 	}
 	_, err = os.Stat(path.Join(dir, "dist", "index.html"))
-	if err == nil && !*rebuild {
+
+	if err == nil && !(rebuild || rebuildAll) {
 		log.Println("Seems like project is already build, skipping this step.")
 		return
 	}
-	if *rebuild {
-		log.Println("Re-building project...")
-		log.Println("Performing cleanup..")
+
+	rebuildAll = err != nil || rebuildAll
+
+	if rebuildAll {
+		log.Println("Performing cleanup for rebuilding..")
 		err = os.RemoveAll(path.Join(dir, "node_modules"))
 		if err != nil {
 			log.Fatalln("Could not delete node_modules")
@@ -39,33 +47,38 @@ func init() {
 		}
 		log.Print("Done!\n")
 	}
+
 	out, err := exec.Command("node", "-v").Output()
 	if err != nil {
 		log.Fatalln("Node not installed")
 	}
-	fmt.Println()
+
 	log.Println("Node.js", string(out))
-	log.Println("Attempting to build project dependencies..")
-	if err = exec.Command("npm", "install").Run(); err != nil {
-		log.Fatalln("Could not build dependencies!")
+	if rebuildAll {
+		log.Println("Attempting to build project dependencies..")
+		if err = exec.Command("npm", "install").Run(); err != nil {
+			log.Fatalln("Could not build dependencies!")
+		}
+		log.Println("Done!")
 	}
-	log.Println("Done!")
-	log.Println("Building project...")
-	if err = exec.Command("npm", "run", "build").Run(); err != nil {
-		log.Fatalln("Could not build project!")
+	if rebuild || rebuildAll {
+		log.Println("Building project...")
+		if err = exec.Command("npm", "run", "build").Run(); err != nil {
+			log.Fatalln("Could not build project!")
+		}
+		log.Println("Done!")
 	}
-	log.Println("Done!")
 }
 
 func main() {
 	g := gin.New()
-	g.Static("/js", "./dist/js")
-	g.Static("/css", "./dist/css")
-	g.Static("/img", "./dist/img")
-	g.StaticFile("/favicon.ico", "./dist/favicon.ico")
-	g.GET("/", htmlSupplier)
-	g.GET("/blogs", htmlSupplier)
-	g.Run(":3000")
+	g.Static("/", "./dist")
+	g.NoRoute(htmlSupplier)
+	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		PORT = "3000"
+	}
+	g.Run(":" + PORT)
 }
 
 func htmlSupplier(c *gin.Context) {
