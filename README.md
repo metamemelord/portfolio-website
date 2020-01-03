@@ -1,6 +1,8 @@
-# metamemelord.com
+# metamemelord.com 
 
 This repo contains the implementation of my personal website, metamemelord.com
+
+[![Build Status](https://travis-ci.org/metamemelord/portfolio-website.svg?branch=master)](https://travis-ci.org/metamemelord/portfolio-website)
 
 ## Project setup
 
