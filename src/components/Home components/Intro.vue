@@ -5,7 +5,13 @@
     </div>
     <div class="main__intro-content">
       <div style="margin:auto">
-        <vue-typed-js :cursorChar="'__'" :loop="true" :strings="['Gaurav', 'Developer', 'Foodie', 'Geek']">
+        <vue-typed-js 
+          :typeSpeed="125"
+          :backSpeed="25"
+          :cursorChar="'__'"
+          :loop="true"
+          :strings="['Gaurav', 'Developer', 'Traveller', 'Dreamer', 'Foodie', 'Geek']"
+        >
           <h1 class="typing"></h1>
         </vue-typed-js>
       </div>
