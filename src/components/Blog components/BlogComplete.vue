@@ -42,7 +42,7 @@ export default {
         ? emailPattern.test(this.getPost.author_contact)
           ? `mailto:${this.getPost.author_contact}`
           : this.getPost.author_contact
-        : "mailto:me@metamemelord.com";
+        : "mailto:hello@gauravsaini.dev";
     }
   },
   created() {

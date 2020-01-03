@@ -9,7 +9,7 @@ type BlogPost struct {
 	Date          string             `bson:"date" json:"date" binding:"required"`
 	ID            primitive.ObjectID `bson:"_id" json:"_id"`
 	Subtitle      string             `bson:"subtitle" json:"subtitle,omitempty"`
-	Tags          []string           `bson:"tags" json:"tags,omitempty" binding:"required,dive"`
+	Tags          []string           `bson:"tags" json:"tags,omitempty"`
 	Title         string             `bson:"title" json:"title" binding:"required"`
 	Visible       bool               `bson:"visible" json:"visible" binding:"required"`
 }

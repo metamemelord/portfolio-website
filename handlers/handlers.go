@@ -64,7 +64,7 @@ func returnBlogPosts(c *gin.Context) {
 }
 
 func addBlogPost(c *gin.Context) {
-	blogPost := &model.BlogPost{}
+	blogPost := &model.BlogPost{Tags: []string{}}
 
 	if err := c.ShouldBindJSON(blogPost); err != nil {
 		log.Println(err)

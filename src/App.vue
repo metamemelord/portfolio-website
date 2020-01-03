@@ -11,7 +11,6 @@
 <script>
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
-import axios from "axios";
 
 export default {
   name: "app",
@@ -20,8 +19,10 @@ export default {
     appFooter: Footer
   },
   created() {
-    axios.get("api/blogs").then(res => {
-        this.$store.dispatch("setPosts", res.data)
+    this.$http.get("api/blogs").then(res => {
+        if (res.status == 200) {
+          this.$store.dispatch("setPosts", res.body)
+        }
       }).catch(err => {
         this.$store.disptach("initPosts")
       });

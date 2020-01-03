@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="main-header__item main-header__email">
-        <a href="mailto:me@metamemelord.com" target="blank">
+        <a href="mailto:hello@gauravsaini.dev" target="blank">
           <i class="fa fa-envelope-o" style="font-size:1.5rem"></i>
           <span class="main-header__item-text">Contact me!</span>
         </a>
