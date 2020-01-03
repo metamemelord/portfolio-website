@@ -1,6 +1,6 @@
 <template>
   <div class="github__card">
-    <h3>{{cardData.name.split("-").join(" ")}}</h3>
+    <h3>{{cardData.name|prettifyRepoName}}</h3>
     <p>{{cardData.description}}</p>
     <div class="github__card-technology-label">
       <span>{{cardData.language}}</span>
@@ -17,6 +17,9 @@ import * as moment from "moment";
 export default {
   props: ["cardData"],
   filters: {
+    prettifyRepoName(repoName) {
+      return repoName.split("-").map(token => token.replace(/\b[a-z]/g, (x) => x.toUpperCase())).join(" ")
+    },
     getLastUpdateTime(time) {
       let duration = moment.duration(moment().diff(moment(time)));
       let durationFromMidnight = moment.duration(
