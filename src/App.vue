@@ -11,6 +11,7 @@
 <script>
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
+import axios from "axios";
 
 export default {
   name: "app",
@@ -19,7 +20,11 @@ export default {
     appFooter: Footer
   },
   created() {
-    this.$store.dispatch("initPosts");
+    axios.get("api/blogs").then(res => {
+        this.$store.dispatch("setPosts", res.data)
+      }).catch(err => {
+        this.$store.disptach("initPosts")
+      });
     var dt = true,
       prev = -1;
     setInterval(() => {

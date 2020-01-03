@@ -2,13 +2,13 @@ package main
 
 import (
 	"flag"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path"
 
 	"github.com/gin-gonic/gin"
+	"github.com/metamemelord/portfolio-website/handlers"
 )
 
 func init() {
@@ -72,16 +72,10 @@ func init() {
 
 func main() {
 	g := gin.New()
-	g.Static("/", "./dist")
-	g.NoRoute(htmlSupplier)
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
 		PORT = "3000"
 	}
+	handlers.Register(g)
 	g.Run(":" + PORT)
-}
-
-func htmlSupplier(c *gin.Context) {
-	file, _ := ioutil.ReadFile("./dist/index.html")
-	c.Data(200, "text/html", file)
 }

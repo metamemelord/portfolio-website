@@ -13,6 +13,9 @@ const mutations = {
 const actions = {
   initPosts: ({ commit }) => {
     commit("SET_POSTS", blogPosts);
+  },
+  setPosts: ({commit}, blogPosts) => {
+    commit("SET_POSTS", blogPosts);
   }
 };
 
@@ -22,7 +25,7 @@ const getters = {
   },
   blogPostById: state => id => {
     return state.blogPosts.filter(post => {
-      if (post.id === id) return post;
+      if (post._id === id) return post;
     })[0];
   }
 };

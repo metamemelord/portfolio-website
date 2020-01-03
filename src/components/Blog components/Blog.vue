@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     postId() {
-      return this.blogPost.id;
+      return this.blogPost._id;
     },
     activeComponent() {
       return this.onlyTitle ? "blog-title" : "blog-complete";

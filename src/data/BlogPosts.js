@@ -1,6 +1,6 @@
 export default [
   {
-    id: 1,
+    _id: 1,
     title: "Words.",
     //subtitle: "LELE",
     content: `We went to great schools. All our teachers, parents, friends, they all taught us a lot. They taught us how days become nights; they taught us how to eat; they taught us to love, to sacrifice at times, to achieve happiness, everything we know. It is a lot. This complete tree of knowledge around our world, it’ll require years to be completely able to comprehend it; to appreciate it.
@@ -30,7 +30,7 @@ We live on a small planet positioned somewhere in this vast universe. There’s 
     author_contact: ""
   },
   {
-    id: 2,
+    _id: 2,
     title: "War: Dream and Reality.",
     //subtitle: "LELE",
     content: `You’ve fought well, my friend. You bled, you healed; did the poison still remain inside?
@@ -71,7 +71,7 @@ And thus, began the war of <b>dream and reality.</b>`,
     author_contact: "metamemelord@outlook.com"
   },
   {
-    id: 3,
+    _id: 3,
     title: "People? They are good.",
     //subtitle: "LELE",
     content: `The ending college life brings a lot of memories and emotions. It was a great journey. Subtle ups, great downs, but there’s more than that; did you enjoy?

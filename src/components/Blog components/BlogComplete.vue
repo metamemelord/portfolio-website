@@ -1,5 +1,5 @@
 <template>
-  <div class="blog__post" :id="getPost.id">
+  <div class="blog__post" :id="getPost._id">
     <h1>{{getPost.title}}</h1>
     <h3 v-if="getPost.subtitle">{{getPost.subtitle}}</h3>
     <h4>
@@ -48,7 +48,7 @@ export default {
   created() {
     let vm = this;
     setTimeout(function() {
-      var post = document.getElementById(vm.getPost.id);
+      var post = document.getElementById(vm.getPost._id);
       var contentNode = post.childNodes[3];
       var content = vm.getPost.content.split("\n").join("<br>");
       contentNode.innerHTML = content;
