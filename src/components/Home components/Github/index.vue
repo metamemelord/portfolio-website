@@ -44,7 +44,7 @@ export default {
     loadUsers() {
       this.$http
         .get(
-          "http://api.github.com/users/metamemelord/repos?access_token=6fe70954c9c7e243d0605bac7435ea7d3a6b225c"
+          "http://api.github.com/users/metamemelord/repos"
         )
         .then(function(responseData) {
           if (responseData.status == 200) {
