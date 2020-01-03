@@ -12,6 +12,14 @@ import (
 )
 
 func init() {
+	if os.Getenv("ENV") == "release" || os.Getenv("GIN_MODE") == "release" {
+		return
+	}
+
+	if os.Getenv("APP_AUTH") == "" {
+		log.Fatalln("APP_AUTH not provided")
+	}
+
 	rebuildAllFlag := flag.Bool("rebuild-all", false, "Rebuild project and dependencies")
 	rebuildFlag := flag.Bool("rebuild", false, "Rebuild project")
 
@@ -76,6 +84,9 @@ func main() {
 	if PORT == "" {
 		PORT = "3000"
 	}
+
+	PORT = ":" + PORT
 	handlers.Register(g)
-	g.Run(":" + PORT)
+	log.Println("Portfolio running on port", PORT)
+	g.Run(PORT)
 }

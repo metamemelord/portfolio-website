@@ -1,14 +1,13 @@
 package db
 
-import "go.mongodb.org/mongo-driver/mongo"
+import (
+	"context"
+	"log"
+	"os"
 
-import "go.mongodb.org/mongo-driver/mongo/options"
-
-import "os"
-
-import "context"
-
-import "log"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
 
 func BlogPostCollection() *mongo.Collection {
 	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_URI"))
@@ -25,5 +24,6 @@ func BlogPostCollection() *mongo.Collection {
 	if collection == nil {
 		log.Fatalln("Database \"portfolio\" does not have \"blog-posts\" collection")
 	}
+	log.Println("Connected to mongo!")
 	return collection
 }
