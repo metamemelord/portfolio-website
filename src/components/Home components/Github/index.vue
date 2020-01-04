@@ -44,7 +44,7 @@ export default {
     loadUsers() {
       this.$http
         .get(
-          "https://api.github.com/users/metamemelord/repos?per_page=100"
+          "api/repos"
         )
         .then(function(responseData) {
           if (responseData.status == 200) {

@@ -6,9 +6,11 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/metamemelord/portfolio-website/handlers"
+	"github.com/metamemelord/portfolio-website/worker"
 )
 
 func init() {
@@ -88,5 +90,11 @@ func main() {
 	PORT = ":" + PORT
 	handlers.Register(g)
 	log.Println("Portfolio running on port", PORT)
+	go func() {
+		for {
+			worker.RefreshData()
+			time.Sleep(2 * time.Hour)
+		}
+	}()
 	g.Run(PORT)
 }

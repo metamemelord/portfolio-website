@@ -34,10 +34,15 @@ func Register(g *gin.Engine) {
 		api.POST("/blog", verifyCredentials, addBlogPost)
 		api.PUT("/blog", verifyCredentials, updateBlogPost)
 		api.DELETE("/blog", verifyCredentials, deleteBlogPost)
+
 		api.GET("/experiences", getExperiences)
 		api.POST("/experience", verifyCredentials, addExperience)
 		api.PUT("/experience", verifyCredentials, updateExperience)
 		api.DELETE("/experience", verifyCredentials, deleteExperience)
+
+		api.GET("/repos", getGithubReposHandler)
+		api.GET("/wordpress", getWordpressPostsHandler)
+		api.POST("admin/data/refresh", verifyCredentials, refreshData)
 	}
 	g.Static("/js", "./dist/js")
 	g.Static("/css", "./dist/css")
