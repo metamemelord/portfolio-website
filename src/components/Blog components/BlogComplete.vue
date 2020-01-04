@@ -16,7 +16,7 @@
         >{{getPostAuthor}}</a>
       </font>
     </h4>
-    <p v-if="getPost.title" style="width: 90%; margin: auto;"></p>
+    <p v-if="getPost.title"></p>
     <div class="blog__post-tags" v-if="getPost.tags && getPost.tags.length">
       <b>Tags:</b>
       <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag}}</span>
@@ -84,6 +84,7 @@ export default {
 .blog__post > p {
   text-align: justify;
 }
+
 .blog__post-tags {
   display: flex;
   flex-wrap: wrap;
@@ -99,6 +100,13 @@ export default {
   background: rgb(255, 161, 38);
   color: #2e3342;
   border-radius: 0.2rem;
+}
+
+@media screen and (min-width: 550px) {
+  .blog__post > p {
+    width: 90%;
+    margin: auto;
+  }
 }
 </style>
 
