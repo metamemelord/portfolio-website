@@ -1,7 +1,10 @@
 <template>
   <div class="blog__post" :id="getPost._id">
-    <h1>{{getPost.title}}</h1>
-    <h3 v-if="getPost.subtitle">{{getPost.subtitle}}</h3>
+    <h1 v-html="getPost.title" v-if="getPost.title"></h1>
+    <template v-if="getPost.subtitle">
+      <h4 v-if="getPost.title">{{getPostExcerpt}}</h4>
+      <h4 v-else v-html="getPost.subtitle"></h4>
+    </template>
     <h4>
       {{getPostDate}} by
       <font>
@@ -13,8 +16,8 @@
         >{{getPostAuthor}}</a>
       </font>
     </h4>
-    <p></p>
-    <div class="blog__post-tags" v-if="getPost.tags">
+    <p v-if="getPost.title" style="width: 90%; margin: auto;"></p>
+    <div class="blog__post-tags" v-if="getPost.tags && getPost.tags.length">
       <b>Tags:</b>
       <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag}}</span>
     </div>
@@ -34,7 +37,7 @@ export default {
       return postDate.format("MMMM DD, YYYY");
     },
     getPostAuthor() {
-      return this.getPost.author ? this.getPost.author : "metamemelord";
+      return this.getPost.author ? this.getPost.author : "Gaurav Saini";
     },
     getPostAuthorContact() {
       const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -43,6 +46,9 @@ export default {
           ? `mailto:${this.getPost.author_contact}`
           : this.getPost.author_contact
         : "mailto:hello@gauravsaini.dev";
+    },
+    getPostExcerpt() {
+      return this.getPost.subtitle.substr(3, 20) + "..."
     }
   },
   created() {

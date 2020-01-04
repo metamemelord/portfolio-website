@@ -19,7 +19,7 @@ export default {
     appFooter: Footer
   },
   created() {
-    this.$http.get("api/blogs").then(res => {
+    this.$http.get("api/wordpress").then(res => {
         if (res.status == 200) {
           this.$store.dispatch("setPosts", res.body)
         }

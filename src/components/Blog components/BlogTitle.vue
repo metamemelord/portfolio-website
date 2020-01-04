@@ -1,7 +1,7 @@
 <template>
   <div class="blog__post">
-    <h1>{{getPost.title}}</h1>
-    <p>{{previewContent}}</p>
+    <h1 v-html="getPost.title" v-if="getPost.title"></h1>
+    <h1 v-html="previewContent" v-else></h1>
   </div>
 </template>
 
@@ -36,14 +36,16 @@ export default {
 </script>
 
 <style scoped>
+.blog__post {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
 .blog__post > h1 {
   color: rgb(255, 161, 38);
   font-size: 3rem;
   margin: 0.8rem;
-  text-align: center;
-}
-
-.blog__post > p {
   text-align: center;
 }
 </style>

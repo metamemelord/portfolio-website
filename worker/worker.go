@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/metamemelord/portfolio-website/model"
 )
 
 type Data struct {
 	GithubData    []interface{}
-	WordpressData map[string]interface{}
+	WordpressData model.Posts
 }
 
 var data = &Data{}
@@ -44,11 +46,12 @@ func wordpressPostRefresher() {
 		log.Println("Error while reading from WordPress", err)
 		return
 	}
-	wordpressResponse := make(map[string]interface{})
+	wordpressResponse := &model.WordpressResponse{}
 	err = json.NewDecoder(resp.Body).Decode(&wordpressResponse)
+	customResponse := model.WordPressResponseToCustomResponse(*wordpressResponse)
 	if err != nil {
 		log.Println("Error while unmarshalling WordPress response", err)
 		return
 	}
-	data.WordpressData = wordpressResponse
+	data.WordpressData = customResponse
 }
