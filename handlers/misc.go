@@ -16,9 +16,11 @@ func refreshData(c *gin.Context) {
 }
 
 func getGithubReposHandler(c *gin.Context) {
-	respond(c, http.StatusOK, worker.GetData().GithubData, nil)
+	log.Println("[INFO] Github data accessed")
+	c.JSON(http.StatusOK, worker.GetData().GithubData)
 }
 
 func getWordpressPostsHandler(c *gin.Context) {
-	respond(c, http.StatusOK, worker.GetData().WordpressData, nil)
+	log.Println("[INFO] Wordpress data accessed")
+	c.JSON(http.StatusOK, worker.GetData().WordpressData)
 }
