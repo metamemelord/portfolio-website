@@ -31,6 +31,7 @@ func githubPackageRefresher() {
 		log.Println("Error while reading from Github", err)
 		return
 	}
+	defer resp.Body.Close()
 	githubResponse := []interface{}{}
 	err = json.NewDecoder(resp.Body).Decode(&githubResponse)
 	if err != nil {
@@ -46,6 +47,7 @@ func wordpressPostRefresher() {
 		log.Println("Error while reading from WordPress", err)
 		return
 	}
+	defer resp.Body.Close()
 	wordpressResponse := &model.WordpressResponse{}
 	err = json.NewDecoder(resp.Body).Decode(&wordpressResponse)
 	customResponse := model.WordPressResponseToCustomResponse(*wordpressResponse)
