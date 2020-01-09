@@ -18,15 +18,17 @@
 export default {
   data() {
     return {
-        experiences: []
-      }
+        experiences: [
+          {"_id":"5e0fbafc3fd85cc84aa6b7b7","company":"Zoomcar","title":"Software Engineer","from_date":"Nov, 2019","to_date":"Present"},
+          {"_id":"5e0fbae03fd85cc84aa6b7b6","company":"Philips","title":"Software Engineer I","from_date":"Jul, 2018","to_date":"Nov, 2019"},
+          {"_id":"5e0fbaba3fd85cc84aa6b7b5","company":"Philips","title":"Project Trainee","from_date":"Jan, 2018","to_date":"May, 2018"}
+        ] 
+	    }
   },
   created() {
     this.$http.get("api/experiences").then(res => {
-      this.experiences = res.data
-    }).catch(err => {
-      this.experiences = []
-    });
+      if (res.data.length) this.experiences = res.data
+    }).catch(err => void 0);
   }
 }
 </script>

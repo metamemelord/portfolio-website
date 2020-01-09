@@ -2,7 +2,7 @@
   <footer class="page-footer">
     <span class="page-footer__item page-footer__text-technologies">
       Made with
-      <font color="red">❤</font> using Vue.js
+      <font color="red">❤</font> using Go and Vue.js
     </span>
     <span class="page-footer__item page-footer__text-seperator">|</span>
     <span class="page-footer__item page-footer__text-copyright">© {{year}} Gaurav Saini</span>

@@ -19,13 +19,6 @@ export default {
     appFooter: Footer
   },
   created() {
-    this.$http.get("api/wordpress").then(res => {
-        if (res.status == 200) {
-          this.$store.dispatch("setPosts", res.body)
-        }
-      }).catch(err => {
-        this.$store.dispatch("initPosts")
-      });
     var dt = true,
       prev = -1;
     setInterval(() => {
