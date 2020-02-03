@@ -1,5 +1,5 @@
 <template>
-  <div class="github">
+  <div id="github" class="github">
     <div class="github__label">
       <a href="https://github.com/metamemelord" target="blank">
         <img
@@ -22,9 +22,9 @@
         </div>
       </template>
       <template v-else>
-        <h1>Repositories</h1>
+        <h1 id="repos">Repositories</h1>
         <project-card v-for="repo in ownedRepos" :key="repo.name" :cardData="repo"></project-card>
-        <h1>Forked</h1>
+        <h1 id="repos-forked">Forked</h1>
         <project-card v-for="repo in forkedRepos" :key="repo.name" :cardData="repo"></project-card>
       </template>
     </div>
