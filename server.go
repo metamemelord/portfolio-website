@@ -14,12 +14,12 @@ import (
 )
 
 func init() {
-	if os.Getenv("ENV") == "release" || os.Getenv("GIN_MODE") == "release" {
-		return
-	}
-
 	if os.Getenv("APP_AUTH") == "" {
 		log.Fatalln("APP_AUTH not provided")
+	}
+
+	if os.Getenv("ENV") == "release" || os.Getenv("GIN_MODE") == "release" {
+		return
 	}
 
 	rebuildAllFlag := flag.Bool("rebuild-all", false, "Rebuild project and dependencies")

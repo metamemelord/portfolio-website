@@ -44,6 +44,9 @@ func Register(g *gin.Engine) {
 		api.GET("/wordpress", getWordpressPostsHandler)
 		api.POST("admin/data/refresh", verifyCredentials, refreshData)
 	}
+	g.GET("/health", func(c *gin.Context) {
+		c.AbortWithStatus(http.StatusOK)
+	})
 	g.Static("/js", "./dist/js")
 	g.Static("/css", "./dist/css")
 	g.Static("/img", "./dist/img")
