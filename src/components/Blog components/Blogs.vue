@@ -1,12 +1,14 @@
 <template>
   <main>
     <div>
-      <b>Top tags:</b>&nbsp;&nbsp;&nbsp;
-      <span v-for="(tag,idx) in getTagsByCount()" 
+      <b>Top tags:</b>
+      <div>
+        <span v-for="(tag,idx) in getTagsByCount()" 
         :key="idx"
         :value="tag[1].toLowerCase()"
         @click="toggleTagInData($event)">{{tag[1]|capitalize}}
       </span>
+      </div>
     </div>
     <blog-post v-for="(blogPost, idx) in blogPosts" :key="idx" :blogPost="blogPost"></blog-post>
   </main>
@@ -53,7 +55,7 @@ export default {
       for(let tag in tags) {
         res.push([tags[tag], tag]);
       }
-      return res.sort((el1, el2) => parseInt(el1[0]) < parseInt(el2[0])).slice(0, 10);
+      return res.sort((el1, el2) => parseInt(el1[0]) < parseInt(el2[0])).slice(0, 7);
     }
   },
   computed: {
@@ -86,6 +88,10 @@ main {
   margin-top: 5rem;
 }
 main > div:first-of-type {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  justify-content: center;
   position: relative;
   top: -1.1rem;
   padding: 1.25rem;
@@ -96,13 +102,29 @@ main > div:first-of-type {
 }
 
 main > div:first-of-type span {
-  margin: 0.5rem;
-  padding: 0.5rem;
+  display: inline-block;
+  margin: 0.3rem;
+  padding: 0.3rem;
   background: rgb(255, 161, 38);
   color: #2e3342;
   border-radius: 0.2rem;
   cursor: pointer;
   transition: background,color 0.2s linear;
+}
+
+@media screen and (min-width: 550px) {
+  main > div:first-of-type {
+    display: block;
+  }
+  
+  main > div:first-of-type div {
+    display: inline;
+  }
+
+  main > div:first-of-type span {
+    margin: 0.5rem;
+    padding: 0.5rem;
+  }
 }
 
 .active-tag {
