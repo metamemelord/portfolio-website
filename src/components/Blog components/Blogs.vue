@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div v-if="tags.length">
+    <div class="blogs__tags-filter" v-if="getTagsByCount().length">
       <b>Top tags:</b>
       <div>
         <span v-for="(tag,idx) in getTagsByCount()" 
@@ -87,7 +87,7 @@ main {
   margin: auto;
   margin-top: 5rem;
 }
-main > div:first-of-type {
+.blogs__tags-filter {
   display: flex;
   flex-wrap: wrap;
   align-content: space-between;
@@ -101,13 +101,13 @@ main > div:first-of-type {
   box-shadow: 0px 0px 7px 4px rgba(0, 0, 0, 0.15);
 }
 
-main > div:first-of-type div {
+.blogs__tags-filter div {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-main > div:first-of-type span {
+.blogs__tags-filter span {
   display: inline-block;
   margin: 0.3rem;
   padding: 0.3rem;
@@ -119,15 +119,15 @@ main > div:first-of-type span {
 }
 
 @media screen and (min-width: 550px) {
-  main > div:first-of-type {
+  .blogs__tags-filter {
     display: block;
   }
   
-  main > div:first-of-type div {
+  .blogs__tags-filter div {
     display: inline;
   }
 
-  main > div:first-of-type span {
+  .blogs__tags-filter span {
     margin: 0.5rem;
     padding: 0.5rem;
   }
