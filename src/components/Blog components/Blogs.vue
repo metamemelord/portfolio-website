@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div>
+    <div v-if="tags.length">
       <b>Top tags:</b>
       <div>
         <span v-for="(tag,idx) in getTagsByCount()" 
