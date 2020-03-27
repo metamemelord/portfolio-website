@@ -19,7 +19,7 @@
     <p v-if="getPost.title"></p>
     <div class="blog__post-tags" v-if="getPost.tags && getPost.tags.length">
       <b>Tags:</b>
-      <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag}}</span>
+      <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag|capitalize}}</span>
     </div>
   </div>
 </template>

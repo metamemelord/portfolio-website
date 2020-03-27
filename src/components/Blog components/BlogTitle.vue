@@ -3,7 +3,7 @@
     <h1 v-html="getPost.title" v-if="getPost.title"></h1>
     <h1 v-html="previewContent" v-else></h1>
     <div class="blog__post-tags" v-if="getPost.tags && getPost.tags.length">
-      <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag}}</span>
+      <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag|capitalize}}</span>
     </div>
   </div>
 </template>

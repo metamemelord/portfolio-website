@@ -5,7 +5,7 @@
       <span v-for="(tag,idx) in getTagsByCount()" 
         :key="idx"
         :value="tag[1].toLowerCase()"
-        @click="toggleTagInData($event)">{{tag[1]}}
+        @click="toggleTagInData($event)">{{tag[1]|capitalize}}
       </span>
     </div>
     <blog-post v-for="(blogPost, idx) in blogPosts" :key="idx" :blogPost="blogPost"></blog-post>
