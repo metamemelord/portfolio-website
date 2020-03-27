@@ -101,6 +101,12 @@ main > div:first-of-type {
   box-shadow: 0px 0px 7px 4px rgba(0, 0, 0, 0.15);
 }
 
+main > div:first-of-type div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 main > div:first-of-type span {
   display: inline-block;
   margin: 0.3rem;
