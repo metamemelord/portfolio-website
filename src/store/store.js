@@ -8,7 +8,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     day: 7,
-    night: 19
+    afternoon: 13,
+    evening: 19,
+    night: 1
   },
   modules: {
     blogPosts

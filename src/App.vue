@@ -19,20 +19,31 @@ export default {
     appFooter: Footer
   },
   created() {
-    var dt = true,
+    var dt = 0,
       prev = -1;
+    const day = this.$store.state.day,
+      afternoon = this.$store.state.afternoon,
+      evening = this.$store.state.evening,
+      night = this.$store.state.night;
     setInterval(() => {
       const hours = new Date().getHours();
-      dt = hours > this.$store.state.day && hours < this.$store.state.night;
-      if (prev != dt) {
-        if (dt) {
-          document.getElementsByTagName("html")[0].className = "";
-        } else {
+      if (dt != prev) {
+        if (hours >= night && hours < day) {
+          document.getElementsByTagName("html")[0].className = "night";
+          dt = 1;
+        } else if (hours >= afternoon && hours < evening) {
+          document.getElementsByTagName("html")[0].className = "night";
+          // document.getElementsByTagName("html")[0].className = "afternoon";
+          dt = 2;
+        } else if (hours >= evening && hours < night) {
           document.getElementsByTagName("html")[0].className = "dark";
+        } else {
+          document.getElementsByTagName("html")[0].className = "";
+          dt = 0;
         }
         prev = dt;
       }
-    }, 1000);
+    }, 1500);
   }
 };
 </script>
@@ -48,9 +59,20 @@ html {
   transition: 0.5s background-color;
 }
 
+.night {
+  background: black;
+  color: rgb(173, 173, 173);
+  box-shadow: 0 0 10px white !important;
+}
+
 .dark {
   background: #262d41;
   color: #eee;
+}
+
+.afternoon {
+  background:rgb(255, 224, 183);
+  color: #333;
 }
 
 .light-a {
