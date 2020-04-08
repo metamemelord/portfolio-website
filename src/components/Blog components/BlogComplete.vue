@@ -48,7 +48,7 @@ export default {
       return this.getPost.author ? this.getPost.author : "Gaurav Saini";
     },
     getPostAuthorContact() {
-      const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return this.getPost.author_contact
         ? emailPattern.test(this.getPost.author_contact)
           ? `mailto:${this.getPost.author_contact}`
@@ -68,7 +68,7 @@ export default {
     this.$http.get("/api/wordpress/" + this.$route.params.id).then(res => {
         this.post = res.body;
         this.post.content = this.post.content.split("\n").join("<br>")
-      }).catch(err => void(0));
+      }).catch(() => this.$router.push("/lost"));
   }
 };
 </script>

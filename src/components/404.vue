@@ -33,8 +33,11 @@ export default {
   text-align: center;
   margin: 0 auto;
   width: 80%;
+  display: flex;
   flex-direction: column;
-  height: 80vh;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 4.1rem);
 }
 
 .parallax-container {
@@ -49,5 +52,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: flex-end;
+}
+
+@media screen and (min-width: 550px) {
+  .error__main {
+    min-height: calc(100vh - 2rem);
+  }
 }
 </style>

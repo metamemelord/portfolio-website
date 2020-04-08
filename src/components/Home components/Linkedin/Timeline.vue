@@ -28,7 +28,7 @@ export default {
   created() {
     this.$http.get("api/experiences").then(res => {
       if (res.data.length) this.experiences = res.data
-    }).catch(err => void 0);
+    }).catch(() => void 0);
   }
 }
 </script>
