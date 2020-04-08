@@ -34,13 +34,13 @@ export default {
   padding: 1rem;
   margin: 1rem;
   border-radius: 0.3rem;
-  box-shadow: 0px 0px 7px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 7px 4px var(--shadow-color);
   transition: 0.2s all;
   cursor: pointer;
 }
 
 .blog__post:hover {
-  box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 3px 2px var(--shadow-color);
 }
 
 .blog__post > h1 {

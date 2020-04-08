@@ -98,7 +98,7 @@ main {
   padding-left: 2rem;
   margin: 1rem;
   border-radius: 0 0 0.3rem 0.3rem;
-  box-shadow: 0px 0px 7px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 7px 4px var(--shadow-color);
 }
 
 .blogs__tags-filter div {
@@ -136,6 +136,6 @@ main {
 .active-tag {
   background: rgb(204, 128, 28) !important;
   color: white !important;
-  box-shadow: 0 0 0.4rem rgba(25, 25, 25, 0.30);
+  box-shadow: 0 0 0.4rem var(--shadow-color);
 }
 </style>

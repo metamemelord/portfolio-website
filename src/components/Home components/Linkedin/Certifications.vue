@@ -108,7 +108,7 @@
   flex-basis: 20rem;
   border-radius: 3px;
   margin: 0.5rem;
-  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 3px 1px var(--shadow-color);
 }
 
 .linkedin__certifications-card h2,

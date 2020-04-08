@@ -19,20 +19,23 @@ export default {
     appFooter: Footer
   },
   created() {
-    var dt = true,
-      prev = -1;
+    var prev = -1;
+    const day = this.$store.state.day,
+      evening = this.$store.state.evening,
+      night = this.$store.state.night;
     setInterval(() => {
-      const hours = new Date().getHours();
-      dt = hours > this.$store.state.day && hours < this.$store.state.night;
-      if (prev != dt) {
-        if (dt) {
-          document.getElementsByTagName("html")[0].className = "";
-        } else {
+      const hour = new Date().getHours();
+      if (hour != prev) {
+        if (hour >= night || hour < day) {
+          document.getElementsByTagName("html")[0].className = "night";
+        } else if (hour >= evening && hour < night) {
           document.getElementsByTagName("html")[0].className = "dark";
+        } else {
+          document.getElementsByTagName("html")[0].className = "";
         }
-        prev = dt;
+        prev = hour;
       }
-    }, 1000);
+    }, 1500);
   }
 };
 </script>
@@ -46,6 +49,12 @@ html {
   font-family: "Open Sans", "Calibri", sans-serif;
   color: #333;
   transition: 0.5s background-color;
+}
+
+.night {
+  background: black;
+  color: rgb(173, 173, 173);
+  --shadow-color: rgba(255, 255, 255, 0.15);
 }
 
 .dark {

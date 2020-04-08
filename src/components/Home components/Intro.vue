@@ -40,12 +40,12 @@
   justify-content: space-between;
   margin: 1rem;
   border-radius: 0.3rem;
-  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 4px 4px var(--shadow-color);
   transition: 0.2s all;
 }
 
 .main__intro:hover {
-  box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 3px 2px var(--shadow-color);
 }
 
 .main__intro-image {
