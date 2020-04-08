@@ -17,8 +17,6 @@ type WordPressPost struct {
 	Title   string                 `json:"title"`
 }
 
-type Posts []Post
-
 type Post struct {
 	ID            int      `json:"_id"`
 	Title         string   `json:"title"`
@@ -51,10 +49,10 @@ func wordPressPostToPost(wpp *WordPressPost) *Post {
 	return post
 }
 
-func WordPressResponseToCustomResponse(wpr WordpressResponse) Posts {
-	posts := Posts{}
+func WordPressResponseToCustomResponse(wpr WordpressResponse) []*Post {
+	posts := []*Post{}
 	for _, post := range wpr.Posts {
-		posts = append(posts, *wordPressPostToPost(&post))
+		posts = append(posts, wordPressPostToPost(&post))
 	}
 	return posts
 }

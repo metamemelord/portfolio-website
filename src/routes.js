@@ -11,6 +11,14 @@ const routes = [
     component: () => import("./components/Home")
   },
   {
+    path: "/blog",
+    redirect: "/blogs"
+  },
+  {
+    path: "/blog/:id",
+    component: () => import("./components/Blog components/BlogComplete")
+  },
+  {
     path: "/blogs",
     component: () => import("./components/Blog components/Blogs")
   },

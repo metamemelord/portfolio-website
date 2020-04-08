@@ -28,6 +28,7 @@ main {
 
 @media screen and (min-width: 550px) {
   main {
+    position: relative;
     margin: 0 auto;
     margin-top: 5rem;
   }

@@ -1,36 +1,44 @@
 <template>
-  <div class="blog__post" :id="getPost._id">
-    <h1 v-html="getPost.title" v-if="getPost.title"></h1>
-    <template v-if="getPost.subtitle">
-      <h4 v-if="getPost.title">{{getPostExcerpt}}</h4>
-      <h4 v-else v-html="getPost.subtitle"></h4>
-    </template>
-    <h4>
-      {{getPostDate}} by
-      <font>
-        <a
-          :href="getPostAuthorContact"
-          style="color:rgb(255, 161, 38);text-decoration: none;"
-          @click.stop
-          target="blank"
-        >{{getPostAuthor}}</a>
-      </font>
-    </h4>
-    <p v-if="getPost.title"></p>
-    <div class="blog__post-tags" v-if="getPost.tags && getPost.tags.length">
-      <b>Tags:</b>
-      <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag|capitalize}}</span>
+  <main>
+    <div class="blog__post-complete" :id="getPost._id">
+      <div class="blog__post-complete-closer" @click="closePost()"><i class="fa fa-times" aria-hidden="true"></i></div>
+      <h1 v-html="getPost.title" v-if="getPost.title"></h1>
+      <template v-if="getPost.subtitle">
+        <h4 v-if="getPost.title">{{getPostExcerpt}}</h4>
+        <h2 v-else v-html="getPost.subtitle"></h2>
+      </template>
+      <h4>
+        {{getPostDate}} by
+        <font>
+          <a
+            :href="getPostAuthorContact"
+            style="color:rgb(255, 161, 38);text-decoration: none;"
+            @click.stop
+            target="blank"
+          >{{getPostAuthor}}</a>
+        </font>
+      </h4>
+      <p v-if="getPost.title" v-html="getPost.content"></p>
+      <div class="blog__post-tags-complete" v-if="getPost.tags && getPost.tags.length">
+        <b>Tags:</b>
+        <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag|capitalize}}</span>
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
 const moment = require("moment");
 export default {
-  props: ["postId"],
+  name: "blog-complete",
+  data() {
+    return {
+      post: {}
+    }
+  },
   computed: {
     getPost() {
-      return this.$store.getters.blogPostById(this.postId);
+      return this.post
     },
     getPostDate() {
       var postDate = new moment(this.getPost.date);
@@ -51,41 +59,58 @@ export default {
       return this.getPost.subtitle.substr(3, 20) + "..."
     }
   },
+  methods: {
+    closePost() {
+      this.$router.push("/blogs");
+    }
+  },
   created() {
-    let vm = this;
-    setTimeout(function() {
-      var post = document.getElementById(vm.getPost._id);
-      var contentNode = post.childNodes[3];
-      var content = vm.getPost.content.split("\n").join("<br>");
-      contentNode.innerHTML = content;
-    }, 5);
+    this.$http.get("/api/wordpress/" + this.$route.params.id).then(res => {
+        this.post = res.body;
+        this.post.content = this.post.content.split("\n").join("<br>")
+      }).catch(err => void(0));
   }
 };
 </script>
 
 <style scoped>
-.blog__post {
-  cursor: unset;
+main {
+  max-width: 70rem;
+  margin: auto;
+  margin-top: 5rem;
+  min-height: calc(100vh - 9rem);
+}
+.blog__post-complete {
+  position: relative;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 0.3rem;
+  box-shadow: 0px 0px 7px 4px var(--shadow-color);
+  padding: 1rem;
+  text-align: center;
+  transition: 0.2s all;
 }
 
-.blog__post > h1 {
+.blog__post-complete:hover {
+  box-shadow: 0px 0px 3px 2px var(--shadow-color);
+}
+
+.blog__post-complete > h1 {
   color: rgb(255, 161, 38);
-  font-size: 3rem;
+  font-size: 4rem;
   margin: 0.5rem;
-  text-align: center;
 }
 
-.blog__post > h3,
-.blog__post > h4 {
+.blog__post-complete > h3,
+.blog__post-complete > h4 {
   margin: 0.2rem 0;
-  text-align: center;
 }
 
-.blog__post > p {
+.blog__post-complete > p {
   text-align: justify;
 }
 
-.blog__post-tags {
+.blog__post-tags-complete {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -94,19 +119,59 @@ export default {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
-.blog__post-tags > span {
+.blog__post-tags-complete > span {
   margin: 0.5rem;
   padding: 0.5rem;
   background: rgb(255, 161, 38);
   color: #2e3342;
   border-radius: 0.2rem;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.blog__post-complete-closer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 3px 2px var(--shadow-color);
+  border: 0.25px solid;
+  border-radius: 50%;
+  right: 1rem;
+  top: 1rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+  color: rgb(255, 91, 91);
 }
 
 @media screen and (min-width: 550px) {
+  main {
+    min-height: calc(100vh - 7rem);
+  }
+
   .blog__post > p {
     width: 90%;
     margin: auto;
   }
+  .blog__post-complete {
+    padding: 1.5rem 2rem;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .blog__post-complete-closer {
+    right: 1.5rem;
+    top: 1.5rem;
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+  .blog__post-complete {
+    padding: 1.5rem 5rem;    
+  }
 }
 </style>
-

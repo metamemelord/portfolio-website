@@ -77,7 +77,7 @@ export default {
   	this.$http.get("api/wordpress").then(res => {
 		if (res.status == 200) this.$store.dispatch("setPosts", res.body)
 		else throw "Wordpress call failed"
-	}).catch(err => this.$store.dispatch("initPosts"));
+  }).catch(err => this.$store.dispatch("initPosts"));
   },
 };
 </script>
@@ -86,6 +86,7 @@ main {
   max-width: 70rem;
   margin: auto;
   margin-top: 5rem;
+  min-height: calc(100vh - 9rem);
 }
 .blogs__tags-filter {
   display: flex;
@@ -116,9 +117,19 @@ main {
   border-radius: 0.2rem;
   cursor: pointer;
   transition: background,color 0.2s linear;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 @media screen and (min-width: 550px) {
+  main {
+    min-height: calc(100vh - 7rem);
+  }
+
   .blogs__tags-filter {
     display: block;
   }
