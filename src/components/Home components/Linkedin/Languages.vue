@@ -27,5 +27,11 @@
   background: rgb(255, 161, 38);
   color: #2e3342;
   border-radius: 0.2rem;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 </style>

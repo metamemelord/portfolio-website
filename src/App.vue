@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <app-header/>
-    <keep-alive>
-      <router-view/>
+    <keep-alive exclude="blog-complete">
+      <transition name="fade" mode="out-in">
+        <router-view/>
+      </transition>
     </keep-alive>
     <app-footer/>
   </div>
@@ -115,6 +117,30 @@ body {
   }
   100% {
     transform: translateX(+4px) translateY(-2px);
+  }
+}
+
+.fade-enter-active {
+  animation: fade-in 100ms ease-out forwards;
+}
+.fade-leave-active {
+  animation: fade-out 100ms ease-out forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 </style>

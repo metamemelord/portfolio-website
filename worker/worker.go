@@ -10,7 +10,7 @@ import (
 
 type Data struct {
 	GithubData    []interface{}
-	WordpressData model.Posts
+	WordpressData []*model.Post
 }
 
 var data = &Data{}
@@ -54,6 +54,11 @@ func wordpressPostRefresher() {
 	if err != nil {
 		log.Println("Error while unmarshalling WordPress response", err)
 		return
+	}
+
+	upb := len(customResponse)
+	for idx, post := range customResponse {
+		post.ID = upb - idx
 	}
 	data.WordpressData = customResponse
 }

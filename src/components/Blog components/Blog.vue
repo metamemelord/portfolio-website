@@ -1,30 +1,24 @@
 <template>
-  <transition name="fade" mode="out-in">
-    <component :is="activeComponent" :postId="postId" @click.native="onlyTitle=!onlyTitle"></component>
-  </transition>
+  <blog-title :postId="postId" @click.native="loadPost"></blog-title>
 </template>
 
 <script>
 import blogTitle from "./BlogTitle.vue";
-import blogComplete from "./BlogComplete.vue";
+
 export default {
   props: ["blogPost"],
-  data() {
-    return {
-      onlyTitle: true
-    };
-  },
   computed: {
     postId() {
       return this.blogPost._id;
-    },
-    activeComponent() {
-      return this.onlyTitle ? "blog-title" : "blog-complete";
+    }
+  },
+  methods: {
+    loadPost() {
+      this.$router.push("/blog/" + this.blogPost._id);
     }
   },
   components: {
-    blogTitle,
-    blogComplete
+    blogTitle
   }
 };
 </script>
@@ -56,29 +50,5 @@ export default {
 
 .blog__post > p {
   text-align: center;
-}
-
-.fade-enter-active {
-  animation: fade-in 0.3s ease-out forwards;
-}
-.fade-leave-active {
-  animation: fade-out 0.3s ease-out forwards;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
 }
 </style>
