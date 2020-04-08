@@ -96,6 +96,5 @@ func main() {
 			time.Sleep(2 * time.Hour)
 		}
 	}()
-	go worker.KeepAlive(20 * time.Second)
 	g.Run(PORT)
 }
