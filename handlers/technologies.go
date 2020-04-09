@@ -15,7 +15,7 @@ import (
 
 func getTechnologies(c *gin.Context) {
 	technologies := []*model.Technology{}
-	findOptions := options.Find().SetSort(bson.M{"type": -1, "name": 1})
+	findOptions := options.Find().SetSort(bson.M{"order": 1})
 	cursor, err := technologiesCollection.Find(c.Request.Context(), bson.M{}, findOptions)
 	if err != nil {
 		log.Println(err)
