@@ -19,10 +19,13 @@
         </font>
       </h4>
       <p v-if="getPost.title" v-html="getPost.content"></p>
-      <div class="blog__post-tags-complete" v-if="getPost.tags && getPost.tags.length">
+
+      <!-- Removing as the these are non-clickable as on now. Will make these directly clickable -->
+      <!-- <div class="blog__post-tags-complete" v-if="getPost.tags && getPost.tags.length">
         <b>Tags:</b>
         <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag|capitalize}}</span>
-      </div>
+      </div> -->
+      
     </div>
   </main>
 </template>

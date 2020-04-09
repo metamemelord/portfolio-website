@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -15,16 +16,18 @@ import (
 )
 
 var (
-	blogPostCollection    *mongo.Collection
-	experiencesCollection *mongo.Collection
-	ErrParseRequestBody   = fmt.Errorf("Failed to parse request body")
-	ErrInternalServer     = fmt.Errorf("Internal server error")
-	ErrPostNotFoundWithID = fmt.Errorf("Could not find a post with that _id")
+	blogPostCollection     *mongo.Collection
+	experiencesCollection  *mongo.Collection
+	technologiesCollection *mongo.Collection
+	ErrParseRequestBody    = fmt.Errorf("Failed to parse request body")
+	ErrInternalServer      = fmt.Errorf("Internal server error")
+	ErrPostNotFoundWithID  = fmt.Errorf("Could not find a post with that _id")
 )
 
 func init() {
 	blogPostCollection = db.GetCollection("blog-posts")
 	experiencesCollection = db.GetCollection("experiences")
+	technologiesCollection = db.GetCollection("technologies")
 }
 
 func Register(g *gin.Engine) {
@@ -39,6 +42,11 @@ func Register(g *gin.Engine) {
 		api.POST("/experience", verifyCredentials, addExperience)
 		api.PUT("/experience", verifyCredentials, updateExperience)
 		api.DELETE("/experience", verifyCredentials, deleteExperience)
+
+		api.GET("/technologies", getTechnologies)
+		api.POST("/technology", verifyCredentials, addTechnology)
+		api.PUT("/technology", verifyCredentials, updateTechnology)
+		api.DELETE("/technology", verifyCredentials, deleteTechnology)
 
 		api.GET("/repos", getGithubReposHandler)
 		api.GET("/wordpress", getWordpressPostsHandler)
@@ -94,7 +102,8 @@ func respond(c *gin.Context, status int, payload interface{}, err error) {
 		log.Println("[ERROR]: ", err)
 		c.JSON(status, map[string]interface{}{"error": err.Error()})
 	} else {
-		log.Println("[INFO]: ", payload)
-		c.JSON(status, payload)
+		resp, _ := json.Marshal(payload)
+		log.Println("[INFO]: ", string(resp))
+		c.Data(status, "application/json", resp)
 	}
 }

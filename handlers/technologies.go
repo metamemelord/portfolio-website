@@ -13,10 +13,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func getExperiences(c *gin.Context) {
-	experiences := []*model.Experience{}
-	findOptions := options.Find().SetSort(bson.M{"_id": -1})
-	cursor, err := experiencesCollection.Find(c.Request.Context(), bson.M{}, findOptions)
+func getTechnologies(c *gin.Context) {
+	technologies := []*model.Technology{}
+	findOptions := options.Find().SetSort(bson.M{"type": -1, "name": 1})
+	cursor, err := technologiesCollection.Find(c.Request.Context(), bson.M{}, findOptions)
 	if err != nil {
 		log.Println(err)
 		respond(c, http.StatusInternalServerError, nil, ErrInternalServer)
@@ -24,9 +24,9 @@ func getExperiences(c *gin.Context) {
 	}
 
 	for cursor.Next(c.Request.Context()) {
-		experience := &model.Experience{}
-		err = cursor.Decode(experience)
-		experiences = append(experiences, experience)
+		technology := &model.Technology{}
+		err = cursor.Decode(technology)
+		technologies = append(technologies, technology)
 	}
 
 	if err != nil {
@@ -34,25 +34,25 @@ func getExperiences(c *gin.Context) {
 		return
 	}
 
-	respond(c, http.StatusOK, experiences, nil)
+	respond(c, http.StatusOK, technologies, nil)
 }
 
-func addExperience(c *gin.Context) {
-	experience := &model.Experience{}
+func addTechnology(c *gin.Context) {
+	technology := &model.Technology{}
 
-	if err := c.ShouldBindJSON(experience); err != nil {
+	if err := c.ShouldBindJSON(technology); err != nil {
 		respond(c, http.StatusBadRequest, nil, ErrParseRequestBody)
 		return
 	}
 
-	exp := experiencesCollection.FindOne(c.Request.Context(), bson.M{"company": experience.Company, "title": experience.Title})
+	exp := technologiesCollection.FindOne(c.Request.Context(), bson.M{"name": technology.Name})
 	if exp.Err() == nil {
 		respond(c, http.StatusConflict, nil, fmt.Errorf("Entry already exists"))
 		return
 	}
 
-	experience.ID = primitive.NewObjectID()
-	res, err := experiencesCollection.InsertOne(c.Request.Context(), experience)
+	technology.ID = primitive.NewObjectID()
+	res, err := technologiesCollection.InsertOne(c.Request.Context(), technology)
 	if err != nil {
 		respond(c, http.StatusInternalServerError, nil, err)
 		return
@@ -61,24 +61,25 @@ func addExperience(c *gin.Context) {
 	respond(c, http.StatusCreated, res, nil)
 }
 
-func updateExperience(c *gin.Context) {
-	experience := &model.Experience{}
+func updateTechnology(c *gin.Context) {
+	technology := &model.Technology{}
 
-	if err := c.ShouldBindJSON(experience); err != nil {
+	if err := c.ShouldBindJSON(technology); err != nil {
 		respond(c, http.StatusBadRequest, nil, ErrParseRequestBody)
 		return
 	}
 
-	exp := experiencesCollection.FindOneAndUpdate(c.Request.Context(), bson.M{"company": experience.Company, "title": experience.Title}, bson.M{"$set": experience})
+	exp := technologiesCollection.FindOneAndUpdate(c.Request.Context(), bson.M{"name": technology.Name}, bson.M{"$set": technology})
 	if exp.Err() != nil {
-		respond(c, http.StatusInternalServerError, nil, fmt.Errorf("Failed to update exprience"))
+		log.Println(exp.Err())
+		respond(c, http.StatusInternalServerError, nil, fmt.Errorf("Failed to update technology"))
 		return
 	}
 
-	respond(c, http.StatusOK, experience, nil)
+	respond(c, http.StatusOK, technology, nil)
 }
 
-func deleteExperience(c *gin.Context) {
+func deleteTechnology(c *gin.Context) {
 	expMap := make(map[string]string)
 
 	if err := json.NewDecoder(c.Request.Body).Decode(&expMap); err != nil {
@@ -90,10 +91,10 @@ func deleteExperience(c *gin.Context) {
 		return
 	} else {
 		dID, _ := primitive.ObjectIDFromHex(id)
-		exp := experiencesCollection.FindOneAndDelete(c.Request.Context(), bson.M{"_id": dID})
+		exp := technologiesCollection.FindOneAndDelete(c.Request.Context(), bson.M{"_id": dID})
 		if exp.Err() != nil {
 			log.Println(exp.Err())
-			respond(c, http.StatusInternalServerError, nil, fmt.Errorf("Failed to delete exprience"))
+			respond(c, http.StatusInternalServerError, nil, fmt.Errorf("Failed to delete technology"))
 			return
 		}
 	}

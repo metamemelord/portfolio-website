@@ -1,6 +1,7 @@
 <template>
   <main>
     <intro-component/>
+    <technologies-component/>
     <linkedin-component/>
     <github-component/>
   </main>
@@ -8,11 +9,13 @@
 
 <script>
 import introComponent from "./Home components/Intro";
+import technologiesComponent from "./Home components/Technologies";
 import linkedinComponent from "./Home components/Linkedin";
 import githubComponent from "./Home components/Github/index";
 export default {
   components: {
     introComponent,
+    technologiesComponent,
     linkedinComponent,
     githubComponent
   }
