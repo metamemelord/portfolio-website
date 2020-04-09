@@ -129,6 +129,16 @@ export default {
     max-width: 70rem;
     margin: 1rem;
   }
+
+  .tech__content__image-container i,
+  .tech__content__image-container img {
+    filter: grayscale(100);
+  }
+
+  .tech__content__image-container i:hover,
+  .tech__content__image-container img:hover {
+    filter: grayscale(0);
+  }
 }
 
 @media screen and (min-width: 73rem) {
@@ -140,16 +150,6 @@ export default {
     flex-basis: 10%;
     text-align: center; 
     margin: 1rem;
-  }
-
-  .tech__content__image-container i,
-  .tech__content__image-container img {
-    filter: grayscale(100);
-  }
-
-  .tech__content__image-container i:hover,
-  .tech__content__image-container img:hover {
-    filter: grayscale(0);
   }
 }
 </style>
