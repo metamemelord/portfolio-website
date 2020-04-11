@@ -112,8 +112,8 @@ export default {
 
 .tech__content__image-container i,
 .tech__content__image-container img {
-  font-size: 5rem;
-  max-width: 4.5rem;
+  font-size: 4rem;
+  max-width: 3.5rem;
   cursor: pointer;
   transition: filter 0.2s linear;
 }
@@ -144,12 +144,22 @@ export default {
 
   .tech__content__image-container i,
   .tech__content__image-container img {
+    font-size: 5rem;
+    max-width: 4.5rem;
     filter: grayscale(100);
   }
 
   .tech__content__image-container i:hover,
   .tech__content__image-container img:hover {
     filter: grayscale(0);
+  }
+}
+
+@media screen and (min-width: 45rem) {
+  .tech__content__image-container i,
+  .tech__content__image-container img {
+    font-size: 4.5rem;
+    max-width: 4rem;
   }
 }
 </style>
