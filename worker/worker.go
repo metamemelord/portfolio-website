@@ -42,7 +42,7 @@ func githubPackageRefresher() {
 }
 
 func wordpressPostRefresher() {
-	resp, err := http.Get("https://public-api.wordpress.com/rest/v1.1/sites/theanonymosopher.wordpress.com/posts/")
+	resp, err := http.Get("https://public-api.wordpress.com/rest/v1.1/sites/metamemelord.wordpress.com/posts/")
 	if err != nil {
 		log.Println("Error while reading from WordPress", err)
 		return
