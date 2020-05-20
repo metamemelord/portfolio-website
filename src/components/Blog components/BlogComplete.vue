@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="blog__post-complete" :id="getPost._id">
+    <div v-if="getPost._id" class="blog__post-complete" :id="getPost._id">
       <div class="blog__post-complete-closer" @click="closePost()"><i class="fa fa-times" aria-hidden="true"></i></div>
       <h1 v-html="getPost.title" v-if="getPost.title"></h1>
       <template v-if="getPost.subtitle">
