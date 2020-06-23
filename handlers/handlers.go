@@ -60,6 +60,8 @@ func Register(g *gin.Engine) {
 	g.Static("/css", "./dist/css")
 	g.Static("/img", "./dist/img")
 	g.StaticFile("/favicon.ico", "./dist/favicon.ico")
+	g.StaticFile("/robots.txt", "./dist/robots.txt")
+	g.StaticFile("/sitemap.xml", "./dist/sitemap.xml")
 	g.NoRoute(htmlSupplier)
 }
 
