@@ -80,7 +80,7 @@ export default {
 main {
   max-width: 70rem;
   margin: auto;
-  margin-top: 5rem;
+  margin-top: 7.3rem;
   min-height: calc(100vh - 9rem);
 }
 .blog__post-complete {
@@ -154,7 +154,7 @@ main {
 
 @media screen and (min-width: 550px) {
   main {
-    min-height: calc(100vh - 7rem);
+    min-height: calc(100vh - 7.3rem);
   }
 
   .blog__post > p {
