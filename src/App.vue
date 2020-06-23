@@ -52,6 +52,7 @@ html {
   color: #333;
   transition: 0.5s background-color;
   --accent-color: rgb(255, 161, 38);
+  font-display: swap;
 }
 
 .night {
