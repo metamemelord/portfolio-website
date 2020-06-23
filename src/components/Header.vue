@@ -1,7 +1,7 @@
 <template>
   <div class="page-header">
     <div v-show="true">
-      <b :style="{'color': currentColor}">New!</b> Read tech blogs <a href="https://tech.gaurav.app" target="_blank">here!</a>
+      <b :style="{'color': currentColor}">New!</b> Read tech blogs <a href="https://tech.gaurav.app" target="blank">here!</a>
     </div>
     <header class="main-header" :class="{'main-header__shadow': isAtTop}">
       <div class="main-header__wrapper">
