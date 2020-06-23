@@ -58,7 +58,7 @@ func Register(g *gin.Engine) {
 		c.AbortWithStatus(http.StatusOK)
 	})
 
-	public := g.Group("/", cacheSetter(48*time.Hour))
+	public := g.Group("/", cacheSetter(168*time.Hour))
 	{
 		public.Static("/js", "./dist/js")
 		public.Static("/css", "./dist/css")
