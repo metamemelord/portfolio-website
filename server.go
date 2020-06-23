@@ -82,6 +82,9 @@ func init() {
 
 func main() {
 	g := gin.New()
+
+	g.Use(gin.LoggerWithWriter(os.Stdout))
+
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
 		PORT = "3000"
