@@ -42,7 +42,7 @@ func wordPressPostToPost(wpp *WordPressPost) *Post {
 		Tags:          []string{},
 	}
 
-	for tag, _ := range wpp.Tags {
+	for tag := range wpp.Tags {
 		post.Tags = append(post.Tags, tag)
 	}
 

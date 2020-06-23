@@ -97,5 +97,5 @@ func main() {
 		}
 	}()
 	go worker.KeepAlive(20 * time.Second)
-	g.Run(PORT)
+	_ = g.Run(PORT)
 }

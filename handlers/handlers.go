@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/metamemelord/portfolio-website/db"
@@ -56,12 +57,16 @@ func Register(g *gin.Engine) {
 	g.GET("/health", func(c *gin.Context) {
 		c.AbortWithStatus(http.StatusOK)
 	})
-	g.Static("/js", "./dist/js")
-	g.Static("/css", "./dist/css")
-	g.Static("/img", "./dist/img")
-	g.StaticFile("/favicon.ico", "./dist/favicon.ico")
-	g.StaticFile("/robots.txt", "./dist/robots.txt")
-	g.StaticFile("/sitemap.xml", "./dist/sitemap.xml")
+
+	public := g.Group("/", cacheSetter(48*time.Hour))
+	{
+		public.Static("/js", "./dist/js")
+		public.Static("/css", "./dist/css")
+		public.Static("/img", "./dist/img")
+		public.StaticFile("/favicon.ico", "./dist/favicon.ico")
+		public.StaticFile("/robots.txt", "./dist/robots.txt")
+		public.StaticFile("/sitemap.xml", "./dist/sitemap.xml")
+	}
 	g.NoRoute(htmlSupplier)
 }
 
@@ -107,5 +112,12 @@ func respond(c *gin.Context, status int, payload interface{}, err error) {
 		resp, _ := json.Marshal(payload)
 		log.Println("[INFO]: ", string(resp))
 		c.Data(status, "application/json", resp)
+	}
+}
+
+func cacheSetter(t time.Duration) func(*gin.Context) {
+	return func(c *gin.Context) {
+		c.Header("Cache-Control", fmt.Sprintf("max-age=%d, public", int64(t.Seconds())))
+		c.Next()
 	}
 }

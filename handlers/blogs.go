@@ -59,7 +59,7 @@ func addBlogPost(c *gin.Context) {
 
 func updateBlogPost(c *gin.Context) {
 	body := make(map[string]string)
-	json.NewDecoder(c.Request.Body).Decode(&body)
+	_ = json.NewDecoder(c.Request.Body).Decode(&body)
 	ID, ok := body["_id"]
 	if !ok {
 		respond(c, http.StatusBadRequest, nil, fmt.Errorf("_id cannot be empty"))
@@ -86,7 +86,7 @@ func updateBlogPost(c *gin.Context) {
 
 func deleteBlogPost(c *gin.Context) {
 	body := make(map[string]string)
-	json.NewDecoder(c.Request.Body).Decode(&body)
+	_ = json.NewDecoder(c.Request.Body).Decode(&body)
 	ID, ok := body["_id"]
 	if !ok {
 		respond(c, http.StatusBadRequest, nil, fmt.Errorf("_id cannot be empty"))
