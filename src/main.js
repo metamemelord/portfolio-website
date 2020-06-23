@@ -14,7 +14,7 @@ Vue.use(VueTypedJs);
 
 Vue.directive("infocus", {
   isLiteral: true,
-  inserted: (el, binding, vnode) => {
+  inserted: (el, binding) => {
     let f = () => {
       let rect = el.getBoundingClientRect();
       let inView =
