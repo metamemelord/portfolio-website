@@ -1,34 +1,39 @@
 <template>
-  <header class="main-header" :class="{'main-header__shadow': isAtTop}">
-    <div class="main-header__wrapper">
-      <div class="main-header__nav">
-        <div class="main-header__item main-header__home">
-          <router-link to="/" active-class="active" exact>
-            <i class="fa fa-home" style="font-size:1.5rem"></i>
-            <span class="main-header__item-text">Home</span>
-          </router-link>
-        </div>
-        <div class="main-header__item main-header__blogs">
-          <router-link to="/blogs" active-class="active">
-            <i class="fa fa-pencil-square-o" style="font-size:1.5rem"></i>
-            <span class="main-header__item-text">Blogs</span>
-          </router-link>
-        </div>
-      </div>
-      <div class="main-header__item main-header__email">
-        <a href="mailto:hello@gauravsaini.dev" target="blank">
-          <i class="fa fa-envelope-o" style="font-size:1.5rem"></i>
-          <span class="main-header__item-text">Contact me!</span>
-        </a>
-      </div>
+  <div class="page-header">
+    <div v-show="true">
+      <b :style="{'color': currentColor}">New!</b> Read tech blogs <a href="https://tech.gaurav.app">here!</a>
     </div>
-  </header>
+    <header class="main-header" :class="{'main-header__shadow': isAtTop}">
+      <div class="main-header__wrapper">
+        <div class="main-header__nav">
+          <div class="main-header__item main-header__home">
+            <router-link to="/" active-class="active" exact>
+              <i class="fa fa-home" style="font-size:1.5rem"></i>
+              <span class="main-header__item-text">Home</span>
+            </router-link>
+          </div>
+          <div class="main-header__item main-header__blogs">
+            <router-link to="/blogs" active-class="active">
+              <i class="fa fa-pencil-square-o" style="font-size:1.5rem"></i>
+              <span class="main-header__item-text">Blogs</span>
+            </router-link>
+          </div>
+        </div>
+        <div class="main-header__item main-header__email">
+          <a href="mailto:hello@gauravsaini.dev" target="blank">
+            <i class="fa fa-envelope-o" style="font-size:1.5rem"></i>
+            <span class="main-header__item-text">Contact me!</span>
+          </a>
+        </div>
+      </div>
+    </header>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
-    return { position: 0 };
+    return { position: 0, currentColor: '#FFF', colorsEnum: ['#FFF', '#87FD05', '#FE02A2', '#FF3503', '#00A0A0', '#FB9214, #07D5E6'] };
   },
   created() {
     let vm = this;
@@ -40,16 +45,49 @@ export default {
     isAtTop() {
       return this.position > 20;
     }
+  }, 
+  watch: {
+    position() {
+      let vm = this;
+      setTimeout(() => {
+        let col = Math.floor(2 * (Math.random())*vm.colorsEnum.length) % vm.colorsEnum.length;
+        if (vm.position != 0) {
+          vm.currentColor = vm.colorsEnum[col];
+        } else {
+          vm.currentColor = vm.colorsEnum[0];
+        }
+      }, 250);
+    }
   }
 };
 </script>
 <style>
-.main-header {
-  top: 0;
+.page-header {
   position: fixed;
   z-index: 100000;
-  width: 100%;
+  top: 0;
   min-width: 20rem;
+  width: 100%;
+}
+
+.page-header > div {
+  padding: 0.4rem;
+  background: #000;
+  text-align: center;
+  color: #fff;
+}
+
+.page-header > div a {
+  text-decoration: none;
+  cursor: pointer;
+  color: rgb(255, 161, 38);
+}
+
+.page-header > div b {
+  transition: 250ms color;
+}
+
+.main-header {
   color: white;
   background: #333;
   transition: 0.4s box-shadow ease-out;
