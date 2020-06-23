@@ -46,7 +46,7 @@ export default {
 }
 
 .blog__post > h1 {
-  color: rgb(255, 161, 38);
+  color: var(--accent-color);
   font-size: 3rem;
   margin: 0.8rem;
   margin-bottom: 0.3rem;
@@ -64,7 +64,7 @@ export default {
 .blog__post-tags > span {
   margin: 0.5rem;
   padding: 0.5rem;
-  background: rgb(255, 161, 38);
+  background: var(--accent-color);
   color: #2e3342;
   border-radius: 0.2rem;
   -webkit-touch-callout: none;

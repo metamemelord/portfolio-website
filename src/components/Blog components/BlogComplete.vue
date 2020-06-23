@@ -12,7 +12,7 @@
         <font>
           <a
             :href="getPostAuthorContact"
-            style="color:rgb(255, 161, 38);text-decoration: none;"
+            style="color:var(--accent-color);text-decoration: none;"
             @click.stop
             target="blank"
           >{{getPostAuthor}}</a>
@@ -99,7 +99,7 @@ main {
 }
 
 .blog__post-complete > h1 {
-  color: rgb(255, 161, 38);
+  color: var(--accent-color);
   font-size: 4rem;
   margin: 0.5rem;
 }
@@ -125,7 +125,7 @@ main {
 .blog__post-tags-complete > span {
   margin: 0.5rem;
   padding: 0.5rem;
-  background: rgb(255, 161, 38);
+  background: var(--accent-color);
   color: #2e3342;
   border-radius: 0.2rem;
   -webkit-touch-callout: none;

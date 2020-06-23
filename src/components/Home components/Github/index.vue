@@ -175,7 +175,7 @@ export default {
 }
 
 .loader #accent:after {
-  background: rgb(255, 161, 38);
+  background: var(--accent-color);
 }
 
 .loader .circle:nth-child(2) {

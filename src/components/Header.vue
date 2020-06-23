@@ -80,7 +80,7 @@ export default {
 .page-header > div a {
   text-decoration: none;
   cursor: pointer;
-  color: rgb(255, 161, 38);
+  color: var(--accent-color);
 }
 
 .page-header > div b {

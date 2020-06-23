@@ -54,7 +54,7 @@ export default {
 }
 
 .linkedin__timeline-point-current {
-  background: rgb(255, 161, 38);
+  background: var(--accent-color);
 }
 
 .linkedin__timeline-item {

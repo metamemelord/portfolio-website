@@ -38,7 +38,7 @@ export default {
 }
 
 .blog__post > h1 {
-  color: rgb(255, 161, 38);
+  color: var(--accent-color);
   font-size: 3rem;
   margin: 0.8rem;
   text-align: center;

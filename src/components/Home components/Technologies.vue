@@ -87,7 +87,7 @@ export default {
 }
 
 .saturated-tech {
-  color: rgb(255, 161, 38) !important;
+  color: var(--accent-color) !important;
 }
 
 .tech:hover {

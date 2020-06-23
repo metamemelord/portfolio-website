@@ -1,7 +1,7 @@
 <template>
   <div class="main__intro">
     <div class="main__intro-image-container">
-      <img class="main__intro-image" src="../../assets/DP-min.png" alt="Gaurav Saini">
+      <img class="main__intro-image" src="../../assets/Portrait.webp" alt="Gaurav Saini">
     </div>
     <div class="main__intro-content">
       <div style="margin:auto">
@@ -54,6 +54,7 @@
   height: 40vmin;
   max-height: 20rem;
   min-height: 10rem;
+  border-radius: 50%;
 }
 
 .main__intro-content {
@@ -91,7 +92,7 @@
 }
 
 .main__intro-information i {
-  color: rgb(255, 161, 38);
+  color: var(--accent-color);
   font-size: 2rem;
 }
 
@@ -103,6 +104,7 @@
   }
   .main__intro-image {
     margin: 2rem;
+    margin-left: 5rem;
     height: 25vmin;
   }
   .main__intro-content h1 {

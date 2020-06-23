@@ -88,7 +88,7 @@ export default {
   padding: 0.5rem;
   margin: 0.5rem;
   color: white;
-  background: rgb(255, 161, 38);
+  background: var(--accent-color);
   border-radius: 3px;
   max-width: calc(33.33% - 1rem);
 }
@@ -104,16 +104,16 @@ export default {
   padding: 1rem;
   border: 1px transparent solid;
   color: white;
-  background: rgb(255, 161, 38);
+  background: var(--accent-color);
   border-radius: 0px 0px 3px 3px;
   transition: all 0.3s;
   cursor: pointer;
 }
 
 .github__card button:hover {
-  border: 1px solid rgb(255, 161, 38);
+  border: 1px solid var(--accent-color);
   background: transparent;
-  color: black;
+  color: var(--accent-color);
   border-radius: 0px 0px 3px 3px;
 }
 

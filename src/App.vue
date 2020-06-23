@@ -51,6 +51,7 @@ html {
   font-family: "Open Sans", "Calibri", sans-serif;
   color: #333;
   transition: 0.5s background-color;
+  --accent-color: rgb(255, 161, 38);
 }
 
 .night {
@@ -77,7 +78,7 @@ body {
 }
 
 .active {
-  color: rgb(255, 161, 38) !important;
+  color: var(--accent-color) !important;
 }
 
 .float-animation {

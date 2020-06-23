@@ -24,7 +24,7 @@
 .linkedin__languages-items span {
   margin: 0.5rem;
   padding: 0.5rem;
-  background: rgb(255, 161, 38);
+  background: var(--accent-color);
   color: #2e3342;
   border-radius: 0.2rem;
   -webkit-touch-callout: none;
