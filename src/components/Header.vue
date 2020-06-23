@@ -94,7 +94,7 @@ export default {
 }
 
 .main-header__shadow {
-  box-shadow: 0px 0px 4px 4px var(--shadow-color);
+  box-shadow: 0px 4px 4px var(--shadow-color);
 }
 
 .main-header__wrapper {
