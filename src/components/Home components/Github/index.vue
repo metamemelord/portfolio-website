@@ -3,7 +3,7 @@
     <div class="github__label">
       <a href="https://github.com/metamemelord" target="blank">
         <img
-          src="../../../assets/Octocat-min.png"
+          src="../../../assets/Octocat.webp"
           alt="Github octocat"
           v-infocus="'saturate-image float-animation'"
         >
