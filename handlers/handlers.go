@@ -32,7 +32,7 @@ func init() {
 }
 
 func Register(g *gin.Engine) {
-	api := g.Group("/api")
+	api := g.Group("/api", cacheSetter(90*time.Minute))
 	{
 		api.GET("/blogs", returnBlogPosts)
 		api.POST("/blog", verifyCredentials, addBlogPost)
