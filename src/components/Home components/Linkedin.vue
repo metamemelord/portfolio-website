@@ -3,7 +3,7 @@
     <div class="linkedin__label">
       <a
         class="light-a"
-        href="https://www.linkedin.com/in/ergauravtondwal/"
+        href="https://www.linkedin.com/in/metamemelord/"
         target="blank"
         v-infocus="'float-animation saturated-linkedin'"
       >
