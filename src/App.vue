@@ -37,10 +37,10 @@ export default {
       if (hour != prev) {
         if (hour >= night || hour < day) {
           document.getElementsByTagName("html")[0].className = "night";
-          document.body.className = "night"
+          document.body.className = "night-font"
         } else if (hour >= evening && hour < night) {
           document.getElementsByTagName("html")[0].className = "dark";
-          document.body.className = "dark"
+          document.body.className = "night-font"
         } else {
           document.getElementsByTagName("html")[0].className = "";
           document.body.className = ""
