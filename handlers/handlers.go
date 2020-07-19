@@ -52,7 +52,8 @@ func Register(g *gin.Engine) {
 		api.GET("/repos", getGithubReposHandler)
 		api.GET("/wordpress", getWordpressPostsHandler)
 		api.GET("/wordpress/:id", getWordpressPostbyIDHandler)
-		api.POST("admin/data/refresh", verifyCredentials, refreshData)
+		api.POST("/email", sendEmail)
+		api.POST("/admin/data/refresh", verifyCredentials, refreshData)
 	}
 	g.GET("/health", func(c *gin.Context) {
 		c.AbortWithStatus(http.StatusOK)

@@ -53,17 +53,23 @@ html {
   transition: 0.5s background-color;
   --accent-color: rgb(255, 161, 38);
   font-display: swap;
+  --background-color: white;
+  --text-color: #333;
 }
 
 .night {
   background: black;
+  --background-color: black;
   color: rgb(173, 173, 173);
+  --text-color: rgb(173, 173, 173);
   --shadow-color: rgba(255, 255, 255, 0.15);
 }
 
 .dark {
   background: #262d41;
+  --background-color: #262d41;
   color: #eee;
+  --text-color: #eee
 }
 
 .light-a {

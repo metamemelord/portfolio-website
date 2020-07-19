@@ -10,7 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/metamemelord/portfolio-website/handlers"
-	"github.com/metamemelord/portfolio-website/worker"
+	"github.com/metamemelord/portfolio-website/pkg/worker"
 )
 
 func init() {

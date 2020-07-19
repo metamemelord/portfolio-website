@@ -20,18 +20,24 @@
           </div>
         </div>
         <div class="main-header__item main-header__email">
-          <a href="mailto:hello@gauravsaini.dev" target="blank">
+          <a @click="openContactMeDialog">
             <i class="fa fa-envelope-o" style="font-size:1.5rem"></i>
             <span class="main-header__item-text">Contact me!</span>
           </a>
         </div>
+        <contact-me/>
       </div>
     </header>
   </div>
 </template>
 
 <script>
+import contactMe from "./ContactMe.vue";
+
 export default {
+  components: {
+    contactMe
+  },
   data() {
     return { position: 0, currentColor: '#FFF', colorsEnum: ['#FFF', '#87FD05', '#FE02A2', '#FF3503', '#00A0A0', '#FB9214, #07D5E6'] };
   },
@@ -44,8 +50,16 @@ export default {
   computed: {
     isAtTop() {
       return this.position > 20;
+    },
+    contactMeDialog() {
+      return this.$store.contactMeDialog;
     }
   }, 
+  methods: {
+    openContactMeDialog() {
+      this.$store.dispatch('setContactMeDialog', true);
+    }
+  },
   watch: {
     position() {
       let vm = this;
@@ -119,10 +133,7 @@ export default {
   transition: 0.5s all;
   color: white;
   text-decoration: none;
-}
-
-.main-header__item a:hover {
-  color: #aaa;
+  cursor: pointer;
 }
 
 .main-header__item-text {
