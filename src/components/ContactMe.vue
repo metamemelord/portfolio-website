@@ -1,27 +1,58 @@
 <template>
   <transition name="grow" mode="out-in">
     <div v-if="contactMeDialog" class="contact-me-dialog">
-        <div>
-          <div class="contact-me-dialog-closer" @click="closeContactMeDialog()"><i class="fa fa-times" aria-hidden="true"></i></div>
+      <div>
+        <div class="contact-me-dialog-closer" @click="closeContactMeDialog()">
+          <i class="fa fa-times" aria-hidden="true"></i>
         </div>
-        <template v-if="form_status==0">
-          <h1>Say hello!</h1>
-          <form>
-              <input type="text" @focus="invalid_name=false" :class="{'invalid-content': invalid_name}" v-model="name" placeholder="Full name">
-              <input type="email" @focus="invalid_email=false" :class="{'invalid-content': invalid_email}" v-model="email" placeholder="Email">
-              <textarea @focus="invalid_body=false" :class="{'invalid-content': invalid_body}" v-model="body" class="contact-me-dialog__body" row="7" placeholder="What is this about? (Max 500 characters)"/>
-              <input :disabled="send_queued" class="contact-me-dialog__submit-btn" type="submit" @click.prevent="submitForm()" value="Submit">
-          </form>
-        </template>
-        <template v-else-if="form_status==1">
-          <h1 class="contact-me-dialog__status"><i style="color:red;" class="fa fa-times-circle-o"></i></h1>
-          <span style="margin-bottom: 2rem;">Something's not right, please try again later.</span>
-        </template>
-        <template v-else>
-          <h1 class="contact-me-dialog__status"><i class="fa fa-check-circle-o"></i></h1>
-          <span style="margin-bottom: 2rem;">Your message has been sent</span>
-        </template>
-    </div>  
+      </div>
+      <template v-if="form_status==0">
+        <h1>Say hello!</h1>
+        <form>
+          <input
+            type="text"
+            @focus="invalid_name=false"
+            :class="{'invalid-content': invalid_name}"
+            v-model="name"
+            placeholder="Full name"
+          />
+          <input
+            type="email"
+            @focus="invalid_email=false"
+            :class="{'invalid-content': invalid_email}"
+            v-model="email"
+            placeholder="Email"
+          />
+          <textarea
+            @focus="invalid_body=false"
+            :class="{'invalid-content': invalid_body}"
+            v-model="body"
+            class="contact-me-dialog__body"
+            row="7"
+            placeholder="What is this about? (Max 500 characters)"
+          />
+          <input
+            :disabled="send_queued"
+            class="contact-me-dialog__submit-btn"
+            type="submit"
+            @click.prevent="submitForm()"
+            value="Submit"
+          />
+        </form>
+      </template>
+      <template v-else-if="form_status==1">
+        <h1 class="contact-me-dialog__status">
+          <i style="color:red;" class="fa fa-times-circle-o"></i>
+        </h1>
+        <span style="margin-bottom: 2rem;">Something's not right, please try again later.</span>
+      </template>
+      <template v-else>
+        <h1 class="contact-me-dialog__status">
+          <i class="fa fa-check-circle-o"></i>
+        </h1>
+        <span style="margin-bottom: 2rem;">Your message has been sent</span>
+      </template>
+    </div>
   </transition>
 </template>
 
@@ -38,7 +69,7 @@ export default {
       invalid_body: false,
       send_queued: false,
       form_status: 0
-    }
+    };
   },
   computed: {
     contactMeDialog() {
@@ -47,13 +78,13 @@ export default {
   },
   methods: {
     closeContactMeDialog() {
-      this.form_status=0;
+      this.form_status = 0;
       this.name = "";
       this.email = "";
       this.body = "";
       this.send_queued = false;
       this.form_status = 0;
-      this.$store.dispatch('setContactMeDialog', false);
+      this.$store.dispatch("setContactMeDialog", false);
     },
     submitForm() {
       const formData = new FormData();
@@ -62,16 +93,20 @@ export default {
         this.invalid_name = true;
         return;
       }
-      formData.append('name', this.name);
+      formData.append("name", this.name);
 
       if (!this.email) {
         this.invalid_email = true;
         return;
-      } else if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.email)) {
+      } else if (
+        !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+          this.email
+        )
+      ) {
         this.invalid_email = true;
         return;
       }
-      formData.append('email', this.email);
+      formData.append("email", this.email);
 
       if (!this.body) {
         this.invalid_body = true;
@@ -81,15 +116,18 @@ export default {
         this.body = this.body.substring(0, 500);
         return;
       }
-      formData.append('datetime', new Date());
-      formData.append('body', this.body);
+      formData.append("datetime", new Date());
+      formData.append("body", this.body);
 
       this.send_queued = true;
-      this.$http.post('/api/email', formData).then(() => {
-        this.form_status=2;
-      }).catch(() => {
-        this.form_status=1;
-      });
+      this.$http
+        .post("/api/email", formData)
+        .then(() => {
+          this.form_status = 2;
+        })
+        .catch(() => {
+          this.form_status = 1;
+        });
     }
   }
 };
@@ -98,7 +136,7 @@ export default {
 <style scoped>
 .invalid-content,
 .contact-me-dialog input:invalid {
-  background:rgba(255, 91, 91, 0.15);
+  background: rgba(255, 91, 91, 0.15);
   border: 1px solid red !important;
 }
 
@@ -137,7 +175,7 @@ export default {
 }
 
 .contact-me-dialog input:focus,
-.contact-me-dialog__body:focus  {
+.contact-me-dialog__body:focus {
   border: 1px solid var(--accent-color);
   border-radius: 0.2rem;
 }
@@ -208,8 +246,7 @@ export default {
 }
 
 .grow-enter,
-.grow-leave-to
-{
+.grow-leave-to {
   opacity: 0;
   transform: scale(0.4);
 }

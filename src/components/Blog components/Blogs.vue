@@ -3,11 +3,12 @@
     <div class="blogs__tags-filter" v-if="getTagsByCount().length">
       <b>Top tags:</b>
       <div>
-        <span v-for="(tag,idx) in getTagsByCount()" 
-        :key="idx"
-        :value="tag[1].toLowerCase()"
-        @click="toggleTagInData($event)">{{tag[1]|capitalize}}
-      </span>
+        <span
+          v-for="(tag,idx) in getTagsByCount()"
+          :key="idx"
+          :value="tag[1].toLowerCase()"
+          @click="toggleTagInData($event)"
+        >{{tag[1]|capitalize}}</span>
       </div>
     </div>
     <blog-post v-for="(blogPost, idx) in blogPosts" :key="idx" :blogPost="blogPost"></blog-post>
@@ -21,13 +22,13 @@ export default {
   data() {
     return {
       tags: []
-    }
+    };
   },
   components: {
     blogPost
   },
   methods: {
-    toggleTagInData(event){
+    toggleTagInData(event) {
       let el = event.target;
       let tag = el.getAttribute("value");
       let idx = this.tags.indexOf(tag);
@@ -41,10 +42,10 @@ export default {
       }
     },
     getTagsByCount() {
-      let tags = {}
-      for(let post of this.$store.getters.blogPosts) {
-        for(let tag of post.tags) {
-          if(tag in tags) {
+      let tags = {};
+      for (let post of this.$store.getters.blogPosts) {
+        for (let tag of post.tags) {
+          if (tag in tags) {
             tags[tag]++;
           } else {
             tags[tag] = 1;
@@ -52,10 +53,12 @@ export default {
         }
       }
       let res = [];
-      for(let tag in tags) {
+      for (let tag in tags) {
         res.push([tags[tag], tag]);
       }
-      return res.sort((el1, el2) => parseInt(el1[0]) < parseInt(el2[0])).slice(0, 7);
+      return res
+        .sort((el1, el2) => parseInt(el1[0]) < parseInt(el2[0]))
+        .slice(0, 7);
     }
   },
   computed: {
@@ -64,7 +67,7 @@ export default {
         return this.$store.getters.blogPosts;
       }
       return this.$store.getters.blogPosts.filter(el => {
-        for(let tag of el.tags) {
+        for (let tag of el.tags) {
           if (this.tags.includes(tag.toLowerCase())) {
             return true;
           }
@@ -74,11 +77,14 @@ export default {
     }
   },
   beforeMount() {
-  	this.$http.get("api/wordpress").then(res => {
-		if (res.status == 200) this.$store.dispatch("setPosts", res.body)
-		else throw "Wordpress call failed"
-  }).catch(err => this.$store.dispatch("initPosts"));
-  },
+    this.$http
+      .get("api/wordpress")
+      .then(res => {
+        if (res.status == 200) this.$store.dispatch("setPosts", res.body);
+        else throw "Wordpress call failed";
+      })
+      .catch(() => this.$store.dispatch("initPosts"));
+  }
 };
 </script>
 <style>
@@ -103,9 +109,9 @@ main {
 }
 
 .blogs__tags-filter div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .blogs__tags-filter span {
@@ -116,7 +122,7 @@ main {
   color: #2e3342;
   border-radius: 0.2rem;
   cursor: pointer;
-  transition: background,color 0.2s linear;
+  transition: background, color 0.2s linear;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -133,7 +139,7 @@ main {
   .blogs__tags-filter {
     display: block;
   }
-  
+
   .blogs__tags-filter div {
     display: inline;
   }
