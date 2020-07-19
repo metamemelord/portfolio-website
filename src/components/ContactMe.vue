@@ -151,9 +151,9 @@ export default {
   align-items: center;
   flex-flow: column;
   border-radius: 0.5rem;
-  width: calc(100vw - 2rem);
+  width: calc(100vw - 2.9rem);
   max-width: 70rem;
-  min-width: 25rem;
+  min-width: 23rem;
   box-shadow: 0px 0px 12px 12px var(--shadow-color);
   z-index: 15;
 }
@@ -260,6 +260,7 @@ export default {
 @media screen and (min-width: 550px) {
   .contact-me-dialog {
     right: 1rem;
+    width: calc(100vw - 2.8rem);
   }
 }
 
