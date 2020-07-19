@@ -25,7 +25,9 @@
             <span class="main-header__item-text">Contact me!</span>
           </a>
         </div>
-        <contact-me/>
+        <transition name="grow" mode="out-in">
+          <contact-me/>
+        </transition>
       </div>
     </header>
   </div>
@@ -50,9 +52,6 @@ export default {
   computed: {
     isAtTop() {
       return this.position > 20;
-    },
-    contactMeDialog() {
-      return this.$store.contactMeDialog;
     }
   }, 
   methods: {
@@ -138,6 +137,19 @@ export default {
 
 .main-header__item-text {
   display: none;
+}
+
+.grow-enter-active {
+  animation: grow 150ms ease-out forwards;
+}
+
+@keyframes grow {
+  from {
+    transform: scale(0.4);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 @media screen and (min-width: 550px) {

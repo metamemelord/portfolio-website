@@ -115,7 +115,7 @@ export default {
   max-width: 70rem;
   min-width: 20rem;
   box-shadow: 0px 0px 12px 12px var(--shadow-color);
-  z-index: 10;
+  z-index: 15;
 }
 
 .contact-me-dialog form {

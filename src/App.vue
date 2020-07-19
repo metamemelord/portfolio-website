@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <app-header/>
+    <div v-if="contactMeDialog" class="page-shield"></div>
     <keep-alive exclude="blog-complete">
       <transition name="fade" mode="out-in">
         <router-view/>
@@ -19,6 +20,11 @@ export default {
   components: {
     appHeader: Header,
     appFooter: Footer
+  },
+  computed: {
+    contactMeDialog() {
+      return this.$store.state.contactMeDialog;
+    }
   },
   created() {
     var prev = -1;
@@ -90,6 +96,23 @@ body {
 
 .float-animation {
   animation: float-slow 10s linear infinite;
+}
+
+.page-shield {
+  background:rgba(0, 0, 0, 0.5);
+  position: fixed;
+  width: 100vw;
+  top: 6.3rem;
+  height: calc(100vh - 10.3rem);
+  z-index: 10;
+}
+
+@media screen and (min-width: 550px) {
+  .page-shield {
+    top: 6.3rem;
+    height: calc(100vh - 8.3rem);
+    z-index: 10;
+  }
 }
 
 @keyframes float-slow {
