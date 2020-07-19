@@ -25,7 +25,7 @@ export default {
 <style>
 main {
   margin-top: 7.3rem;
-  max-width: 70rem;
+  max-width: 72rem;
   min-width: 25rem;
 }
 

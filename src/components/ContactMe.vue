@@ -1,4 +1,5 @@
 <template>
+  <transition name="grow" mode="out-in">
     <div v-if="contactMeDialog" class="contact-me-dialog">
         <div>
           <div class="contact-me-dialog-closer" @click="closeContactMeDialog()"><i class="fa fa-times" aria-hidden="true"></i></div>
@@ -21,6 +22,7 @@
           <span style="margin-bottom: 2rem;">Your message has been sent</span>
         </template>
     </div>  
+  </transition>
 </template>
 
 <script>
@@ -198,6 +200,24 @@ export default {
   color: var(--accent-color);
   margin: 1rem;
   font-size: 7rem;
+}
+
+.grow-enter-active,
+.grow-leave-active {
+  transition: all 225ms ease-out;
+}
+
+.grow-enter,
+.grow-leave-to
+{
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+.modal-leave,
+.modal-enter-to {
+  opacity: 1;
+  transform: scale(1);
 }
 
 @media screen and (min-width: 550px) {

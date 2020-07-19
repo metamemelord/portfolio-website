@@ -86,7 +86,7 @@ main {
   max-width: 72rem;
   margin: auto;
   margin-top: 7.3rem;
-  min-height: calc(100vh - 9rem);
+  min-height: calc(100vh - 10.8rem);
 }
 .blogs__tags-filter {
   display: flex;
@@ -127,7 +127,7 @@ main {
 
 @media screen and (min-width: 550px) {
   main {
-    min-height: calc(100vh - 7.3rem);
+    min-height: calc(100vh - 9rem);
   }
 
   .blogs__tags-filter {
