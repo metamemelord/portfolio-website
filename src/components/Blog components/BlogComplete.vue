@@ -142,7 +142,6 @@ main {
   justify-content: center;
   align-items: center;
   box-shadow: 0px 0px 3px 2px var(--shadow-color);
-  border: 0.25px solid;
   border-radius: 50%;
   right: 1rem;
   top: 1rem;

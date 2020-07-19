@@ -121,7 +121,6 @@ export default {
 .tech__content__image-container span {
   position: absolute;
   top: -2rem;
-  background: red;
 }
 
 @media screen and (min-width: 550px) {

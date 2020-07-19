@@ -27,7 +27,12 @@
         media="print" onload="this.media='all'" />
     <style>
         :root {
+            background: #fff;
+            color: #333;
             --shadow-color: rgba(0, 0, 0, 0.15);
+            --background-color: #fff;
+            --text-color: #333;
+            --accent-color: rgb(255, 161, 38);
         }
 
         * {
@@ -36,12 +41,8 @@
 
         html {
             font-family: "Open Sans", "Calibri", sans-serif;
-            color: #333;
             transition: 0.5s background-color, color;
-            --accent-color: rgb(255, 161, 38);
             font-display: swap;
-            --background-color: white;
-            --text-color: #333;
         }
 
         .night {
@@ -69,6 +70,7 @@
 
         body {
             margin: 0;
+            transition: 2s background-color, color;
         }
 
         .active {

@@ -27,23 +27,27 @@ export default {
     }
   },
   created() {
-    var prev = -1;
     const day = this.$store.state.day,
       evening = this.$store.state.evening,
       night = this.$store.state.night;
+      
+    let prev = -1;
     setInterval(() => {
       const hour = new Date().getHours();
       if (hour != prev) {
         if (hour >= night || hour < day) {
           document.getElementsByTagName("html")[0].className = "night";
+          document.body.className = "night"
         } else if (hour >= evening && hour < night) {
           document.getElementsByTagName("html")[0].className = "dark";
+          document.body.className = "dark"
         } else {
           document.getElementsByTagName("html")[0].className = "";
+          document.body.className = ""
         }
         prev = hour;
       }
-    }, 1500);
+    }, 1000);
   }
 };
 </script>
