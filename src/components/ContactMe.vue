@@ -9,15 +9,16 @@
               <input type="text" @focus="invalid_name=false" :class="{'invalid-content': invalid_name}" v-model="name" placeholder="Full name">
               <input type="email" @focus="invalid_email=false" :class="{'invalid-content': invalid_email}" v-model="email" placeholder="Email">
               <textarea @focus="invalid_body=false" :class="{'invalid-content': invalid_body}" v-model="body" class="contact-me-dialog__body" row="7" placeholder="What is this about? (Max 500 characters)"/>
-              <input class="contact-me-dialog__submit-btn" type="submit" @click.prevent="submitForm()" value="Submit">
+              <input :disabled="send_queued" class="contact-me-dialog__submit-btn" type="submit" @click.prevent="submitForm()" value="Submit">
           </form>
         </template>
         <template v-else-if="form_status==1">
-          <h1 class="contact-me-dialog__success-check"><i style="color:red;" class="fa fa-times-circle-o"></i></h1>
-          Something's not right, please try again later.
+          <h1 class="contact-me-dialog__status"><i style="color:red;" class="fa fa-times-circle-o"></i></h1>
+          <span style="margin-bottom: 2rem;">Something's not right, please try again later.</span>
         </template>
         <template v-else>
-          <h1 class="contact-me-dialog__success-check"><i class="fa fa-check-circle-o"></i></h1>
+          <h1 class="contact-me-dialog__status"><i class="fa fa-check-circle-o"></i></h1>
+          <span style="margin-bottom: 2rem;">Your message has been sent</span>
         </template>
     </div>  
 </template>
@@ -33,6 +34,7 @@ export default {
       invalid_name: false,
       invalid_email: false,
       invalid_body: false,
+      send_queued: false,
       form_status: 0
     }
   },
@@ -47,6 +49,8 @@ export default {
       this.name = "";
       this.email = "";
       this.body = "";
+      this.send_queued = false;
+      this.form_status = 0;
       this.$store.dispatch('setContactMeDialog', false);
     },
     submitForm() {
@@ -78,6 +82,7 @@ export default {
       formData.append('datetime', new Date());
       formData.append('body', this.body);
 
+      this.send_queued = true;
       this.$http.post('/api/email', formData).then(() => {
         this.form_status=2;
       }).catch(() => {
@@ -159,12 +164,19 @@ export default {
 }
 
 .contact-me-dialog__submit-btn {
+  color: #fff !important;
   margin: 1rem !important;
   margin-bottom: 2.5rem !important;
   background: var(--accent-color) !important;
   width: 6rem !important;
   border: none !important;
   font-weight: 600;
+  cursor: pointer;
+}
+
+.contact-me-dialog__submit-btn:disabled {
+  filter: grayscale(50%);
+  cursor: progress;
 }
 
 .contact-me-dialog-closer {
@@ -183,7 +195,7 @@ export default {
   color: rgb(255, 91, 91);
 }
 
-.contact-me-dialog__success-check{
+.contact-me-dialog__status {
   color: var(--accent-color);
   margin: 1rem;
   font-size: 7rem;
