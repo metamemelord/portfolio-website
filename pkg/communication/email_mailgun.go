@@ -25,7 +25,6 @@ Message:
 %s
 `
 	emailBody = fmt.Sprintf(emailBody, email.SenderName, email.SenderEmail, email.DataTime, email.Body)
-	fmt.Println(emailBody)
 
 	message := m.mg.NewMessage(email.SenderEmail, email.Subject, emailBody, email.RecipientEmail)
 	resp, id, err := m.mg.Send(ctx, message)
