@@ -6,6 +6,7 @@ import VueTypedJs from 'vue-typed-js'
 import App from "./App.vue";
 import store from "./store/store";
 import router from "./routes";
+import "normalize.css"
 
 Vue.use(VueResource);
 Vue.use(Vuex);

@@ -113,7 +113,7 @@ export default {
   border-radius: 0.5rem;
   width: calc(100vw - 2rem);
   max-width: 70rem;
-  min-width: 20rem;
+  min-width: 25rem;
   box-shadow: 0px 0px 12px 12px var(--shadow-color);
   z-index: 15;
 }
