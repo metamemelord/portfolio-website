@@ -9,6 +9,7 @@ require (
 	github.com/gobuffalo/envy v1.9.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/mailgun/mailgun-go v2.0.0+incompatible
+	github.com/mailgun/mailgun-go/v4 v4.1.3
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v1.0.0 // indirect

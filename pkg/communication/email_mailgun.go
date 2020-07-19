@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/mailgun/mailgun-go"
+	"github.com/mailgun/mailgun-go/v4"
 )
 
 func NewEmailSender() EmailSender {
@@ -26,7 +26,7 @@ Body: %s
 	emailBody = fmt.Sprintf(emailBody, email.SenderName, email.SenderEmail, email.DataTime, email.Body)
 
 	message := m.mg.NewMessage(email.SenderEmail, email.Subject, emailBody, email.RecipientEmail)
-	resp, id, err := m.mg.Send(message)
+	resp, id, err := m.mg.Send(ctx, message)
 
 	if err != nil {
 		log.Println(err, resp)
