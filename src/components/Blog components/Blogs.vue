@@ -83,7 +83,7 @@ export default {
 </script>
 <style>
 main {
-  max-width: 70rem;
+  max-width: 72rem;
   margin: auto;
   margin-top: 7.3rem;
   min-height: calc(100vh - 9rem);
