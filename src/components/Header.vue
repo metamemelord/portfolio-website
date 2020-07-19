@@ -166,14 +166,10 @@ export default {
     color: #333;
   }
   .main-header__item a {
-    color: inherit;
     display: flex;
     align-items: center;
   }
 
-  .main-header__item a:hover {
-    color: inherit;
-  }
   .main-header__item a i {
     padding-left: 0.3rem;
     padding-right: 0.3rem;

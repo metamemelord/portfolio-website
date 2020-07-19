@@ -94,7 +94,7 @@ main {
   align-content: space-between;
   justify-content: center;
   position: relative;
-  top: -1.1rem;
+  top: -1.4rem;
   padding: 1.25rem;
   padding-left: 2rem;
   margin: 1rem;
