@@ -21,8 +21,9 @@ export default {
 
 <style>
 .page-footer {
-  position: sticky;
+  position: fixed;
   width: 100%;
+  min-width: 25rem;
   bottom: 0;
   display: flex;
   flex-flow: column;

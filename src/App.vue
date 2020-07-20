@@ -1,12 +1,15 @@
 <template>
   <div id="app">
     <app-header />
-    <div v-if="contactMeDialog" class="page-shield"></div>
+    <transition name="fade" mode="out-in">
+      <div v-if="contactMeDialog" class="page-shield"></div>
+    </transition>
     <keep-alive exclude="blog-complete">
       <transition name="fade" mode="out-in">
         <router-view />
       </transition>
     </keep-alive>
+    <contact-me />
     <app-footer />
   </div>
 </template>
@@ -14,12 +17,14 @@
 <script>
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
+import contactMe from "./components/ContactMe.vue";
 
 export default {
   name: "app",
   components: {
     appHeader: Header,
-    appFooter: Footer
+    appFooter: Footer,
+    contactMe
   },
   computed: {
     contactMeDialog() {
@@ -97,16 +102,12 @@ body {
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
   width: 100vw;
-  top: 6.3rem;
-  height: calc(100vh - 10.3rem);
-  z-index: 10;
+  top: 0;
+  height: 100vh;
+  z-index: 2;
+  overflow: hidden;
 }
-@media screen and (min-width: 550px) {
-  .page-shield {
-    top: 6.3rem;
-    height: calc(100vh - 8.3rem);
-  }
-}
+
 @keyframes float-slow {
   0% {
     transform: translateY(0);

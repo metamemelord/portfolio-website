@@ -25,19 +25,14 @@
             <span class="main-header__item-text">Contact me!</span>
           </a>
         </div>
-        <contact-me/>
       </div>
     </header>
   </div>
 </template>
 
 <script>
-import contactMe from "./ContactMe.vue";
 
 export default {
-  components: {
-    contactMe
-  },
   data() {
     return { position: 0, currentColor: '#FFF', colorsEnum: ['#FFF', '#87FD05', '#FE02A2', '#FF3503', '#00A0A0', '#FB9214, #07D5E6'] };
   },

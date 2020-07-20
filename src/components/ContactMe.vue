@@ -1,57 +1,59 @@
 <template>
   <transition name="grow" mode="out-in">
-    <div v-if="contactMeDialog" class="contact-me-dialog">
-      <div>
-        <div class="contact-me-dialog-closer" @click="closeContactMeDialog()">
-          <i class="fa fa-times" aria-hidden="true"></i>
+    <div v-if="contactMeDialog" class="contact-me-dialog__wrapper">
+      <div v-if="contactMeDialog" class="contact-me-dialog">
+        <div>
+          <div class="contact-me-dialog-closer" @click="closeContactMeDialog()">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </div>
         </div>
+        <template v-if="form_status==0">
+          <h1>Say hello!</h1>
+          <form>
+            <input
+              type="text"
+              @focus="invalid_name=false"
+              :class="{'invalid-content': invalid_name}"
+              v-model="name"
+              placeholder="Full name"
+            />
+            <input
+              type="email"
+              @focus="invalid_email=false"
+              :class="{'invalid-content': invalid_email}"
+              v-model="email"
+              placeholder="Email"
+            />
+            <textarea
+              @focus="invalid_body=false"
+              :class="{'invalid-content': invalid_body}"
+              v-model="body"
+              class="contact-me-dialog__body"
+              row="7"
+              placeholder="What is this about? (Max 500 characters)"
+            />
+            <input
+              :disabled="send_queued"
+              class="contact-me-dialog__submit-btn"
+              type="submit"
+              @click.prevent="submitForm()"
+              value="Submit"
+            />
+          </form>
+        </template>
+        <template v-else-if="form_status==1">
+          <h1 class="contact-me-dialog__status">
+            <i style="color:red;" class="fa fa-times-circle-o"></i>
+          </h1>
+          <span style="margin-bottom: 2rem;">Something's not right, please try again later.</span>
+        </template>
+        <template v-else>
+          <h1 class="contact-me-dialog__status">
+            <i class="fa fa-check-circle-o"></i>
+          </h1>
+          <span style="margin-bottom: 2rem;">Your message has been sent</span>
+        </template>
       </div>
-      <template v-if="form_status==0">
-        <h1>Say hello!</h1>
-        <form>
-          <input
-            type="text"
-            @focus="invalid_name=false"
-            :class="{'invalid-content': invalid_name}"
-            v-model="name"
-            placeholder="Full name"
-          />
-          <input
-            type="email"
-            @focus="invalid_email=false"
-            :class="{'invalid-content': invalid_email}"
-            v-model="email"
-            placeholder="Email"
-          />
-          <textarea
-            @focus="invalid_body=false"
-            :class="{'invalid-content': invalid_body}"
-            v-model="body"
-            class="contact-me-dialog__body"
-            row="7"
-            placeholder="What is this about? (Max 500 characters)"
-          />
-          <input
-            :disabled="send_queued"
-            class="contact-me-dialog__submit-btn"
-            type="submit"
-            @click.prevent="submitForm()"
-            value="Submit"
-          />
-        </form>
-      </template>
-      <template v-else-if="form_status==1">
-        <h1 class="contact-me-dialog__status">
-          <i style="color:red;" class="fa fa-times-circle-o"></i>
-        </h1>
-        <span style="margin-bottom: 2rem;">Something's not right, please try again later.</span>
-      </template>
-      <template v-else>
-        <h1 class="contact-me-dialog__status">
-          <i class="fa fa-check-circle-o"></i>
-        </h1>
-        <span style="margin-bottom: 2rem;">Your message has been sent</span>
-      </template>
     </div>
   </transition>
 </template>
@@ -140,22 +142,34 @@ export default {
   border: 1px solid red !important;
 }
 
+.contact-me-dialog__wrapper {
+  position: fixed;
+  display: flex;
+  top: 0;
+  background: transparent;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  padding-top: 6.3rem;
+  z-index: 2;
+}
+
 .contact-me-dialog {
-  top: 6.3rem;
+  position: relative;
+  width: 100%;
   padding: 0.5rem;
-  margin: 1rem auto;
+  margin: 1rem;
   background: var(--background-color);
   color: var(--text-color);
-  position: fixed;
   display: flex;
   align-items: center;
   flex-flow: column;
   border-radius: 0.5rem;
-  width: calc(100vw - 2.9rem);
-  max-width: 70rem;
-  min-width: 23rem;
   box-shadow: 0px 0px 12px 12px var(--shadow-color);
   z-index: 15;
+  max-height: 50vh;
+  max-width: 70rem;
+  min-width: 23rem;
 }
 
 .contact-me-dialog form {
@@ -255,19 +269,5 @@ export default {
 .modal-enter-to {
   opacity: 1;
   transform: scale(1);
-}
-
-@media screen and (min-width: 550px) {
-  .contact-me-dialog {
-    right: 1rem;
-    width: calc(100vw - 2.8rem);
-  }
-}
-
-@media screen and (min-width: 72rem) {
-  .contact-me-dialog {
-    margin: 1rem auto;
-    right: unset;
-  }
 }
 </style>
