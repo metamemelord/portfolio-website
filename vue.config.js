@@ -1,22 +1,12 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   configureWebpack: {
-    plugins: [
-      new PreloadWebpackPlugin({
-        rel: 'preload',
-        as(entry) {
-          if (/\.css$/.test(entry)) return 'style';
-          if (/\.woff$/.test(entry)) return 'font';
-          return 'script';
-        }
-      })
-    ],
     optimization: {
       splitChunks: {
         chunks: 'async',
-        maxSize: 300000,
+        maxSize: 250000,
         minChunks: 1,
         maxAsyncRequests: 6,
         maxInitialRequests: 4,
@@ -35,9 +25,26 @@ module.exports = {
       },
       minimizer: [
         new UglifyJsPlugin({
+          uglifyOptions: {
+            keep_classnames: false,
+            keep_fnames: false,
+            output: {
+              comments: false
+            },
+          },
           parallel: 4,
         })
       ],
     },
+    plugins: [
+      new OptimizeCssAssetsPlugin({
+        assetNameRegExp: /\.optimize\.css\.scss$/g,
+        cssProcessor: require('cssnano'),
+        cssProcessorPluginOptions: {
+          preset: ['default', { discardComments: { removeAll: true } }],
+        },
+        canPrint: true
+      }),
+    ],
   }
 };
