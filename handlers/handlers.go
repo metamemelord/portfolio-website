@@ -32,24 +32,24 @@ func init() {
 }
 
 func Register(g *gin.Engine) {
-	api := g.Group("/api", cacheSetter(90*time.Minute))
+	api := g.Group("/api")
 	{
-		api.GET("/blogs", returnBlogPosts)
+		api.GET("/blogs", cacheSetter(2*time.Hour), returnBlogPosts)
 		api.POST("/blog", verifyCredentials, addBlogPost)
 		api.PUT("/blog", verifyCredentials, updateBlogPost)
 		api.DELETE("/blog", verifyCredentials, deleteBlogPost)
 
-		api.GET("/experiences", getExperiences)
+		api.GET("/experiences", cacheSetter(720*time.Hour), getExperiences)
 		api.POST("/experience", verifyCredentials, addExperience)
 		api.PUT("/experience", verifyCredentials, updateExperience)
 		api.DELETE("/experience", verifyCredentials, deleteExperience)
 
-		api.GET("/technologies", getTechnologies)
+		api.GET("/technologies", cacheSetter(720*time.Hour), getTechnologies)
 		api.POST("/technology", verifyCredentials, addTechnology)
 		api.PUT("/technology", verifyCredentials, updateTechnology)
 		api.DELETE("/technology", verifyCredentials, deleteTechnology)
 
-		api.GET("/repos", getGithubReposHandler)
+		api.GET("/repos", cacheSetter(2*time.Hour), getGithubReposHandler)
 		api.GET("/wordpress", getWordpressPostsHandler)
 		api.GET("/wordpress/:id", getWordpressPostbyIDHandler)
 		api.POST("/email", sendEmail)

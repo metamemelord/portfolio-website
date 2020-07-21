@@ -14,23 +14,20 @@
     </div>
     <div class="linkedin__content">
       <linkedin-timeline/>
-      <linkedin-certifications/>
-      <linkedin-languages/>
       <linkedin-interests/>
+      <linkedin-languages/>
     </div>
   </div>
 </template>
 
 <script>
 import linkedinTimeline from "./Linkedin/Timeline.vue";
-import linkedinCertifications from "./Linkedin/Certifications.vue";
 import linkedinLanguages from "./Linkedin/Languages.vue";
 import linkedinInterests from "./Linkedin/Interests.vue";
 
 export default {
   components: {
     linkedinTimeline,
-    linkedinCertifications,
     linkedinLanguages,
     linkedinInterests
   },
