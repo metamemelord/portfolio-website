@@ -1,6 +1,6 @@
 <template>
   <transition name="grow" mode="out-in">
-    <div v-if="contactMeDialog" class="contact-me-dialog__wrapper">
+    <div v-if="contactMeDialog" @click.self="closeContactMeDialog()" class="contact-me-dialog__wrapper">
       <div v-if="contactMeDialog" class="contact-me-dialog">
         <div>
           <div class="contact-me-dialog-closer" @click="closeContactMeDialog()">
@@ -157,6 +157,7 @@ export default {
 .contact-me-dialog {
   position: relative;
   width: 100%;
+  max-height: 28.5rem;
   padding: 0.5rem;
   margin: 1rem;
   background: var(--background-color);
@@ -167,7 +168,6 @@ export default {
   border-radius: 0.5rem;
   box-shadow: 0px 0px 12px 12px var(--shadow-color);
   z-index: 15;
-  max-height: 50vh;
   max-width: 70rem;
   min-width: 23rem;
 }
