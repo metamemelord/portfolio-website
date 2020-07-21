@@ -52,7 +52,7 @@ export default {
             this.repos.concat(responseData.body);
           }
         })
-        .catch(error => {
+        .catch(() => {
           this.repos = [];
         });
     }

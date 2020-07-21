@@ -1,11 +1,7 @@
 <template>
   <div class="tech" id="tech">
     <div class="tech__label">
-      <span
-        class="light-a"
-        v-infocus="'float-animation saturated-tech'"
-        style="cursor:pointer;"
-      >
+      <span class="light-a" v-infocus="'float-animation saturated-tech'" style="cursor:pointer;">
         <h1>
           <i class="fa fa-code"></i>
         </h1>
@@ -15,7 +11,12 @@
       <div v-for="(tech,idx) in technologies" :key="idx" class="tech__content__image-container">
         <a :href="tech.url" target="blank" style="text-decoration:none;outline: none;">
           <i v-if="tech.media_type=='font'" :class="tech.css_class" style="outline: none;" />
-          <img v-else-if="tech.media_type=='img'" :src="tech.src" style="outline: none;" :alt="tech.name" />
+          <img
+            v-else-if="tech.media_type=='img'"
+            :src="tech.src"
+            style="outline: none;"
+            :alt="tech.name"
+          />
         </a>
       </div>
     </div>
@@ -23,12 +24,11 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
       technologies: []
-    }
+    };
   },
   created() {
     var dt = true,
@@ -39,15 +39,11 @@ export default {
       if (prev != dt) {
         var label;
         if (dt) {
-          label = document
-            .getElementById("tech")
-            .getElementsByTagName("a")[0];
+          label = document.getElementById("tech").getElementsByTagName("a")[0];
           label.classList.remove("dark-a");
           label.classList.add("light-a");
         } else {
-          label = document
-            .getElementById("tech")
-            .getElementsByTagName("a")[0];
+          label = document.getElementById("tech").getElementsByTagName("a")[0];
           label.classList.remove("light-a");
           label.classList.add("dark-a");
         }
@@ -56,9 +52,12 @@ export default {
     }, 1000);
   },
   beforeMount() {
-    this.$http.get("/api/technologies").then(res => {
+    this.$http
+      .get("/api/technologies")
+      .then(res => {
         this.technologies = res.body;
-      }).catch(() => void 0);
+      })
+      .catch(() => void 0);
   }
 };
 </script>
@@ -103,7 +102,7 @@ export default {
 }
 
 .tech__content__image-container {
-  flex-basis: 20%;  
+  flex-basis: 20%;
   margin: 1rem;
   display: flex;
   justify-content: center;
@@ -147,7 +146,7 @@ export default {
 
   .tech__content__image-container {
     flex-basis: 10%;
-    text-align: center; 
+    text-align: center;
     margin: 1rem;
   }
 

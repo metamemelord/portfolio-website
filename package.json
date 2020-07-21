@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/preload-webpack-plugin": "^1.1.1",
     "moment": "^2.24.0",
     "normalize.css": "^8.0.1",
     "parallax-js": "^3.1.0",

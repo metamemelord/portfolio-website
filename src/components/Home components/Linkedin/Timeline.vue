@@ -2,7 +2,12 @@
   <div class="linkedin__timeline" v-if="experiences.length != 0">
     <h1 style="margin: 0">Timeline</h1>
     <div class="linkedin__timeline-items">
-      <div class="linkedin__timeline-item" v-for="(experience, idx) in experiences" :key="experience._id" :id="experience._id">
+      <div
+        class="linkedin__timeline-item"
+        v-for="(experience, idx) in experiences"
+        :key="experience._id"
+        :id="experience._id"
+      >
         <div class="linkedin__timeline-point" :class="{'linkedin__timeline-point-current':idx==0}"></div>
         <div class="linkedin__timeline-item-content">
           <h2>{{experience.company}}</h2>
@@ -18,19 +23,40 @@
 export default {
   data() {
     return {
-        experiences: [
-          {"_id":"5e0fbafc3fd85cc84aa6b7b7","company":"Zoomcar","title":"Software Engineer","from_date":"Nov, 2019","to_date":"Present"},
-          {"_id":"5e0fbae03fd85cc84aa6b7b6","company":"Philips","title":"Software Engineer I","from_date":"Jul, 2018","to_date":"Nov, 2019"},
-          {"_id":"5e0fbaba3fd85cc84aa6b7b5","company":"Philips","title":"Project Trainee","from_date":"Jan, 2018","to_date":"May, 2018"}
-        ] 
-	    }
+      experiences: [
+        {
+          _id: "5e0fbafc3fd85cc84aa6b7b7",
+          company: "Zoomcar",
+          title: "Software Engineer",
+          from_date: "Nov, 2019",
+          to_date: "Present"
+        },
+        {
+          _id: "5e0fbae03fd85cc84aa6b7b6",
+          company: "Philips",
+          title: "Software Engineer I",
+          from_date: "Jul, 2018",
+          to_date: "Nov, 2019"
+        },
+        {
+          _id: "5e0fbaba3fd85cc84aa6b7b5",
+          company: "Philips",
+          title: "Project Trainee",
+          from_date: "Jan, 2018",
+          to_date: "May, 2018"
+        }
+      ]
+    };
   },
   created() {
-    this.$http.get("api/experiences").then(res => {
-      if (res.data.length) this.experiences = res.data
-    }).catch(() => void 0);
+    this.$http
+      .get("api/experiences")
+      .then(res => {
+        if (res.data.length) this.experiences = res.data;
+      })
+      .catch(() => void 0);
   }
-}
+};
 </script>
 <style>
 .linkedin__timeline {

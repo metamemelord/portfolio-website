@@ -1,7 +1,9 @@
 <template>
   <main>
     <div v-if="getPost._id" class="blog__post-complete" :id="getPost._id">
-      <div class="blog__post-complete-closer" @click="closePost()"><i class="fa fa-times" aria-hidden="true"></i></div>
+      <div class="blog__post-complete-closer" @click="closePost()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </div>
       <h1 v-html="getPost.title" v-if="getPost.title"></h1>
       <template v-if="getPost.subtitle">
         <h4 v-if="getPost.title">{{getPostExcerpt}}</h4>
@@ -24,8 +26,7 @@
       <!-- <div class="blog__post-tags-complete" v-if="getPost.tags && getPost.tags.length">
         <b>Tags:</b>
         <span v-for="(tag,idx) in getPost.tags" :key="idx">{{tag|capitalize}}</span>
-      </div> -->
-      
+      </div>-->
     </div>
   </main>
 </template>
@@ -37,11 +38,11 @@ export default {
   data() {
     return {
       post: {}
-    }
+    };
   },
   computed: {
     getPost() {
-      return this.post
+      return this.post;
     },
     getPostDate() {
       var postDate = new moment(this.getPost.date);
@@ -59,7 +60,7 @@ export default {
         : "mailto:hello@gauravsaini.dev";
     },
     getPostExcerpt() {
-      return this.getPost.subtitle.substr(3, 20) + "..."
+      return this.getPost.subtitle.substr(3, 20) + "...";
     }
   },
   methods: {
@@ -68,10 +69,13 @@ export default {
     }
   },
   created() {
-    this.$http.get("/api/wordpress/" + this.$route.params.id).then(res => {
+    this.$http
+      .get("/api/wordpress/" + this.$route.params.id)
+      .then(res => {
         this.post = res.body;
-        this.post.content = this.post.content.split("\n").join("<br>")
-      }).catch(() => this.$router.push("/lost"));
+        this.post.content = this.post.content.split("\n").join("<br>");
+      })
+      .catch(() => this.$router.push("/lost"));
   }
 };
 </script>
@@ -173,7 +177,7 @@ main {
     width: 2.5rem;
   }
   .blog__post-complete {
-    padding: 1.5rem 5rem;    
+    padding: 1.5rem 5rem;
   }
 }
 </style>

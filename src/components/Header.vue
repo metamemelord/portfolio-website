@@ -38,7 +38,7 @@ export default {
   },
   created() {
     let vm = this;
-    window.addEventListener("scroll", function(event) {
+    window.addEventListener("scroll", function() {
       vm.position = this.scrollY;
     });
   },

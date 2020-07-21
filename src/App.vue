@@ -63,7 +63,7 @@ export default {
 html {
   font-family: "Open Sans", "Calibri", sans-serif;
   transition: 0.5s background-color;
-  font-display: swap;
+  font-display: swap !important;
 }
 .night {
   background: black;
