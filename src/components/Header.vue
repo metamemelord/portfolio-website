@@ -7,20 +7,20 @@
       <div class="main-header__wrapper">
         <div class="main-header__nav">
           <div class="main-header__item main-header__home">
-            <router-link to="/" active-class="active" exact>
+            <router-link to="/" :class="{'inactive':contactMeDialog}" active-class="active" exact>
               <i class="fa fa-home" style="font-size:1.5rem"></i>
               <span class="main-header__item-text">Home</span>
             </router-link>
           </div>
           <div class="main-header__item main-header__blogs">
-            <router-link to="/blogs" active-class="active">
+            <router-link to="/blogs" :class="{'inactive':contactMeDialog}" active-class="active">
               <i class="fa fa-pencil-square-o" style="font-size:1.5rem"></i>
               <span class="main-header__item-text">Blogs</span>
             </router-link>
           </div>
         </div>
         <div class="main-header__item main-header__email">
-          <span @click="openContactMeDialog">
+          <span @click="openContactMeDialog" :class="{'active':contactMeDialog}">
             <i class="fa fa-envelope-o" style="font-size:1.5rem"></i>
             <span class="main-header__item-text">Contact me!</span>
           </span>
@@ -45,6 +45,9 @@ export default {
   computed: {
     isAtTop() {
       return this.position > 20;
+    },
+    contactMeDialog() {
+      return this.$store.state.contactMeDialog;
     }
   }, 
   methods: {
