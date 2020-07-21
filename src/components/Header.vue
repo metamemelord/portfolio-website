@@ -20,10 +20,10 @@
           </div>
         </div>
         <div class="main-header__item main-header__email">
-          <a @click="openContactMeDialog">
+          <span @click="openContactMeDialog">
             <i class="fa fa-envelope-o" style="font-size:1.5rem"></i>
             <span class="main-header__item-text">Contact me!</span>
-          </a>
+          </span>
         </div>
       </div>
     </header>
@@ -121,11 +121,17 @@ export default {
   padding: 1.2rem 2rem;
 }
 
-.main-header__item a {
+.main-header__item a,
+.main-header__item > span {
   transition: 0.5s all;
   color: white;
   text-decoration: none;
   cursor: pointer;
+}
+
+.main-header__item a:hover,
+.main-header__item > span:hover {
+  color: var(--accent-color);
 }
 
 .main-header__item-text {
@@ -141,21 +147,21 @@ export default {
     padding: 1.2rem;
     transition: 0.4s all;
   }
-  .main-header__item:hover {
-    background: #ddd;
-    color: #333;
-  }
-  .main-header__item a {
+  
+  .main-header__item a,
+  .main-header__item > span {
     display: flex;
     align-items: center;
   }
 
-  .main-header__item a i {
+  .main-header__item a i,
+  .main-header__item span i {
     padding-left: 0.3rem;
     padding-right: 0.3rem;
   }
 
-  .main-header__item a span {
+  .main-header__item a span,
+  .main-header__item span span {
     padding-left: 0.3rem;
     padding-right: 0.3rem;
   }
