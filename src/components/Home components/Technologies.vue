@@ -1,7 +1,7 @@
 <template>
   <div class="tech" id="tech">
     <div class="tech__label">
-      <a
+      <span
         class="light-a"
         v-infocus="'float-animation saturated-tech'"
         style="cursor:pointer;"
@@ -9,7 +9,7 @@
         <h1>
           <i class="fa fa-code"></i>
         </h1>
-      </a>
+      </span>
     </div>
     <div class="tech__content">
       <div v-for="(tech,idx) in technologies" :key="idx" class="tech__content__image-container">
