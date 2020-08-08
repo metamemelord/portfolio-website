@@ -95,9 +95,15 @@ body {
 .active {
   color: var(--accent-color) !important;
 }
+
 .inactive {
   color: #fff !important;
 }
+
+.inactive:hover {
+  color: var(--accent-color) !important;
+}
+
 .float-animation {
   animation: float-slow 10s linear infinite;
 }

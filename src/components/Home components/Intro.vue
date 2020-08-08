@@ -10,7 +10,7 @@
           :backSpeed="25"
           :cursorChar="'__'"
           :loop="true"
-          :strings="['Gaurav', 'Developer', 'Traveller', 'Dreamer', 'Foodie', 'Geek']"
+          :strings="['Gaurav', 'Developer', 'Traveller', 'Dreamer', 'Photographer', 'Foodie', 'Geek']"
         >
           <h1 class="typing"></h1>
         </vue-typed-js>

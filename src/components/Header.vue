@@ -7,20 +7,20 @@
       <div class="main-header__wrapper">
         <div class="main-header__nav">
           <div class="main-header__item main-header__home">
-            <router-link to="/" :class="{'inactive':contactMeDialog}" active-class="active" exact>
+            <router-link @click.native="contactMeDialogFunc(false)" to="/" :class="{'inactive':contactMeDialog}" active-class="active" exact>
               <i class="fa fa-home" style="font-size:1.5rem"></i>
               <span class="main-header__item-text">Home</span>
             </router-link>
           </div>
           <div class="main-header__item main-header__blogs">
-            <router-link to="/blogs" :class="{'inactive':contactMeDialog}" active-class="active">
+            <router-link @click.native="contactMeDialogFunc(false)" to="/blogs" :class="{'inactive':contactMeDialog}" active-class="active">
               <i class="fa fa-pencil-square-o" style="font-size:1.5rem"></i>
               <span class="main-header__item-text">Blogs</span>
             </router-link>
           </div>
         </div>
         <div class="main-header__item main-header__email">
-          <span @click="openContactMeDialog" :class="{'active':contactMeDialog}">
+          <span @click="contactMeDialogFunc(true)" :class="{'active':contactMeDialog}">
             <i class="fa fa-envelope-o" style="font-size:1.5rem"></i>
             <span class="main-header__item-text">Contact me!</span>
           </span>
@@ -51,8 +51,9 @@ export default {
     }
   }, 
   methods: {
-    openContactMeDialog() {
-      this.$store.dispatch('setContactMeDialog', true);
+    contactMeDialogFunc(open) {
+      console.log("hihi");
+      this.$store.dispatch('setContactMeDialog', open);
     }
   },
   watch: {
