@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sync"
 
 	"github.com/metamemelord/portfolio-website/model"
 )
+
+var githubWPMutex sync.Mutex
 
 type Data struct {
 	GithubData    []interface{}
@@ -38,7 +41,9 @@ func githubPackageRefresher() {
 		log.Println("Error while unmarshalling Github response", err)
 		return
 	}
+	githubWPMutex.Lock()
 	data.GithubData = githubResponse
+	githubWPMutex.Unlock()
 }
 
 func wordpressPostRefresher() {
@@ -60,5 +65,7 @@ func wordpressPostRefresher() {
 	for idx, post := range customResponse {
 		post.ID = upb - idx
 	}
+	githubWPMutex.Lock()
 	data.WordpressData = customResponse
+	githubWPMutex.Unlock()
 }

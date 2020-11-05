@@ -55,9 +55,17 @@ func Register(g *gin.Engine) {
 		api.POST("/email", sendEmail)
 		api.POST("/admin/data/refresh", verifyCredentials, refreshData)
 	}
+
 	g.GET("/health", func(c *gin.Context) {
 		c.AbortWithStatus(http.StatusOK)
 	})
+
+	// Proxy routes
+	{
+		g.GET("/ext/:routing_key", resolveProxy, htmlSupplier)
+		g.POST("/ext", verifyCredentials, addProxy)
+		g.DELETE("/ext/:routing_key", verifyCredentials, deleteProxy)
+	}
 
 	public := g.Group("/", cacheSetter(168*time.Hour))
 	{
@@ -68,6 +76,7 @@ func Register(g *gin.Engine) {
 		public.StaticFile("/robots.txt", "./dist/robots.txt")
 		public.StaticFile("/sitemap.xml", "./dist/sitemap.xml")
 	}
+
 	g.NoRoute(htmlSupplier)
 }
 

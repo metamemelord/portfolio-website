@@ -96,6 +96,7 @@ func main() {
 	go func() {
 		for {
 			worker.RefreshData()
+			worker.CheckAndMarkProxyInactive()
 			time.Sleep(2 * time.Hour)
 		}
 	}()
