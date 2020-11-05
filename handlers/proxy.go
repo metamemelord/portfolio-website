@@ -16,11 +16,11 @@ func addProxy(c *gin.Context) {
 	if err := c.BindJSON(&proxyItem); err != nil {
 		respond(c, http.StatusBadRequest, nil, err)
 	} else {
-		id, err := worker.AddProxyItem(c.Request.Context(), &proxyItem)
+		_, err := worker.AddProxyItem(c.Request.Context(), &proxyItem)
 		if err != nil {
 			respond(c, http.StatusServiceUnavailable, nil, err)
 		} else {
-			respond(c, http.StatusCreated, id, nil)
+			respond(c, http.StatusCreated, nil, nil)
 		}
 	}
 }

@@ -119,9 +119,14 @@ func respond(c *gin.Context, status int, payload interface{}, err error) {
 		log.Println("[ERROR]: ", err)
 		c.JSON(status, map[string]interface{}{"error": err.Error()})
 	} else {
-		resp, _ := json.Marshal(payload)
-		log.Println("[INFO]: ", string(resp))
-		c.Data(status, "application/json", resp)
+		if payload != nil {
+			resp, _ := json.Marshal(payload)
+			log.Println("[INFO]: ", string(resp))
+			c.Data(status, "application/json", resp)
+		} else {
+			log.Println("[INFO]: Status OK")
+			c.String(status, "")
+		}
 	}
 }
 

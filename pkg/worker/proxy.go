@@ -26,7 +26,7 @@ func init() {
 	proxyRoutes = make(map[string]model.ProxyItem)
 
 	expiredProxyItemIDs := []primitive.ObjectID{}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancel()
 	cursor, err := proxyItemsCollection.Find(ctx, bson.M{"active": true})
 	if err != nil {
@@ -37,7 +37,7 @@ func init() {
 	for cursor.Next(ctx) {
 		proxyItem := model.ProxyItem{}
 		_ = cursor.Decode(&proxyItem)
-		if time.Now().UnixNano() > proxyItem.Expiry.UnixNano() {
+		if time.Now().UTC().UnixNano() > proxyItem.Expiry.UnixNano() {
 			expiredProxyItemIDs = append(expiredProxyItemIDs, proxyItem.ID)
 		} else {
 			proxyRoutes[proxyItem.RoutingKey] = proxyItem
@@ -59,9 +59,9 @@ func ResolveProxyItem(routingKey string) (string, int, error) {
 		return "", 0, errors.New("Failed to find route")
 	}
 
-	if time.Now().UnixNano() > proxyItem.Expiry.UnixNano() {
+	if time.Now().UTC().UnixNano() > proxyItem.Expiry.UnixNano() {
 		_ = DeleteProxyItem(routingKey)
-		return "", 0, errors.New("Failed to find route")
+		return "", 0, errors.New("Route has been expired")
 	}
 
 	statusCode := http.StatusTemporaryRedirect
@@ -78,10 +78,12 @@ func AddProxyItem(ctx context.Context, proxyItem *model.ProxyItem) (string, erro
 	proxyItem.RoutingKey = strings.ToLower(proxyItem.RoutingKey)
 	exp, err := time.Parse(core.DATE_FORMAT, proxyItem.ExpiryString)
 	if err != nil {
-		proxyItem.Expiry = time.Now().Add(time.Hour * 876000)
+		proxyItem.Expiry = time.Now().UTC().Add(time.Hour * 876000)
 	} else {
 		proxyItem.Expiry = exp
 	}
+	proxyItem.ExpiryString = ""
+	proxyItem.Active = time.Now().UTC().UnixNano() < proxyItem.Expiry.UnixNano()
 
 	result, err := proxyItemsCollection.InsertOne(ctx, proxyItem)
 	if err != nil {
@@ -91,7 +93,7 @@ func AddProxyItem(ctx context.Context, proxyItem *model.ProxyItem) (string, erro
 	proxyRouteMutex.Lock()
 	proxyRoutes[proxyItem.RoutingKey] = *proxyItem
 	proxyRouteMutex.Unlock()
-	return proxyItem.ID.String(), err
+	return proxyItem.RoutingKey, err
 }
 
 func DeleteProxyItem(routingKey string) error {
@@ -113,7 +115,7 @@ func CheckAndMarkProxyInactive() {
 	keysToBeDeleted := []string{}
 	proxyRouteMutex.Lock()
 	for k, proxyItem := range proxyRoutes {
-		if time.Now().UnixNano() > proxyItem.Expiry.UnixNano() {
+		if time.Now().UTC().UnixNano() > proxyItem.Expiry.UnixNano() {
 			expiredProxyItemIDs = append(expiredProxyItemIDs, proxyItem.ID)
 			keysToBeDeleted = append(keysToBeDeleted, k)
 		}
