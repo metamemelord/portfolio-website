@@ -13,4 +13,5 @@ type ProxyItem struct {
 	ExpiryString string             `json:"expiry" bson:"-"`
 	Expiry       time.Time          `json:"-" bson:"expiry"`
 	Active       bool               `json:"-" bson:"active"`
+	Permanent    bool               `json:"permanent" bson:"permanent"`
 }

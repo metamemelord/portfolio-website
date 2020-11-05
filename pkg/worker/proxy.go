@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"net/http"
 	"strings"
 	"sync"
 	"time"
@@ -49,21 +50,26 @@ func init() {
 	}
 }
 
-func ResolveProxyItem(routingKey string) (string, error) {
+func ResolveProxyItem(routingKey string) (string, int, error) {
 	routingKey = strings.ToLower(routingKey)
 	var proxyItem model.ProxyItem
 	var ok bool
 
 	if proxyItem, ok = proxyRoutes[routingKey]; !ok {
-		return "", errors.New("Failed to find route")
+		return "", 0, errors.New("Failed to find route")
 	}
 
 	if time.Now().UnixNano() > proxyItem.Expiry.UnixNano() {
 		_ = DeleteProxyItem(routingKey)
-		return "", errors.New("Failed to find route")
+		return "", 0, errors.New("Failed to find route")
 	}
 
-	return proxyItem.Target, nil
+	statusCode := http.StatusTemporaryRedirect
+	if proxyItem.Permanent {
+		statusCode = http.StatusMovedPermanently
+	}
+
+	return proxyItem.Target, statusCode, nil
 }
 
 func AddProxyItem(ctx context.Context, proxyItem *model.ProxyItem) (string, error) {

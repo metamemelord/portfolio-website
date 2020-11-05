@@ -27,8 +27,8 @@ func addProxy(c *gin.Context) {
 
 func resolveProxy(c *gin.Context) {
 	routingKey := c.Param(ROUTING_KEY)
-	if target, err := worker.ResolveProxyItem(routingKey); err == nil {
-		c.Redirect(http.StatusOK, target)
+	if target, code, err := worker.ResolveProxyItem(routingKey); err == nil {
+		c.Redirect(code, target)
 		c.Abort()
 	} else {
 		log.Println("Error while redirecting", err)
