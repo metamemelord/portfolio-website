@@ -6,14 +6,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/metamemelord/portfolio-website/model"
+	"github.com/metamemelord/portfolio-website/pkg/core"
 	"github.com/metamemelord/portfolio-website/pkg/worker"
 )
-
-const ROUTING_KEY = "routing_key"
 
 func addProxy(c *gin.Context) {
 	proxyItem := model.ProxyItem{}
 	if err := c.BindJSON(&proxyItem); err != nil {
+		log.Println(err)
 		respond(c, http.StatusBadRequest, nil, err)
 	} else {
 		_, err := worker.AddProxyItem(c.Request.Context(), &proxyItem)
@@ -26,8 +26,9 @@ func addProxy(c *gin.Context) {
 }
 
 func resolveProxy(c *gin.Context) {
-	routingKey := c.Param(ROUTING_KEY)
-	if target, code, err := worker.ResolveProxyItem(routingKey); err == nil {
+	routingKey := c.Param(core.ROUTING_KEY)
+	pathToForward := c.Param(core.PATH_LABEL)
+	if target, code, err := worker.ResolveProxyItem(routingKey, pathToForward); err == nil {
 		c.Redirect(code, target)
 		c.Abort()
 	} else {
@@ -36,7 +37,7 @@ func resolveProxy(c *gin.Context) {
 }
 
 func deleteProxy(c *gin.Context) {
-	routingKey := c.Param(ROUTING_KEY)
+	routingKey := c.Param(core.ROUTING_KEY)
 	if err := worker.DeleteProxyItem(routingKey); err == nil {
 		respond(c, http.StatusOK, nil, nil)
 	} else {

@@ -3,6 +3,7 @@ package worker
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -50,7 +51,7 @@ func init() {
 	}
 }
 
-func ResolveProxyItem(routingKey string) (string, int, error) {
+func ResolveProxyItem(routingKey, pathToForward string) (string, int, error) {
 	routingKey = strings.ToLower(routingKey)
 	var proxyItem model.ProxyItem
 	var ok bool
@@ -69,7 +70,13 @@ func ResolveProxyItem(routingKey string) (string, int, error) {
 		statusCode = http.StatusMovedPermanently
 	}
 
-	return proxyItem.Target, statusCode, nil
+	target := proxyItem.Target
+
+	if proxyItem.ForwardPath {
+		target = fmt.Sprintf("%s/%s", strings.TrimRight(target, "/"), strings.TrimLeft(pathToForward, "/"))
+	}
+
+	return target, statusCode, nil
 }
 
 func AddProxyItem(ctx context.Context, proxyItem *model.ProxyItem) (string, error) {
