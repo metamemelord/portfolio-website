@@ -28,7 +28,7 @@ func addProxy(c *gin.Context) {
 func resolveProxy(c *gin.Context) {
 	routingKey := c.Param(core.ROUTING_KEY)
 	pathToForward := c.Param(core.PATH_LABEL)
-	if target, code, err := worker.ResolveProxyItem(routingKey, pathToForward); err == nil {
+	if target, code, err := worker.ResolveProxyItem(routingKey, pathToForward, c.Request.URL.RawQuery); err == nil {
 		c.Redirect(code, target)
 		c.Abort()
 	} else {

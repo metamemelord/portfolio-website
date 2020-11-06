@@ -51,7 +51,7 @@ func init() {
 	}
 }
 
-func ResolveProxyItem(routingKey, pathToForward string) (string, int, error) {
+func ResolveProxyItem(routingKey, pathToForward, rawQuery string) (string, int, error) {
 	routingKey = strings.ToLower(routingKey)
 	var proxyItem model.ProxyItem
 	var ok bool
@@ -74,6 +74,9 @@ func ResolveProxyItem(routingKey, pathToForward string) (string, int, error) {
 
 	if proxyItem.ForwardPath {
 		target = fmt.Sprintf("%s/%s", strings.TrimRight(target, "/"), strings.TrimLeft(pathToForward, "/"))
+	}
+	if len(rawQuery) > 0 {
+		target = fmt.Sprintf("%s?%s", target, rawQuery)
 	}
 
 	return target, statusCode, nil
