@@ -57,12 +57,12 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 	var ok bool
 
 	if redirectionItem, ok = redirectionRoutes[routingKey]; !ok {
-		return "", 0, errors.New("Failed to find route")
+		return core.EMPTY_STRING, 0, errors.New("Failed to find route")
 	}
 
 	if time.Now().UTC().UnixNano() > redirectionItem.Expiry.UnixNano() {
 		_ = DeleteRedirectionItem(routingKey)
-		return "", 0, errors.New("Route has been expired")
+		return core.EMPTY_STRING, 0, errors.New("Route has been expired")
 	}
 
 	statusCode := http.StatusTemporaryRedirect
@@ -92,7 +92,7 @@ func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionI
 	} else {
 		redirectionItem.Expiry = exp
 	}
-	redirectionItem.ExpiryString = ""
+	redirectionItem.ExpiryString = core.EMPTY_STRING
 	redirectionItem.Active = time.Now().UTC().UnixNano() < redirectionItem.Expiry.UnixNano()
 	if redirectionItem.ForwardPath == nil {
 		forwardPath := true
@@ -102,7 +102,7 @@ func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionI
 	result, err := redirectionItemsCollection.InsertOne(ctx, redirectionItem)
 	if err != nil {
 		log.Println(result, err)
-		return "", err
+		return core.EMPTY_STRING, err
 	}
 	redirectionRouteMutex.Lock()
 	redirectionRoutes[redirectionItem.RoutingKey] = *redirectionItem

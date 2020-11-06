@@ -13,6 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/metamemelord/portfolio-website/db"
+	"github.com/metamemelord/portfolio-website/pkg/core"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -83,11 +84,11 @@ func Register(g *gin.Engine) {
 
 func verifyCredentials(c *gin.Context) {
 	auth := c.GetHeader("Authorization")
-	if auth == "" {
+	if auth == core.EMPTY_STRING {
 		auth = c.GetHeader("authorization")
 	}
 
-	if auth == "" {
+	if auth == core.EMPTY_STRING {
 		respond(c, http.StatusUnauthorized, nil, fmt.Errorf("Require auth"))
 		c.Abort()
 		return
@@ -126,7 +127,7 @@ func respond(c *gin.Context, status int, payload interface{}, err error) {
 			c.Data(status, "application/json", resp)
 		} else {
 			log.Println("[INFO]: Status OK")
-			c.String(status, "")
+			c.String(status, core.EMPTY_STRING)
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"log"
 	"net/http"
 
@@ -16,7 +17,12 @@ func addRedirection(c *gin.Context) {
 		log.Println(err)
 		respond(c, http.StatusBadRequest, nil, err)
 	} else {
-		_, err := worker.AddRedirectionItem(c.Request.Context(), &redirectionItem)
+		target, _, _ := worker.ResolveRedirectionItem(redirectionItem.RoutingKey, core.EMPTY_STRING, core.EMPTY_STRING)
+		if target != core.EMPTY_STRING {
+			respond(c, http.StatusConflict, nil, errors.New("This route already exists"))
+			return
+		}
+		_, err = worker.AddRedirectionItem(c.Request.Context(), &redirectionItem)
 		if err != nil {
 			respond(c, http.StatusServiceUnavailable, nil, err)
 		} else {

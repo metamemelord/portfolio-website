@@ -1,5 +1,7 @@
 package model
 
+import "github.com/metamemelord/portfolio-website/pkg/core"
+
 type WordpressResponse struct {
 	Posts []WordPressPost `json:"posts"`
 }
@@ -38,7 +40,7 @@ func wordPressPostToPost(wpp *WordPressPost) *Post {
 		Content:       wpp.Content,
 		Author:        wpp.Author.Name,
 		Date:          wpp.Date,
-		AuthorContact: "",
+		AuthorContact: core.EMPTY_STRING,
 		Tags:          []string{},
 	}
 
