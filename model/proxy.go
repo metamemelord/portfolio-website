@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type ProxyItem struct {
+type RedirectionItem struct {
 	ID           primitive.ObjectID `bson:"_id" json:"-"`
 	RoutingKey   string             `bson:"routing_key" json:"routing_key"`
 	Target       string             `bson:"target" json:"target"`

@@ -10,13 +10,13 @@ import (
 	"github.com/metamemelord/portfolio-website/pkg/worker"
 )
 
-func addProxy(c *gin.Context) {
-	proxyItem := model.ProxyItem{}
-	if err := c.BindJSON(&proxyItem); err != nil {
+func addRedirection(c *gin.Context) {
+	redirectionItem := model.RedirectionItem{}
+	if err := c.BindJSON(&redirectionItem); err != nil {
 		log.Println(err)
 		respond(c, http.StatusBadRequest, nil, err)
 	} else {
-		_, err := worker.AddProxyItem(c.Request.Context(), &proxyItem)
+		_, err := worker.AddRedirectionItem(c.Request.Context(), &redirectionItem)
 		if err != nil {
 			respond(c, http.StatusServiceUnavailable, nil, err)
 		} else {
@@ -25,10 +25,10 @@ func addProxy(c *gin.Context) {
 	}
 }
 
-func resolveProxy(c *gin.Context) {
+func resolveRedirection(c *gin.Context) {
 	routingKey := c.Param(core.ROUTING_KEY)
 	pathToForward := c.Param(core.PATH_LABEL)
-	if target, code, err := worker.ResolveProxyItem(routingKey, pathToForward, c.Request.URL.RawQuery); err == nil {
+	if target, code, err := worker.ResolveRedirectionItem(routingKey, pathToForward, c.Request.URL.RawQuery); err == nil {
 		c.Redirect(code, target)
 		c.Abort()
 	} else {
@@ -36,9 +36,9 @@ func resolveProxy(c *gin.Context) {
 	}
 }
 
-func deleteProxy(c *gin.Context) {
+func deleteRedirection(c *gin.Context) {
 	routingKey := c.Param(core.ROUTING_KEY)
-	if err := worker.DeleteProxyItem(routingKey); err == nil {
+	if err := worker.DeleteRedirectionItem(routingKey); err == nil {
 		respond(c, http.StatusOK, nil, nil)
 	} else {
 		respond(c, http.StatusServiceUnavailable, nil, err)

@@ -18,61 +18,61 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var proxyRouteMutex sync.Mutex
-var proxyRoutes map[string]model.ProxyItem
-var proxyItemsCollection *mongo.Collection
+var redirectionRouteMutex sync.Mutex
+var redirectionRoutes map[string]model.RedirectionItem
+var redirectionItemsCollection *mongo.Collection
 
 func init() {
-	proxyItemsCollection = db.GetCollection("proxy-items")
-	proxyRoutes = make(map[string]model.ProxyItem)
+	redirectionItemsCollection = db.GetCollection("redirection-items")
+	redirectionRoutes = make(map[string]model.RedirectionItem)
 
-	expiredProxyItemIDs := []primitive.ObjectID{}
+	expiredRedirectionItemIDs := []primitive.ObjectID{}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancel()
-	cursor, err := proxyItemsCollection.Find(ctx, bson.M{"active": true})
+	cursor, err := redirectionItemsCollection.Find(ctx, bson.M{"active": true})
 	if err != nil {
-		log.Println("Error while retrieving proxy items", err)
+		log.Println("Error while retrieving redirection items", err)
 		return
 	}
-	proxyRouteMutex.Lock()
+	redirectionRouteMutex.Lock()
 	for cursor.Next(ctx) {
-		proxyItem := model.ProxyItem{}
-		_ = cursor.Decode(&proxyItem)
-		if time.Now().UTC().UnixNano() > proxyItem.Expiry.UnixNano() {
-			expiredProxyItemIDs = append(expiredProxyItemIDs, proxyItem.ID)
+		redirectionItem := model.RedirectionItem{}
+		_ = cursor.Decode(&redirectionItem)
+		if time.Now().UTC().UnixNano() > redirectionItem.Expiry.UnixNano() {
+			expiredRedirectionItemIDs = append(expiredRedirectionItemIDs, redirectionItem.ID)
 		} else {
-			proxyRoutes[proxyItem.RoutingKey] = proxyItem
+			redirectionRoutes[redirectionItem.RoutingKey] = redirectionItem
 		}
 	}
 	cursor.Close(ctx)
-	proxyRouteMutex.Unlock()
-	if len(expiredProxyItemIDs) > 0 {
-		markInactive(&expiredProxyItemIDs)
+	redirectionRouteMutex.Unlock()
+	if len(expiredRedirectionItemIDs) > 0 {
+		markInactive(&expiredRedirectionItemIDs)
 	}
 }
 
-func ResolveProxyItem(routingKey, pathToForward, rawQuery string) (string, int, error) {
+func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string, int, error) {
 	routingKey = strings.ToLower(routingKey)
-	var proxyItem model.ProxyItem
+	var redirectionItem model.RedirectionItem
 	var ok bool
 
-	if proxyItem, ok = proxyRoutes[routingKey]; !ok {
+	if redirectionItem, ok = redirectionRoutes[routingKey]; !ok {
 		return "", 0, errors.New("Failed to find route")
 	}
 
-	if time.Now().UTC().UnixNano() > proxyItem.Expiry.UnixNano() {
-		_ = DeleteProxyItem(routingKey)
+	if time.Now().UTC().UnixNano() > redirectionItem.Expiry.UnixNano() {
+		_ = DeleteRedirectionItem(routingKey)
 		return "", 0, errors.New("Route has been expired")
 	}
 
 	statusCode := http.StatusTemporaryRedirect
-	if proxyItem.Permanent {
+	if redirectionItem.Permanent {
 		statusCode = http.StatusMovedPermanently
 	}
 
-	target := proxyItem.Target
+	target := redirectionItem.Target
 
-	if proxyItem.ForwardPath {
+	if redirectionItem.ForwardPath {
 		target = fmt.Sprintf("%s/%s", strings.TrimRight(target, "/"), strings.TrimLeft(pathToForward, "/"))
 	}
 	if len(rawQuery) > 0 {
@@ -82,70 +82,70 @@ func ResolveProxyItem(routingKey, pathToForward, rawQuery string) (string, int, 
 	return target, statusCode, nil
 }
 
-func AddProxyItem(ctx context.Context, proxyItem *model.ProxyItem) (string, error) {
+func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionItem) (string, error) {
 	// Pre-processing
-	proxyItem.ID = primitive.NewObjectID()
-	proxyItem.RoutingKey = strings.ToLower(proxyItem.RoutingKey)
-	exp, err := time.Parse(core.DATE_FORMAT, proxyItem.ExpiryString)
+	redirectionItem.ID = primitive.NewObjectID()
+	redirectionItem.RoutingKey = strings.ToLower(redirectionItem.RoutingKey)
+	exp, err := time.Parse(core.DATE_FORMAT, redirectionItem.ExpiryString)
 	if err != nil {
-		proxyItem.Expiry = time.Now().UTC().Add(time.Hour * 876000)
+		redirectionItem.Expiry = time.Now().UTC().Add(time.Hour * 876000)
 	} else {
-		proxyItem.Expiry = exp
+		redirectionItem.Expiry = exp
 	}
-	proxyItem.ExpiryString = ""
-	proxyItem.Active = time.Now().UTC().UnixNano() < proxyItem.Expiry.UnixNano()
+	redirectionItem.ExpiryString = ""
+	redirectionItem.Active = time.Now().UTC().UnixNano() < redirectionItem.Expiry.UnixNano()
 
-	result, err := proxyItemsCollection.InsertOne(ctx, proxyItem)
+	result, err := redirectionItemsCollection.InsertOne(ctx, redirectionItem)
 	if err != nil {
 		log.Println(result, err)
 		return "", err
 	}
-	proxyRouteMutex.Lock()
-	proxyRoutes[proxyItem.RoutingKey] = *proxyItem
-	proxyRouteMutex.Unlock()
-	return proxyItem.RoutingKey, err
+	redirectionRouteMutex.Lock()
+	redirectionRoutes[redirectionItem.RoutingKey] = *redirectionItem
+	redirectionRouteMutex.Unlock()
+	return redirectionItem.RoutingKey, err
 }
 
-func DeleteProxyItem(routingKey string) error {
+func DeleteRedirectionItem(routingKey string) error {
 	routingKey = strings.ToLower(routingKey)
-	proxyItem, ok := proxyRoutes[routingKey]
+	redirectionItem, ok := redirectionRoutes[routingKey]
 	if !ok {
 		return nil
 	}
 
-	proxyRouteMutex.Lock()
-	delete(proxyRoutes, routingKey)
-	proxyRouteMutex.Unlock()
-	markInactive(&[]primitive.ObjectID{proxyItem.ID})
+	redirectionRouteMutex.Lock()
+	delete(redirectionRoutes, routingKey)
+	redirectionRouteMutex.Unlock()
+	markInactive(&[]primitive.ObjectID{redirectionItem.ID})
 	return nil
 }
 
-func CheckAndMarkProxyInactive() {
-	expiredProxyItemIDs := []primitive.ObjectID{}
+func CheckAndMarkRedirectionInactive() {
+	expiredRedirectionItemIDs := []primitive.ObjectID{}
 	keysToBeDeleted := []string{}
-	proxyRouteMutex.Lock()
-	for k, proxyItem := range proxyRoutes {
-		if time.Now().UTC().UnixNano() > proxyItem.Expiry.UnixNano() {
-			expiredProxyItemIDs = append(expiredProxyItemIDs, proxyItem.ID)
+	redirectionRouteMutex.Lock()
+	for k, redirectionItem := range redirectionRoutes {
+		if time.Now().UTC().UnixNano() > redirectionItem.Expiry.UnixNano() {
+			expiredRedirectionItemIDs = append(expiredRedirectionItemIDs, redirectionItem.ID)
 			keysToBeDeleted = append(keysToBeDeleted, k)
 		}
 	}
 
 	if len(keysToBeDeleted) > 0 {
 		for _, k := range keysToBeDeleted {
-			delete(proxyRoutes, k)
+			delete(redirectionRoutes, k)
 		}
 	}
-	proxyRouteMutex.Unlock()
+	redirectionRouteMutex.Unlock()
 
-	if len(expiredProxyItemIDs) > 0 {
-		markInactive(&expiredProxyItemIDs)
+	if len(expiredRedirectionItemIDs) > 0 {
+		markInactive(&expiredRedirectionItemIDs)
 	}
 }
 
-func markInactive(expiredProxyItemIDs *[]primitive.ObjectID) {
+func markInactive(expiredRedirectionItemIDs *[]primitive.ObjectID) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 	defer cancel()
 	log.Println("Marking inactive IDs")
-	log.Println(proxyItemsCollection.UpdateMany(ctx, bson.M{"_id": bson.M{"$in": expiredProxyItemIDs}}, bson.M{"$set": bson.M{"active": false}}))
+	log.Println(redirectionItemsCollection.UpdateMany(ctx, bson.M{"_id": bson.M{"$in": expiredRedirectionItemIDs}}, bson.M{"$set": bson.M{"active": false}}))
 }

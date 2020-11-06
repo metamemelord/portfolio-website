@@ -60,12 +60,12 @@ func Register(g *gin.Engine) {
 		c.AbortWithStatus(http.StatusOK)
 	})
 
-	// Proxy routes
+	// Redirection routes
 	{
-		g.GET("/ext/:routing_key", resolveProxy, htmlSupplier)
-		g.GET("/ext/:routing_key/*path", resolveProxy, htmlSupplier)
-		g.POST("/admin/ext", verifyCredentials, addProxy)
-		g.DELETE("/admin/ext/:routing_key", verifyCredentials, deleteProxy)
+		g.GET("/r/:routing_key", resolveRedirection, htmlSupplier)
+		g.GET("/r/:routing_key/*path", resolveRedirection, htmlSupplier)
+		g.POST("/admin/redirecto", verifyCredentials, addRedirection)
+		g.DELETE("/admin/ext/:routing_key", verifyCredentials, deleteRedirection)
 	}
 
 	public := g.Group("/", cacheSetter(168*time.Hour))
