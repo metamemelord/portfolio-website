@@ -72,7 +72,7 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 
 	target := redirectionItem.Target
 
-	if redirectionItem.ForwardPath {
+	if *redirectionItem.ForwardPath {
 		target = fmt.Sprintf("%s/%s", strings.TrimRight(target, "/"), strings.TrimLeft(pathToForward, "/"))
 	}
 	if len(rawQuery) > 0 {
@@ -94,6 +94,10 @@ func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionI
 	}
 	redirectionItem.ExpiryString = ""
 	redirectionItem.Active = time.Now().UTC().UnixNano() < redirectionItem.Expiry.UnixNano()
+	if redirectionItem.ForwardPath == nil {
+		forwardPath := true
+		redirectionItem.ForwardPath = &forwardPath
+	}
 
 	result, err := redirectionItemsCollection.InsertOne(ctx, redirectionItem)
 	if err != nil {

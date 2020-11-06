@@ -14,5 +14,5 @@ type RedirectionItem struct {
 	Expiry       time.Time          `bson:"expiry" json:"-"`
 	Active       bool               `bson:"active" json:"-"`
 	Permanent    bool               `bson:"permanent" json:"permanent"`
-	ForwardPath  bool               `bson:"forward_path" json:"forward_path"`
+	ForwardPath  *bool              `bson:"forward_path" json:"forward_path"`
 }
