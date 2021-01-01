@@ -55,6 +55,7 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 	routingKey = strings.ToLower(routingKey)
 	var redirectionItem model.RedirectionItem
 	var ok bool
+	var rawQueryUsed bool
 
 	if redirectionItem, ok = redirectionRoutes[routingKey]; !ok {
 		return core.EMPTY_STRING, 0, errors.New("Failed to find route")
@@ -75,8 +76,31 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 	if *redirectionItem.ForwardPath {
 		target = fmt.Sprintf("%s/%s", strings.TrimRight(target, "/"), strings.TrimLeft(pathToForward, "/"))
 	}
+	
 	if len(rawQuery) > 0 {
 		target = fmt.Sprintf("%s?%s", target, rawQuery)
+		rawQueryUsed = true
+	}
+
+	// Process metadata here
+	if redirectionItem.Metadata != nil {
+		for metadataItemType, data := range redirectionItem.Metadata {
+			switch metadataItemType {
+			case model.MetadataItemTypeQueryParam:
+				queries := make([]string, len(data))
+				iter := 0
+				for k, v := range data {
+					queries[i] = fmt.Sprintf("%s=%s", k, v.(string))
+				}
+				joiner := core.QUESTION_MARK
+				if rawQueryUsed {
+					joiner = core.AMPERSAND
+				}
+				target = fmt.Sprintf("%s%s%s", target, joiner, strings.Join(queries))
+			default:
+				break
+			}
+		}
 	}
 
 	return target, statusCode, nil

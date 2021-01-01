@@ -14,5 +14,7 @@ type RedirectionItem struct {
 	Expiry       time.Time          `bson:"expiry" json:"-"`
 	Active       bool               `bson:"active" json:"-"`
 	Permanent    bool               `bson:"permanent" json:"permanent"`
+	Metadata map[MetadataItemType]map[string]interface{} `bson:"metadata" json:"metadata"`
 	ForwardPath  *bool              `bson:"forward_path" json:"forward_path"`
 }
+
