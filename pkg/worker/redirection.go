@@ -76,7 +76,7 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 	if *redirectionItem.ForwardPath {
 		target = fmt.Sprintf("%s/%s", strings.TrimRight(target, "/"), strings.TrimLeft(pathToForward, "/"))
 	}
-	
+
 	if len(rawQuery) > 0 {
 		target = fmt.Sprintf("%s?%s", target, rawQuery)
 		rawQueryUsed = true
