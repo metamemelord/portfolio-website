@@ -86,17 +86,18 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 	if redirectionItem.Metadata != nil {
 		for metadataItemType, data := range redirectionItem.Metadata {
 			switch metadataItemType {
-			case model.MetadataItemTypeQueryParam:
+			case model.MetadataItemTypeQueryParameter:
 				queries := make([]string, len(data))
 				iter := 0
 				for k, v := range data {
-					queries[i] = fmt.Sprintf("%s=%s", k, v.(string))
+					queries[iter] = fmt.Sprintf("%s=%s", k, v.(string))
+					iter++
 				}
 				joiner := core.QUESTION_MARK
 				if rawQueryUsed {
 					joiner = core.AMPERSAND
 				}
-				target = fmt.Sprintf("%s%s%s", target, joiner, strings.Join(queries))
+				target = fmt.Sprintf("%s%s%s", target, joiner, strings.Join(queries, core.AMPERSAND))
 			default:
 				break
 			}
