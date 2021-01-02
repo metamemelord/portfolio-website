@@ -86,7 +86,7 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 	if redirectionItem.Metadata != nil {
 		for metadataItemType, data := range redirectionItem.Metadata {
 			switch metadataItemType {
-			case model.MetadataItemTypeQueryParameter:
+			case model.MetadataItemTypeQueryParam.String():
 				queries := make([]string, len(data))
 				iter := 0
 				for k, v := range data {
