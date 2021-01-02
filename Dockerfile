@@ -8,6 +8,7 @@ RUN npm run build
 RUN go get github.com/dmarkham/enumer
 RUN go install github.com/dmarkham/enumer
 ENV PATH=$PATH:$GOPATH/bin
+ENV GO111MODULE=on
 RUN go generate ./...
 RUN go build -o portfolio
 
