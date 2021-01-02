@@ -82,6 +82,7 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 		rawQueryUsed = true
 	}
 
+	log.Println("lololololllllllllllllllllllllllllllllllllllllllllllllllll", redirection.Metadata, "xd")
 	// Process metadata here
 	if redirectionItem.Metadata != nil {
 		for metadataItemType, data := range redirectionItem.Metadata {
