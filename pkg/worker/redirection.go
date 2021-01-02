@@ -104,6 +104,8 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 		}
 	}
 
+	log.Printf("Redirecting to %s\n", target)
+
 	return target, statusCode, nil
 }
 
