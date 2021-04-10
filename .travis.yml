@@ -1,8 +1,14 @@
 language: go
+go:
+  - 1.16
 services:
   - docker
 env:
   - GO111MODULE=on
 before_install:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - go get github.com/dmarkham/enumer
+  - go install github.com/dmarkham/enumer
+  - go generate ./...
+script:
   - docker build -t metamemelord/portfolio .
