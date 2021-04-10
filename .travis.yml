@@ -1,8 +1,8 @@
 language: go
-
 services:
   - docker
-
+env:
+  - GO111MODULE=on
 before_install:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   - docker build -t metamemelord/portfolio .
