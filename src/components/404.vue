@@ -19,8 +19,8 @@ export default {
       sceneTop = document.getElementById("scene-top");
       sceneBottom = document.getElementById("scene-bottom");
       if (sceneTop && sceneBottom) {
-        var parallaxInstance = new Parallax(sceneTop);
-        var parallaxInstance = new Parallax(sceneBottom);
+        new Parallax(sceneTop);
+        new Parallax(sceneBottom);
         clearInterval(timeoutForAnimation);
       }
     }, 100);

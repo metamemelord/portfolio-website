@@ -52,7 +52,6 @@ export default {
   }, 
   methods: {
     contactMeDialogFunc(open) {
-      console.log("hihi");
       this.$store.dispatch('setContactMeDialog', open);
     }
   },

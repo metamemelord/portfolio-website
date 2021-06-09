@@ -35,17 +35,18 @@ export default {
     var dt = true,
       prev = -1;
     setInterval(() => {
+      var label;
       const hours = new Date().getHours();
       dt = hours > this.$store.state.day && hours < this.$store.state.night;
       if (prev != dt) {
         if (dt) {
-          var label = document
+          label = document
             .getElementById("linkedin")
             .getElementsByTagName("a")[0];
           label.classList.remove("dark-a");
           label.classList.add("light-a");
         } else {
-          var label = document
+          label = document
             .getElementById("linkedin")
             .getElementsByTagName("a")[0];
           label.classList.remove("light-a");
