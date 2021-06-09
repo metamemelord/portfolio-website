@@ -6,10 +6,10 @@ module.exports = {
     optimization: {
       splitChunks: {
         chunks: 'async',
-        maxSize: 225000,
+        maxSize: 200000,
         minChunks: 1,
-        maxAsyncRequests: 10,
-        maxInitialRequests: 4,
+        maxAsyncRequests: Infinity,
+        maxInitialRequests: Infinity,
         automaticNameDelimiter: '~',
         cacheGroups: {
           defaultVendors: {
