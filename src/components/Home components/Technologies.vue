@@ -30,7 +30,7 @@ export default {
       technologies: []
     };
   },
-  created() {
+  beforeMount() {
     var dt = true,
       prev = -1;
     setInterval(() => {
@@ -51,7 +51,7 @@ export default {
       }
     }, 1000);
   },
-  beforeMount() {
+  created() {
     this.$http
       .get("/api/technologies")
       .then(res => {
