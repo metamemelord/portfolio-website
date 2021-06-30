@@ -116,8 +116,10 @@ func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionI
 	exp, err := time.Parse(core.DATE_FORMAT, redirectionItem.ExpiryString)
 	if err != nil {
 		redirectionItem.Expiry = time.Now().UTC().Add(time.Hour * 876000)
+		redirectionItem.Permanent = true
 	} else {
 		redirectionItem.Expiry = exp
+		redirectionItem.Permanent = false
 	}
 	redirectionItem.ExpiryString = core.EMPTY_STRING
 	redirectionItem.Active = time.Now().UTC().UnixNano() < redirectionItem.Expiry.UnixNano()
