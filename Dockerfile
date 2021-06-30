@@ -2,7 +2,7 @@ FROM golang:alpine as builder
 ENV GO111MODULE=on
 ENV PATH=$PATH:$GOPATH/bin
 
-RUN apk add --update nodejs nodejs-npm build-base git
+RUN apk add --update nodejs npm alpine-sdk
 WORKDIR /build
 COPY . .
 RUN npx browserslist@latest --update-db
