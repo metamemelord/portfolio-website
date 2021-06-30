@@ -24,7 +24,8 @@ export default {
 
 <style>
 main {
-  margin-top: 7.3rem;
+  margin-top: 7rem;
+  margin-bottom: 4.6rem;
   max-width: 72rem;
   min-width: 25rem;
 }
@@ -33,7 +34,8 @@ main {
   main {
     position: relative;
     margin: 0 auto;
-    margin-top: 7.3rem;
+    margin-top: 7rem;
+    margin-bottom: 3rem;
   }
 }
 </style>
