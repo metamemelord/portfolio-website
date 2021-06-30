@@ -71,12 +71,12 @@ func Register(g *gin.Engine) {
 
 	public := g.Group("/", cacheSetter(168*time.Hour))
 	{
-		public.Static("/js", "./dist/js")
-		public.Static("/css", "./dist/css")
-		public.Static("/img", "./dist/img")
-		public.StaticFile("/favicon.ico", "./dist/favicon.ico")
-		public.StaticFile("/robots.txt", "./dist/robots.txt")
-		public.StaticFile("/sitemap.xml", "./dist/sitemap.xml")
+		public.Static("/js", "dist/js")
+		public.Static("/css", "dist/css")
+		public.Static("/img", "dist/img")
+		public.StaticFile("/favicon.ico", "dist/favicon.ico")
+		public.StaticFile("/robots.txt", "dist/robots.txt")
+		public.StaticFile("/sitemap.xml", "dist/sitemap.xml")
 	}
 
 	g.NoRoute(htmlSupplier)

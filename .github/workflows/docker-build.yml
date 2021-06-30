@@ -29,5 +29,5 @@ jobs:
           go get github.com/dmarkham/enumer
           go install github.com/dmarkham/enumer
           go generate ./...
-      - name: build
+      - name: Build docker image
         run: docker build -t metamemelord/portfolio .
