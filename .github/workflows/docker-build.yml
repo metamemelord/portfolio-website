@@ -24,11 +24,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PAT }}
-      - name: Get enumer
-        run: go get github.com/dmarkham/enumer
-      - name: Install enumer
-        run: go install github.com/dmarkham/enumer
-      - name: Generate enums
-        run: go generate ./...
+      - name: Install enumer and generate enums
+        run: |
+          go get github.com/dmarkham/enumer
+          go install github.com/dmarkham/enumer
+          go generate ./...
       - name: build
         run: docker build -t metamemelord/portfolio .
