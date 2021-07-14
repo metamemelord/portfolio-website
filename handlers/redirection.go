@@ -17,6 +17,12 @@ func addRedirection(c *gin.Context) {
 		log.Println(err)
 		respond(c, http.StatusBadRequest, nil, err)
 	} else {
+
+		if redirectionItem.RoutingKey == core.EMPTY_STRING {
+			respond(c, http.StatusBadRequest, nil, errors.New("Empty routing_key provided"))
+			return
+		}
+
 		target, _, _ := worker.ResolveRedirectionItem(redirectionItem.RoutingKey, core.EMPTY_STRING, core.EMPTY_STRING)
 		if target != core.EMPTY_STRING {
 			respond(c, http.StatusConflict, nil, errors.New("This route already exists"))
@@ -24,7 +30,7 @@ func addRedirection(c *gin.Context) {
 		}
 		_, err = worker.AddRedirectionItem(c.Request.Context(), &redirectionItem)
 		if err != nil {
-			respond(c, http.StatusServiceUnavailable, nil, err)
+			respond(c, http.StatusUnprocessableEntity, nil, err)
 		} else {
 			respond(c, http.StatusCreated, nil, nil)
 		}

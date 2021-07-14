@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 	"sync"
 	"time"
@@ -113,6 +114,22 @@ func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionI
 	// Pre-processing
 	redirectionItem.ID = primitive.NewObjectID()
 	redirectionItem.RoutingKey = strings.ToLower(redirectionItem.RoutingKey)
+
+	target, err := url.Parse(redirectionItem.Target)
+	if err != nil {
+		log.Println("Invalid path:", redirectionItem.Target, err)
+		return core.EMPTY_STRING, err
+	}
+
+	if target.Scheme == core.EMPTY_STRING {
+		redirectionItem.Target = fmt.Sprintf("https://%s", redirectionItem.Target)
+	} else if target.Scheme != "https" && target.Scheme != "http" {
+		msg := "Currently only http and https redirects are supported"
+		log.Println(msg, ":", redirectionItem.Target)
+		return core.EMPTY_STRING, errors.New(msg)
+	}
+
+	fmt.Println(redirectionItem.Target)
 	exp, err := time.Parse(core.DATE_FORMAT, redirectionItem.ExpiryString)
 	if err != nil {
 		redirectionItem.Expiry = time.Now().UTC().Add(time.Hour * 876000)

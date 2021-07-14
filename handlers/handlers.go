@@ -65,8 +65,10 @@ func Register(g *gin.Engine) {
 	{
 		g.GET("/r/:routing_key", resolveRedirection, htmlSupplier)
 		g.GET("/r/:routing_key/*path", resolveRedirection, htmlSupplier)
-		g.POST("/admin/redirect", verifyCredentials, addRedirection)
-		g.DELETE("/admin/redirect/:routing_key", verifyCredentials, deleteRedirection)
+
+		// API
+		api.POST("/redirect", verifyCredentials, addRedirection)
+		api.DELETE("/redirect/:routing_key", verifyCredentials, deleteRedirection)
 	}
 
 	public := g.Group("/", cacheSetter(168*time.Hour))
