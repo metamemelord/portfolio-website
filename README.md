@@ -2,7 +2,7 @@
 
 This repo contains the implementation of my personal website, metamemelord.com
 
-[![Build Status](https://travis-ci.org/metamemelord/portfolio-website.svg?branch=master)](https://travis-ci.org/metamemelord/portfolio-website)
+![Docker build](https://github.com/metamemelord/portfolio-website/actions/workflows/docker-build.yml/badge.svg)
 
 ## Project setup
 
