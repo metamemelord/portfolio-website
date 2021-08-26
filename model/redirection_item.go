@@ -16,4 +16,5 @@ type RedirectionItem struct {
 	Permanent    bool                              `bson:"permanent" json:"-"`
 	Metadata     map[string]map[string]interface{} `bson:"metadata" json:"metadata"`
 	ForwardPath  *bool                             `bson:"forward_path" json:"forward_path"`
+	HitCount     uint64                            `bson:"hit_count"`
 }

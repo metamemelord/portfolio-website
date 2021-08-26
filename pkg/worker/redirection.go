@@ -22,6 +22,7 @@ import (
 var redirectionRouteMutex sync.Mutex
 var redirectionRoutes map[string]model.RedirectionItem
 var redirectionItemsCollection *mongo.Collection
+var redirectionHitCounterChannel = make(chan primitive.ObjectID, 200)
 
 func init() {
 	redirectionItemsCollection = db.GetCollection("redirection-items")
@@ -50,6 +51,8 @@ func init() {
 	if len(expiredRedirectionItemIDs) > 0 {
 		markInactive(&expiredRedirectionItemIDs)
 	}
+
+	go runRedirectionHitCounterPublisher(context.Background())
 }
 
 func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string, int, error) {
@@ -107,6 +110,10 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 
 	log.Printf("Redirecting to %s\n", target)
 
+	go func(id primitive.ObjectID) {
+		redirectionHitCounterChannel <- id
+	}(redirectionItem.ID)
+
 	return target, statusCode, nil
 }
 
@@ -129,7 +136,6 @@ func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionI
 		return core.EMPTY_STRING, errors.New(msg)
 	}
 
-	fmt.Println(redirectionItem.Target)
 	exp, err := time.Parse(core.DATE_FORMAT, redirectionItem.ExpiryString)
 	if err != nil {
 		redirectionItem.Expiry = time.Now().UTC().Add(time.Hour * 876000)
@@ -138,7 +144,11 @@ func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionI
 		redirectionItem.Expiry = exp
 		redirectionItem.Permanent = false
 	}
+
+	// Cleaning up unintended addition of defaults
 	redirectionItem.ExpiryString = core.EMPTY_STRING
+	redirectionItem.HitCount = 0
+
 	redirectionItem.Active = time.Now().UTC().UnixNano() < redirectionItem.Expiry.UnixNano()
 	if redirectionItem.ForwardPath == nil {
 		forwardPath := true
@@ -198,4 +208,23 @@ func markInactive(expiredRedirectionItemIDs *[]primitive.ObjectID) {
 	defer cancel()
 	log.Println("Marking inactive IDs")
 	log.Println(redirectionItemsCollection.UpdateMany(ctx, bson.M{"_id": bson.M{"$in": expiredRedirectionItemIDs}}, bson.M{"$set": bson.M{"active": false}}))
+}
+
+func runRedirectionHitCounterPublisher(ctx context.Context) {
+	for {
+		select {
+		case value := <-redirectionHitCounterChannel:
+			go incrementHitCount(ctx, value)
+		case <-ctx.Done():
+			break
+		}
+	}
+}
+
+func incrementHitCount(ctx context.Context, id primitive.ObjectID) {
+	result, err := redirectionItemsCollection.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$inc": bson.M{"hit_count": 1}})
+	if err == nil && (result.MatchedCount != 1 || result.ModifiedCount != 1) {
+		err = fmt.Errorf("Error incrementing the hit count Matched=%d, Modified=%d", result.MatchedCount, result.ModifiedCount)
+	}
+	log.Printf("Updating hit count for id=(%s), error=(%v)", id.String(), err)
 }
