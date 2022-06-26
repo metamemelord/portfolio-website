@@ -14,10 +14,6 @@ import (
 )
 
 func init() {
-	if os.Getenv("APP_AUTH") == "" {
-		log.Fatalln("APP_AUTH not provided")
-	}
-
 	if os.Getenv("ENV") == "release" || os.Getenv("GIN_MODE") == "release" {
 		return
 	}
@@ -77,6 +73,10 @@ func init() {
 			log.Fatalln("Could not build project!")
 		}
 		log.Println("Done!")
+	}
+
+	if os.Getenv("APP_AUTH") == "" {
+		log.Fatalln("APP_AUTH not provided")
 	}
 }
 

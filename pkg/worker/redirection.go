@@ -41,7 +41,7 @@ func init() {
 		redirectionItem := model.RedirectionItem{}
 		_ = cursor.Decode(&redirectionItem)
 		if time.Now().UTC().UnixNano() > redirectionItem.Expiry.UnixNano() {
-			expiredRedirectionItemIDs = append(expiredRedirectionItemIDs, redirectionItem.ID)
+			expiredRedirectionItemIDs = append(expiredRedirectionItemIDs, *redirectionItem.ID)
 		} else {
 			redirectionRoutes[redirectionItem.RoutingKey] = redirectionItem
 		}
@@ -53,6 +53,36 @@ func init() {
 	}
 
 	go runRedirectionHitCounterPublisher(context.Background())
+}
+
+func GetRedirectionItems(ctx context.Context, filters ...model.RedirectionItemSearchFilter) ([]*model.RedirectionItem, error) {
+	queryFilters := bson.M{}
+	for _, filter := range filters {
+		queryFilters[filter.Key] = filter.Value
+	}
+	return getRedirectionItems(ctx, queryFilters)
+}
+
+func getRedirectionItems(ctx context.Context, filters bson.M) ([]*model.RedirectionItem, error) {
+	var response []*model.RedirectionItem = make([]*model.RedirectionItem, 0, 0)
+
+	totalItems, err := redirectionItemsCollection.CountDocuments(ctx, filters)
+	if err != nil || totalItems == 0 {
+		return response, err
+	}
+
+	response = make([]*model.RedirectionItem, 0, totalItems)
+	cursor, err := redirectionItemsCollection.Find(ctx, filters)
+
+	if err == nil {
+		for cursor.Next(ctx) {
+			redirectionItem := &model.RedirectionItem{}
+			_ = cursor.Decode(redirectionItem)
+			redirectionItem.ExpiryString = redirectionItem.Expiry.Format(core.DATE_FORMAT)
+			response = append(response, redirectionItem)
+		}
+	}
+	return response, err
 }
 
 func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string, int, error) {
@@ -71,13 +101,13 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 	}
 
 	statusCode := http.StatusTemporaryRedirect
-	if redirectionItem.Permanent {
+	if redirectionItem.Permanent != nil && *redirectionItem.Permanent {
 		statusCode = http.StatusMovedPermanently
 	}
 
 	target := redirectionItem.Target
 
-	if *redirectionItem.ForwardPath {
+	if redirectionItem.ForwardPath != nil && *redirectionItem.ForwardPath {
 		target = fmt.Sprintf("%s/%s", strings.TrimRight(target, "/"), strings.TrimLeft(pathToForward, "/"))
 	}
 
@@ -112,15 +142,20 @@ func ResolveRedirectionItem(routingKey, pathToForward, rawQuery string) (string,
 
 	go func(id primitive.ObjectID) {
 		redirectionHitCounterChannel <- id
-	}(redirectionItem.ID)
+	}(*redirectionItem.ID)
 
 	return target, statusCode, nil
 }
 
 func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionItem) (string, error) {
 	// Pre-processing
-	redirectionItem.ID = primitive.NewObjectID()
+	newObjectID := primitive.NewObjectID()
+	redirectionItem.ID = &newObjectID
+
 	redirectionItem.RoutingKey = strings.ToLower(redirectionItem.RoutingKey)
+
+	createdAt := time.Now()
+	redirectionItem.CreatedAt = &createdAt
 
 	target, err := url.Parse(redirectionItem.Target)
 	if err != nil {
@@ -137,19 +172,24 @@ func AddRedirectionItem(ctx context.Context, redirectionItem *model.RedirectionI
 	}
 
 	exp, err := time.Parse(core.DATE_FORMAT, redirectionItem.ExpiryString)
+	var permanentRedirect bool
 	if err != nil {
-		redirectionItem.Expiry = time.Now().UTC().Add(time.Hour * 876000)
-		redirectionItem.Permanent = true
-	} else {
-		redirectionItem.Expiry = exp
-		redirectionItem.Permanent = false
+		exp = time.Now().UTC().Add(time.Hour * 876000)
+		permanentRedirect = true
 	}
+	redirectionItem.Expiry = &exp
+	redirectionItem.Permanent = &permanentRedirect
 
 	// Cleaning up unintended addition of defaults
 	redirectionItem.ExpiryString = core.EMPTY_STRING
 	redirectionItem.HitCount = 0
 
-	redirectionItem.Active = time.Now().UTC().UnixNano() < redirectionItem.Expiry.UnixNano()
+	active := time.Now().UTC().Unix() < redirectionItem.Expiry.Unix()
+
+	if !active {
+		return core.EMPTY_STRING, errors.New("Expiry is in the past")
+	}
+	redirectionItem.Active = &active
 	if redirectionItem.ForwardPath == nil {
 		forwardPath := true
 		redirectionItem.ForwardPath = &forwardPath
@@ -176,7 +216,7 @@ func DeleteRedirectionItem(routingKey string) error {
 	redirectionRouteMutex.Lock()
 	delete(redirectionRoutes, routingKey)
 	redirectionRouteMutex.Unlock()
-	markInactive(&[]primitive.ObjectID{redirectionItem.ID})
+	markInactive(&[]primitive.ObjectID{*redirectionItem.ID})
 	return nil
 }
 
@@ -186,7 +226,7 @@ func CheckAndMarkRedirectionInactive() {
 	redirectionRouteMutex.Lock()
 	for k, redirectionItem := range redirectionRoutes {
 		if time.Now().UTC().UnixNano() > redirectionItem.Expiry.UnixNano() {
-			expiredRedirectionItemIDs = append(expiredRedirectionItemIDs, redirectionItem.ID)
+			expiredRedirectionItemIDs = append(expiredRedirectionItemIDs, *redirectionItem.ID)
 			keysToBeDeleted = append(keysToBeDeleted, k)
 		}
 	}
