@@ -67,6 +67,8 @@ func Register(g *gin.Engine) {
 		g.GET("/r/:routing_key/*path", resolveRedirection, htmlSupplier)
 
 		// API
+		api.GET("/redirect", verifyCredentials, getRedirectionItems)
+		api.GET("/redirect/:routing_key", verifyCredentials, getRedirectionItemByRoutingKey)
 		api.POST("/redirect", verifyCredentials, addRedirection)
 		api.DELETE("/redirect/:routing_key", verifyCredentials, deleteRedirection)
 	}
