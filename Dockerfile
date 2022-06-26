@@ -1,21 +1,22 @@
-FROM golang:alpine as builder
+FROM docker.io/library/golang:1-alpine as server-builder
+WORKDIR /build
 ENV GO111MODULE=on
 ENV PATH=$PATH:$GOPATH/bin
+RUN go install github.com/dmarkham/enumer@latest
+COPY . .
+RUN go generate ./...
+RUN go build -o portfolio
 
-RUN apk add --update nodejs npm alpine-sdk
+FROM docker.io/library/node:16-alpine as ui-builder
+RUN npm install --location=global npm
 WORKDIR /build
 COPY . .
 RUN npx browserslist@latest --update-db
 RUN npm install
 RUN npm run build
 
-RUN go get github.com/dmarkham/enumer
-RUN go install github.com/dmarkham/enumer
-RUN go generate ./...
-RUN go build -o portfolio
-
 FROM alpine
 WORKDIR /portfolio
-COPY --from=builder /build/dist ./dist
-COPY --from=builder /build/portfolio .
+COPY --from=ui-builder /build/dist ./dist
+COPY --from=server-builder /build/portfolio .
 CMD ["./portfolio"]

@@ -1,0 +1,44 @@
+name: Docker
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    env:
+      GO111MODULE: on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Go - This is just for failing fast
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+      - name: Install enumer and run go:generate
+        run: |
+          go install github.com/dmarkham/enumer@latest
+          go generate ./...
+      - name: Build the server
+        run: go build ./...
+      - name: Install Node - This is just for failing fast
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Build the UI
+        run: |
+          npm install --location=global npm
+          npx browserslist@latest --update-db
+          npm install
+          npm run build
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PAT }}
+      - name: Build container image
+        run: docker build -t metamemelord/portfolio .
