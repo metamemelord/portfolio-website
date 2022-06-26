@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gaurav.app/sitemap.xml
+Sitemap: https://gaurav.dev/sitemap.xml
