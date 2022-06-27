@@ -35,7 +35,7 @@ func init() {
 	_, err = os.Stat(path.Join(dir, "dist", "index.html"))
 
 	if err == nil && !(rebuild || rebuildAll) {
-		log.Println("Seems like project is already build, skipping this step.")
+		log.Println("Seems like project is already built, skipping this step.")
 		return
 	}
 
@@ -74,7 +74,9 @@ func init() {
 		}
 		log.Println("Done!")
 	}
+}
 
+func init() {
 	if os.Getenv("APP_AUTH") == "" {
 		log.Fatalln("APP_AUTH not provided")
 	}

@@ -1,18 +1,29 @@
 package communication
 
-import "context"
+import (
+	"context"
+	"os"
+)
 
-type EmailSender interface {
+var SELF_EMAIL = "hello@gaurav.dev"
+
+func init() {
+	emailFromEnv := os.Getenv("SELF_EMAIL")
+	if len(emailFromEnv) > 0 {
+		SELF_EMAIL = emailFromEnv
+	}
+}
+
+type EmailClient interface {
 	Send(context.Context, *Email) (interface{}, error)
 }
 
 type Email struct {
-	DataTime       string
-	Sender         string
-	SenderName     string
-	SenderEmail    string
-	RecipientEmail string
-	Subject        string
-	Body           string
-	BodyHTML       string
+	DateTime    string
+	Sender      string
+	SenderName  string
+	SenderEmail string
+	Subject     string
+	Body        string
+	BodyHTML    string
 }

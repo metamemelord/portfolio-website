@@ -9,7 +9,7 @@ import (
 	"github.com/mailgun/mailgun-go/v4"
 )
 
-func NewEmailSender() EmailSender {
+func NewMailgunEmailClient() EmailClient {
 	mg := mailgun.NewMailgun(os.Getenv("MAILGUN_DOMAIN"), os.Getenv("MAILGUN_API_KEY"))
 	return &mailgunEmailService{mg: mg}
 }
@@ -24,9 +24,9 @@ Date: %s
 Message: 
 %s
 `
-	emailBody = fmt.Sprintf(emailBody, email.SenderName, email.SenderEmail, email.DataTime, email.Body)
+	emailBody = fmt.Sprintf(emailBody, email.SenderName, email.SenderEmail, email.DateTime, email.Body)
 
-	message := m.mg.NewMessage(email.SenderEmail, email.Subject, emailBody, email.RecipientEmail)
+	message := m.mg.NewMessage(email.SenderEmail, email.Subject, emailBody, SELF_EMAIL)
 	resp, id, err := m.mg.Send(ctx, message)
 
 	if err != nil {
