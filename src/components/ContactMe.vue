@@ -45,7 +45,7 @@
           <h1 class="contact-me-dialog__status">
             <i style="color:red;" class="fa fa-times-circle-o"></i>
           </h1>
-          <span style="margin-bottom: 2rem;">Something's not right, please try again later.</span>
+          <span style="margin-bottom: 2rem;">Something's not right, please try again later or contact <a href="mailto:hello@gaurav.dev" style="color:var(--accent-color);text-decoration:none"><b>here</b></a></span>
         </template>
         <template v-else>
           <h1 class="contact-me-dialog__status">

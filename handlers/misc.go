@@ -3,7 +3,6 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -12,19 +11,18 @@ import (
 	"github.com/metamemelord/portfolio-website/pkg/worker"
 )
 
-var emailClient communication.EmailSender
+var emailClient communication.EmailClient
 
 func init() {
-	emailClient = communication.NewEmailSender()
+	emailClient = communication.NewMicrosoft365EmailClient()
 }
 
 func sendEmail(c *gin.Context) {
-	email := &communication.Email{SenderName: c.PostForm("name"),
-		SenderEmail:    c.PostForm("email"),
-		RecipientEmail: os.Getenv("SELF_EMAIL"),
-		Subject:        "Received an email from personal website",
-		DataTime:       c.PostForm("datetime"),
-		Body:           c.PostForm("body"),
+	email := &communication.Email{
+		SenderName:  c.PostForm("name"),
+		SenderEmail: c.PostForm("email"),
+		DateTime:    c.PostForm("datetime"),
+		Body:        c.PostForm("body"),
 	}
 
 	_, err := emailClient.Send(c.Request.Context(), email)
