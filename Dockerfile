@@ -1,11 +1,13 @@
 FROM docker.io/library/golang:1-alpine as server-builder
+RUN apk add upx
 WORKDIR /build
 ENV GO111MODULE=on
 ENV PATH=$PATH:$GOPATH/bin
 RUN go install github.com/dmarkham/enumer@latest
 COPY . .
 RUN go generate ./...
-RUN go build -o portfolio
+RUN go build -v -ldflags="-s -w" -o portfolio
+RUN upx portfolio
 
 FROM docker.io/library/node:16-alpine as ui-builder
 RUN npm install --location=global npm
