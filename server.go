@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -102,6 +103,11 @@ func main() {
 			time.Sleep(2 * time.Hour)
 		}
 	}()
-	go worker.KeepAlive(time.Minute)
+
+	envKeepAliveCron := strings.ToLower(os.Getenv("KEEP_ALIVE_CRON"))
+	if len(envKeepAliveCron) == 0 || envKeepAliveCron == "true" || envKeepAliveCron == "1" {
+		go worker.KeepAlive(time.Minute)
+	}
+
 	_ = g.Run(PORT)
 }

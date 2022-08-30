@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+var healthcheckURL = "https://gaurav.dev/health"
+
 func KeepAlive(t time.Duration) {
 	for {
 		makeRequest()
@@ -14,8 +16,7 @@ func KeepAlive(t time.Duration) {
 }
 
 func makeRequest() {
-	url := "https://gaurav-saini.herokuapp.com/health"
-	res, err := http.Get(url)
+	res, err := http.Get(healthcheckURL)
 	if err != nil {
 		log.Println(err)
 	} else {
