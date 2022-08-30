@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.1.0
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/mailgun/mailgun-go/v4 v4.8.1
 	github.com/microsoft/kiota-authentication-azure-go v0.3.1

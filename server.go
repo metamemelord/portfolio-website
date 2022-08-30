@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/metamemelord/portfolio-website/handlers"
 	"github.com/metamemelord/portfolio-website/pkg/worker"
@@ -87,6 +88,8 @@ func main() {
 	g := gin.New()
 
 	g.Use(gin.LoggerWithWriter(os.Stdout))
+
+	g.Use(cors.Default())
 
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
