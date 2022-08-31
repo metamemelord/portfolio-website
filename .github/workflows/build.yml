@@ -40,7 +40,7 @@ jobs:
           npx browserslist@latest --update-db
           npm install
           npm run build
-      - name: Login to Docker Hub
+      - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
@@ -63,11 +63,39 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: executing remote ssh commands using password
+      - name: Deploy the image
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          script: whoami
+          # Sometimes you gotta bear the burden of working with rootful containers (:
+          script: |
+            set +o history
+            sudo podman stop ${{ secrets.CONTAINER_NAME }} && sudo podman rm ${{ secrets.CONTAINER_NAME }}
+            sudo podman pull ${{ steps.meta.outputs.tags }}
+            sudo podman run -d -p ${{ secrets.CONTAINER_EXTERNAL_PORT }}:${{ secrets.CONTAINER_INTERNAL_PORT }} \
+              -e GIN_MODE="${{ secrets.CONTAINER_GIN_MODE }}" \
+              -e KEEP_ALIVE_CRON="${{ secrets.CONTAINER_KEEP_ALIVE_CRON }}" \
+              -e APP_AUTH="${{ secrets.CONTAINER_APP_AUTH }}" \
+              -e MONGO_URI="${{ secrets.CONTAINER_MONGO_URI }}" \
+              -e MS_CLIENT_ID="${{ secrets.CONTAINER_MS_CLIENT_ID }}" \
+              -e MS_EMAIL_KEY="${{ secrets.CONTAINER_MS_EMAIL_KEY }}" \
+              -e MS_GRAPH_SELF_USER_ID="${{ secrets.CONTAINER_MS_GRAPH_SELF_USER_ID }}" \
+              -e MS_SECRET_ID="${{ secrets.CONTAINER_MS_SECRET_ID }}" \
+              -e MS_TENANT_ID="${{ secrets.CONTAINER_MS_TENANT_ID }}" \
+              -e SELF_EMAIL="${{ secrets.CONTAINER_SELF_EMAIL }}" \
+              -e PORT="${{ secrets.CONTAINER_INTERNAL_PORT }}" \
+              --name "${{ secrets.CONTAINER_NAME }}" \
+              ${{ steps.meta.outputs.tags }}
+            set -o history
+      - name: Check service health
+        uses: jtalk/url-health-check-action@v2
+        with:
+          url: https://metamemelord.dev/health
+          follow-redirect: false
+          max-attempts: 5
+          retry-delay: 5s
+          retry-all: false
+
