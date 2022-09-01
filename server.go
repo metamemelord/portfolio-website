@@ -112,5 +112,10 @@ func main() {
 		go worker.KeepAlive(time.Minute)
 	}
 
-	_ = g.Run(PORT)
+	tlsEnabled := os.Getenv("TLS_ENABLED")
+	if tlsEnabled == "true" || tlsEnabled == "1" {
+		_ = g.RunTLS(PORT, os.Getenv("TLS_CERT_PATH"), os.Getenv("TLS_KEY_PATH"))
+	} else {
+		_ = g.Run(PORT)
+	}
 }

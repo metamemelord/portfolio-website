@@ -3,6 +3,7 @@ name: Docker
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  DOMAIN: gaurav.dev
 
 on:
   push:
@@ -88,13 +89,17 @@ jobs:
               -e MS_TENANT_ID="${{ secrets.CONTAINER_MS_TENANT_ID }}" \
               -e SELF_EMAIL="${{ secrets.CONTAINER_SELF_EMAIL }}" \
               -e PORT="${{ secrets.CONTAINER_INTERNAL_PORT }}" \
+              -e TLS_ENABLED="${{ secrets.CONTAINER_TLS_ENABLED }}" \
+              -e TLS_CERT_PATH="${{ secrets.CONTAINER_INTERNAL_TLS_CERTS_DIR }}/cert.pem" \
+              -e TLS_KEY_PATH="${{ secrets.CONTAINER_INTERNAL_TLS_CERTS_DIR }}/key.pem" \
+              -v ${{ secrets.CONTAINER_EXTERNAL_TLS_CERTS_DIR }}:${{ secrets.CONTAINER_INTERNAL_TLS_CERTS_DIR }}/:Z \
               --name "${{ secrets.CONTAINER_NAME }}" \
               ${{ steps.meta.outputs.tags }}
             set -o history
       - name: Check service health
         uses: jtalk/url-health-check-action@v2
         with:
-          url: http://${{ secrets.SSH_HOST }}/health
+          url: https://${{ env.DOMAIN }}/health
           follow-redirect: false
           max-attempts: 5
           retry-delay: 5s

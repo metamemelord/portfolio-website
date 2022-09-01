@@ -24,3 +24,4 @@ yarn-error.log*
 portfolio-website
 model/metadataitemtype_enumer.go
 server
+certs/*
