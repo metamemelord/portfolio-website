@@ -58,7 +58,7 @@ func Register(g *gin.Engine) {
 	}
 
 	g.GET("/health", func(c *gin.Context) {
-		c.AbortWithStatus(http.StatusOK)
+		c.AbortWithStatus(http.StatusNoContent)
 	})
 
 	// Redirection routes
