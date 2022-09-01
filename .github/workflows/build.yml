@@ -78,6 +78,7 @@ jobs:
             sudo podman run -d -p ${{ secrets.CONTAINER_EXTERNAL_PORT }}:${{ secrets.CONTAINER_INTERNAL_PORT }} \
               -e GIN_MODE="${{ secrets.CONTAINER_GIN_MODE }}" \
               -e KEEP_ALIVE_CRON="${{ secrets.CONTAINER_KEEP_ALIVE_CRON }}" \
+              -e KEEP_ALIVE_BASE_URL="${{ secrets.CONTAINER_KEEP_ALIVE_BASE_URL }}" \
               -e APP_AUTH="${{ secrets.CONTAINER_APP_AUTH }}" \
               -e MONGO_URI="${{ secrets.CONTAINER_MONGO_URI }}" \
               -e MS_CLIENT_ID="${{ secrets.CONTAINER_MS_CLIENT_ID }}" \

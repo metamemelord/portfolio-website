@@ -1,12 +1,21 @@
 package worker
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
-var healthcheckURL = "https://gaurav.dev/health"
+var keepAliveBaseURL = "https://gaurav.dev"
+
+func init() {
+	keepAliveBaseURLfromEnv := os.Getenv("KEEP_ALIVE_BASE_URL")
+	if len(keepAliveBaseURLfromEnv) > 0 {
+		keepAliveBaseURL = keepAliveBaseURLfromEnv
+	}
+}
 
 func KeepAlive(t time.Duration) {
 	for {
@@ -16,7 +25,7 @@ func KeepAlive(t time.Duration) {
 }
 
 func makeRequest() {
-	res, err := http.Get(healthcheckURL)
+	res, err := http.Get(fmt.Sprintf("%s/health", keepAliveBaseURL))
 	if err != nil {
 		log.Println(err)
 	} else {
