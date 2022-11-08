@@ -56,7 +56,7 @@ type microsoft365EmailService struct {
 }
 
 func (m *microsoft365EmailService) Send(ctx context.Context, email *Email) (interface{}, error) {
-	emailBody := `<div style="color:#454545;margin:0;padding:0;"><h1>Hi <b>%s</b>, thanks for writing to me!</h1>I have received your message<p style="background:#efefef;color:#000;font-size:1rem;"><tt>%s</tt></p>at %s.<br><br>I will get back to you soon!<br><br><div>Regards,<br><b>Gaurav Saini<br>+91-99994-97257<br>https://gaurav.dev</b></div></div>`
+	emailBody := `<div style="color:#454545;margin:0;padding:0;"><h1>Hi <b>%s</b>, thanks for writing to me!</h1>I have received your message<p style="background:#efefef;color:#000;font-size:1rem;"><tt>%s</tt></p>at %s.<br><br>I will get back to you soon!<br><br><div>Regards,<br><b>Gaurav Saini<br>(778) 858-3884<br>https://gaurav.dev</b></div></div>`
 	emailBody = fmt.Sprintf(emailBody, email.SenderName, email.Body, email.DateTime)
 
 	var message msGraphModels.Messageable = msGraphModels.NewMessage()

@@ -20,11 +20,11 @@
         <div class="main__intro-information">
           <span>
             <i class="fa fa-mobile"></i>
-            <span>+91-99994-97257</span>
+            <span>(778) 858-3884</span>
           </span>
           <span>
             <i class="fa fa-location-arrow"></i>
-            <span>Bangalore</span>
+            <span>Vancouver, BC, Canada</span>
           </span>
         </div>
       </div>

@@ -57,7 +57,7 @@ export default {
         ? emailPattern.test(this.getPost.author_contact)
           ? `mailto:${this.getPost.author_contact}`
           : this.getPost.author_contact
-        : "mailto:hello@gauravsaini.dev";
+        : "mailto:hello@gaurav.dev";
     },
     getPostExcerpt() {
       return this.getPost.subtitle.substr(3, 20) + "...";
