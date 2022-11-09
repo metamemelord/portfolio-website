@@ -19,8 +19,10 @@
         <p>I learn things by doing.</p>
         <div class="main__intro-information">
           <span>
-            <i class="fa fa-mobile"></i>
-            <span>(778) 858-3884</span>
+            <a href="tel:+17788583884" style="color:inherit;text-decoration:none;">
+              <i class="fa fa-mobile"></i>
+              <span>(778) 858-3884</span>
+            </a>
           </span>
           <span>
             <i class="fa fa-location-arrow"></i>
