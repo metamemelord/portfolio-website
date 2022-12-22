@@ -9,7 +9,7 @@ import (
 	azidentity "github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	a "github.com/microsoft/kiota-authentication-azure-go"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
-	"github.com/microsoftgraph/msgraph-sdk-go/me/sendmail"
+	"github.com/microsoftgraph/msgraph-sdk-go/me"
 	msGraphModels "github.com/microsoftgraph/msgraph-sdk-go/models"
 )
 
@@ -78,11 +78,11 @@ func (m *microsoft365EmailService) Send(ctx context.Context, email *Email) (inte
 	message.SetBccRecipients([]msGraphModels.Recipientable{selfRecipient})
 
 	saveToSentItems := false
-	sendEmailRequest := sendmail.NewSendMailPostRequestBody()
+	sendEmailRequest := me.NewSendMailPostRequestBody()
 	sendEmailRequest.SetMessage(message)
 	sendEmailRequest.SetSaveToSentItems(&saveToSentItems)
 	return "", m.mgGraphClient.UsersById(MS_GRAPH_SELF_USER_ID).
-		SendMail().Post(sendEmailRequest)
+		SendMail().Post(ctx, sendEmailRequest, nil)
 }
 
 func prepareRecipientEmailAddress(name, email string) msGraphModels.EmailAddressable {

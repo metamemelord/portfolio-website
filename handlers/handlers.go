@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -116,7 +115,7 @@ func verifyCredentials(c *gin.Context) {
 }
 
 func htmlSupplier(c *gin.Context) {
-	file, _ := ioutil.ReadFile("./dist/index.html")
+	file, _ := os.ReadFile("./dist/index.html")
 	c.Data(200, "text/html", file)
 }
 
