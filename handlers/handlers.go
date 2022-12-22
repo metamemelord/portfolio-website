@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -21,15 +20,32 @@ var (
 	blogPostCollection     *mongo.Collection
 	experiencesCollection  *mongo.Collection
 	technologiesCollection *mongo.Collection
+	staticAssetsBasePath   = "/srv/portfolio/dist"
 	ErrParseRequestBody    = fmt.Errorf("Failed to parse request body")
 	ErrInternalServer      = fmt.Errorf("Internal server error")
 	ErrPostNotFoundWithID  = fmt.Errorf("Could not find a post with that _id")
+
+	htmlBody = []byte{}
+	err      error
+
+	indexHtmlBasePath = staticAssetsBasePath + "/index.html"
+	jsBasePath        = staticAssetsBasePath + "/js"
+	cssBasePath       = staticAssetsBasePath + "/css"
+	imgBasePath       = staticAssetsBasePath + "/img"
+	faviconBasePath   = staticAssetsBasePath + "/favicon.ico"
+	robotsTxtBasePath = staticAssetsBasePath + "/robots.txt"
+	sitemapBasePath   = staticAssetsBasePath + "/sitemap.xml"
 )
 
 func init() {
 	blogPostCollection = db.GetCollection("blog-posts")
 	experiencesCollection = db.GetCollection("experiences")
 	technologiesCollection = db.GetCollection("technologies")
+
+	htmlBody, err = os.ReadFile(indexHtmlBasePath)
+	if err != nil {
+		log.Println("[ERROR]: Failed to load HTML (" + err.Error() + ")")
+	}
 }
 
 func Register(g *gin.Engine) {
@@ -75,12 +91,12 @@ func Register(g *gin.Engine) {
 
 	public := g.Group("/", cacheSetter(168*time.Hour))
 	{
-		public.Static("/js", "dist/js")
-		public.Static("/css", "dist/css")
-		public.Static("/img", "dist/img")
-		public.StaticFile("/favicon.ico", "dist/favicon.ico")
-		public.StaticFile("/robots.txt", "dist/robots.txt")
-		public.StaticFile("/sitemap.xml", "dist/sitemap.xml")
+		public.Static("/js", jsBasePath)
+		public.Static("/css", cssBasePath)
+		public.Static("/img", imgBasePath)
+		public.StaticFile("/favicon.ico", faviconBasePath)
+		public.StaticFile("/robots.txt", robotsTxtBasePath)
+		public.StaticFile("/sitemap.xml", sitemapBasePath)
 	}
 
 	g.NoRoute(htmlSupplier)
@@ -116,8 +132,7 @@ func verifyCredentials(c *gin.Context) {
 }
 
 func htmlSupplier(c *gin.Context) {
-	file, _ := ioutil.ReadFile("./dist/index.html")
-	c.Data(200, "text/html", file)
+	c.Data(200, "text/html", htmlBody)
 }
 
 func respond(c *gin.Context, status int, payload interface{}, err error) {
