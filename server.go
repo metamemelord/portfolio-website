@@ -91,6 +91,8 @@ func main() {
 
 	g.Use(cors.Default())
 
+	g.Use(handlers.SubdomainRedirectionMiddleware)
+
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
 		PORT = "3000"

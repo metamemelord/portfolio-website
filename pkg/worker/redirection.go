@@ -19,10 +19,22 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var redirectionRouteMutex sync.Mutex
-var redirectionRoutes map[string]model.RedirectionItem
-var redirectionItemsCollection *mongo.Collection
-var redirectionHitCounterChannel = make(chan primitive.ObjectID, 200)
+var (
+	redirectionRouteMutex        sync.Mutex
+	redirectionRoutes            map[string]model.RedirectionItem
+	redirectionItemsCollection   *mongo.Collection
+	redirectionHitCounterChannel = make(chan primitive.ObjectID, 200)
+	subdomainRedirection         = map[string]string{
+		"linkedin":  "https://linkedin.com/in/metamemelord",
+		"git":       "https://github.com/metamemelord",
+		"github":    "https://github.com/metamemelord",
+		"youtube":   "https://youtube.com/@metamemelord",
+		"medium":    "https://metamemelord.medium.com",
+		"tech":      "https://metamemelord.medium.com",
+		"instagram": "https://instagram.com/gaurav.sai.ni.hai",
+		"whatsapp":  "https://api.whatsapp.com/send?phone=919999497257",
+	}
+)
 
 func init() {
 	redirectionItemsCollection = db.GetCollection("redirection-items")
@@ -267,4 +279,16 @@ func incrementHitCount(ctx context.Context, id primitive.ObjectID) {
 		err = fmt.Errorf("Error incrementing the hit count Matched=%d, Modified=%d", result.MatchedCount, result.ModifiedCount)
 	}
 	log.Printf("Updating hit count for id=(%s), error=(%v)", id.String(), err)
+}
+
+func GetSubdomainRedirection(hostname, requestURI string) (statusCode int, url string) {
+	segments := strings.Split(hostname, ".")
+	if redirectionWebsite, ok := subdomainRedirection[segments[0]]; ok {
+		statusCode = http.StatusPermanentRedirect
+		url = fmt.Sprintf("%s/%s", redirectionWebsite, strings.TrimLeft(requestURI, "/"))
+	} else {
+		statusCode = http.StatusTemporaryRedirect
+		url = "https://gaurav.dev/404"
+	}
+	return
 }

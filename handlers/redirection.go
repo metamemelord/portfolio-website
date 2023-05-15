@@ -88,3 +88,21 @@ func deleteRedirection(c *gin.Context) {
 		respond(c, http.StatusServiceUnavailable, nil, err)
 	}
 }
+
+func SubdomainRedirectionMiddleware(c *gin.Context) {
+	hostname := c.Request.Host
+	if isSubdomainRequest(hostname) {
+		code, uri := worker.GetSubdomainRedirection(hostname, c.Request.URL.RequestURI())
+		c.Redirect(code, uri)
+		c.Abort()
+	} else {
+		c.Next()
+	}
+}
+
+func isSubdomainRequest(hostname string) bool {
+	if subdomainPattern.Match([]byte(hostname)) {
+		return !strings.HasPrefix("www.", hostname)
+	}
+	return false
+}
