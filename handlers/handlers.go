@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -21,6 +22,7 @@ var (
 	experiencesCollection  *mongo.Collection
 	technologiesCollection *mongo.Collection
 	staticAssetsBasePath   = "/srv/portfolio/dist"
+	subdomainPattern       = regexp.MustCompile("[a-zA-Z0-9]+\\.gaurav\\.dev")
 	ErrParseRequestBody    = fmt.Errorf("Failed to parse request body")
 	ErrInternalServer      = fmt.Errorf("Internal server error")
 	ErrPostNotFoundWithID  = fmt.Errorf("Could not find a post with that _id")

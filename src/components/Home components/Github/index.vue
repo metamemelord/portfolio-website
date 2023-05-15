@@ -1,7 +1,7 @@
 <template>
   <div id="github" class="github">
     <div class="github__label">
-      <a href="https://github.com/metamemelord" target="blank">
+      <a href="https://github.gaurav.dev" target="blank">
         <img
           src="../../../assets/Octocat.webp"
           alt="Github octocat"
