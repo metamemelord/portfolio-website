@@ -9,7 +9,8 @@ RUN go generate ./...
 RUN go build -v -ldflags="-s -w" -o portfolio
 RUN upx -9 -k portfolio
  
-FROM docker.io/library/node:16-alpine AS ui-builder
+FROM docker.io/library/node:20-alpine AS ui-builder
+ENV NODE_OPTIONS="--openssl-legacy-provider"
 RUN npm install --location=global npm
 WORKDIR /build
 COPY . .
