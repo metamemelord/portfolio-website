@@ -74,7 +74,7 @@ func (m *microsoft365EmailService) Send(ctx context.Context, email *Email) (inte
 	saveToSentItems := false
 	sendMailBody.SetSaveToSentItems(&saveToSentItems)
 
-	return "", m.msGraphClient.UsersById(MS_GRAPH_SELF_USER_ID).SendMail().Post(ctx, sendMailBody, nil)
+	return "", m.msGraphClient.Users().ByUserId(MS_GRAPH_SELF_USER_ID).SendMail().Post(ctx, sendMailBody, nil)
 }
 
 func prepareRecipientEmailAddress(name, email string) models.EmailAddressable {

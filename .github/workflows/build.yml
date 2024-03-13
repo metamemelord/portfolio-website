@@ -20,27 +20,28 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      # Azure SDK takes forever (~10 mins) to build, saving some build time till it's faster
       # - name: Install Go - This is just for failing fast
       #   uses: actions/setup-go@v2
       #   with:
-      #     go-version: 1.18
+      #     go-version: 1.21
       # - name: Install enumer and run go:generate
       #   run: |
       #     go install github.com/dmarkham/enumer@latest
       #     go generate ./...
       # - name: Build the server
       #   run: go build server.go
-      - name: Install Node - This is just for failing fast
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Build the UI
-        run: |
-          npm install --location=global npm
-          npx browserslist@latest --update-db
-          npm install
-          npm run build
+      # - name: Install Node - This is just for failing fast
+      #   uses: actions/setup-node@v3
+      #   env:
+      #     NODE_OPTIONS: "--openssl-legacy-provider"
+      #   with:
+      #     node-version: 20
+      # - name: Build the UI
+      #   run: |
+      #     npm install --location=global npm
+      #     npx browserslist@latest --update-db
+      #     npm install
+      #     npm run build
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
