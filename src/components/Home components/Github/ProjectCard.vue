@@ -5,7 +5,7 @@
     <div class="github__card-technology-label">
       <span>{{cardData.language}}</span>
     </div>
-    <span>{{cardData.updated_at|getLastUpdateTime}}</span>
+    <span>{{cardData.pushed_at|getLastUpdateTime}}</span>
     <a :href="cardData.html_url" target="_blank" rel="noopener noreferrer">
       <button>Checkout</button>
     </a>

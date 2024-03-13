@@ -33,7 +33,6 @@
 
 <script>
 import projectCard from "./ProjectCard";
-import * as moment from "moment";
 export default {
   data() {
     return {
@@ -62,15 +61,7 @@ export default {
   },
   computed: {
     ownedRepos() {
-      let ownedRepos = this.repos.filter(repo => !repo.fork);
-      ownedRepos.sort((repo1, repo2) => {
-        let key1 = moment().diff(repo1.updated_at);
-        let key2 = moment().diff(repo2.updated_at);
-        if (key1 > key2) return 1;
-        if (key1 < key2) return -1;
-        return 0;
-      });
-      return ownedRepos;
+      return this.repos.filter(repo => !repo.fork);
     },
     forkedRepos() {
       return this.repos.filter(repo => repo.fork);

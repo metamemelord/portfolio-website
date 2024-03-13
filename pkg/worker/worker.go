@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sort"
 	"sync"
 
 	"github.com/metamemelord/portfolio-website/model"
@@ -12,7 +13,7 @@ import (
 var githubWPMutex sync.Mutex
 
 type Data struct {
-	GithubData    []interface{}
+	GithubData    []*model.Repository
 	WordpressData []*model.Post
 }
 
@@ -35,12 +36,15 @@ func githubPackageRefresher() {
 		return
 	}
 	defer resp.Body.Close()
-	githubResponse := []interface{}{}
+	githubResponse := []*model.Repository{}
 	err = json.NewDecoder(resp.Body).Decode(&githubResponse)
 	if err != nil {
 		log.Println("Error while unmarshalling Github response", err)
 		return
 	}
+	sort.Slice(githubResponse, func(i, j int) bool {
+		return githubResponse[i].PushedAt > githubResponse[j].PushedAt
+	})
 	githubWPMutex.Lock()
 	data.GithubData = githubResponse
 	githubWPMutex.Unlock()
