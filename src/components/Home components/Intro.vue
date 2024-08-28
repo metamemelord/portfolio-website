@@ -26,7 +26,7 @@
           </span>
           <span>
             <i class="fa fa-location-arrow"></i>
-            <span>Vancouver, BC, Canada</span>
+            <span>Calgary, AB, Canada</span>
           </span>
         </div>
       </div>
