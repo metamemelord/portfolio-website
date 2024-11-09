@@ -75,9 +75,9 @@ jobs:
           # Sometimes you gotta bear the burden of working with rootful containers (:
           script: |
             set +o history
+            sudo podman pull ${{ steps.meta.outputs.tags }}
             sudo service portfolio stop
             sudo podman rm ${{ secrets.CONTAINER_NAME }}
-            sudo podman pull ${{ steps.meta.outputs.tags }}
             sudo podman create -p ${{ secrets.CONTAINER_EXTERNAL_PORT }}:${{ secrets.CONTAINER_INTERNAL_PORT }} \
               -e GIN_MODE="${{ secrets.CONTAINER_GIN_MODE }}" \
               -e KEEP_ALIVE_CRON="${{ secrets.CONTAINER_KEEP_ALIVE_CRON }}" \
