@@ -1,27 +1,12 @@
-# metamemelord.com 
+[![Build and publish](https://github.com/metamemelord/portfolio-website/actions/workflows/build.yml/badge.svg)](https://github.com/metamemelord/portfolio-website/actions/workflows/build.yml)
 
-This repo contains the implementation of my personal website, metamemelord.com
+# Gaurav Saini Portfolio Website 
+Links: ([gaurav.dev](https://gaurav.dev), [metamemelord.dev](https://metamemelord.dev), [metamemelord.com](https://metamemelord.com))
 
- [![Docker build](https://github.com/metamemelord/portfolio-website/actions/workflows/docker-build.yml/badge.svg)](https://github.com/metamemelord/portfolio-website/actions/workflows/docker-build.yml)
-
-## Project setup
-
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-
-```
-npm run build
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Features
+- Live update of repos from Github.
+- Live update of blogs from Wordpress.
+- Has a built-in URL shortner that support adding query params and path forwarding and is backed by an in memory DB and Mongo.
+- Has sub-domain redirection to not rely on DNS provider for additional routes.
+- Has a scheduler to run periodically fetch the data from Github and Wordpress.
+- Send email via Microsoft 365.
