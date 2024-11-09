@@ -75,10 +75,10 @@ jobs:
           # Sometimes you gotta bear the burden of working with rootful containers (:
           script: |
             set +o history
-            sudo podman stop ${{ secrets.CONTAINER_NAME }} && sudo podman rm ${{ secrets.CONTAINER_NAME }}
+            sudo service portfolio stop
+            sudo podman rm ${{ secrets.CONTAINER_NAME }}
             sudo podman pull ${{ steps.meta.outputs.tags }}
-            sudo podman run -d -p ${{ secrets.CONTAINER_EXTERNAL_PORT }}:${{ secrets.CONTAINER_INTERNAL_PORT }} \
-              --network podman \
+            sudo podman create -p ${{ secrets.CONTAINER_EXTERNAL_PORT }}:${{ secrets.CONTAINER_INTERNAL_PORT }} \
               -e GIN_MODE="${{ secrets.CONTAINER_GIN_MODE }}" \
               -e KEEP_ALIVE_CRON="${{ secrets.CONTAINER_KEEP_ALIVE_CRON }}" \
               -e KEEP_ALIVE_BASE_URL="${{ secrets.CONTAINER_KEEP_ALIVE_BASE_URL }}" \
@@ -97,4 +97,5 @@ jobs:
               -v ${{ secrets.CONTAINER_EXTERNAL_TLS_CERTS_DIR }}:${{ secrets.CONTAINER_INTERNAL_TLS_CERTS_DIR }}/:Z \
               --name "${{ secrets.CONTAINER_NAME }}" \
               ${{ steps.meta.outputs.tags }}
+            sudo service portfolio start
             set -o history
