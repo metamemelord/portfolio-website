@@ -8,7 +8,7 @@
         v-infocus="'float-animation saturated-linkedin'"
       >
         <h1>
-          <i class="fa fa-linkedin"></i>
+          <i class="fa-brands fa-linkedin-in"></i>
         </h1>
       </a>
     </div>
