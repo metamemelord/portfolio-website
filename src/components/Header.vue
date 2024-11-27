@@ -73,7 +73,7 @@ export default {
 <style>
 .page-header {
   position: fixed;
-  z-index: 100000;
+  z-index: 1000;
   top: 0;
   min-width: 25rem;
   width: 100%;
