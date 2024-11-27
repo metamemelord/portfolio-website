@@ -4,7 +4,7 @@
       <img class="main__intro-image" src="../../assets/Portrait.webp" alt="Gaurav Saini">
     </div>
     <div class="main__intro-content">
-      <div style="margin:auto">
+      <div class="main__typing" style="margin:0.5rem auto 0 auto">
         <vue-typed-js 
           :typeSpeed="125"
           :backSpeed="25"
@@ -19,14 +19,31 @@
         <p>I learn things by doing.</p>
         <div class="main__intro-information">
           <span>
-            <a href="tel:+17788583884" style="color:inherit;text-decoration:none;">
-              <i class="fa fa-mobile"></i>
+            <a href="tel:+17788583884">
+              <i class="fa fa-phone"></i>
               <span>(778) 858-3884</span>
             </a>
           </span>
           <span>
             <i class="fa fa-location-arrow"></i>
-            <span>Calgary, AB, Canada</span>
+            <span>Calgary, Canada</span>
+          </span>
+        </div>
+        <div class="main__intro-information">
+          <span>
+            <a href="https://instagram.gaurav.dev" target="_blank" class="icon-ig">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+          </span>
+          <span>
+            <a href="https://linkedin.gaurav.dev" target="_blank" class="icon-in">
+              <i class="fa-brands fa-linkedin"></i>
+            </a>
+          </span>
+          <span>
+            <a href="https://api.whatsapp.com/send?phone=919999497257" class="icon-wa" target="_blank">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
           </span>
         </div>
       </div>
@@ -65,21 +82,20 @@
   text-align: center;
   justify-content: space-around;
   padding: 1rem;
-  padding-top: 0;
   flex-grow: 1;
 }
 
-.main__intro-content > div {
-  height: 5.5rem;
+.main__typing {
+  min-height: 6rem;
+}
+
+.main__typing h1 {
+  margin-top: 0;
+  font-size: 3rem !important;
 }
 
 .main__intro-content > div > p {
   margin-top: 0;
-}
-
-.main__intro-content h1 {
-  margin-top: 0;
-  font-size: 3rem !important;
 }
 
 .main__intro-information {
@@ -93,9 +109,30 @@
   vertical-align: middle;
 }
 
+.main__intro-information a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .main__intro-information i {
   color: var(--accent-color);
   font-size: 2rem;
+  transition: 0.3s;
+}
+
+.main__intro-information .icon-ig i:hover,
+.main__intro-information .icon-ig i:focus {
+  color: #833AB4;
+}
+
+.main__intro-information .icon-in i:hover,
+.main__intro-information .icon-in i:focus {
+  color: #0A66C2;
+}
+
+.main__intro-information .icon-wa i:hover,
+.main__intro-information .icon-wa i:focus {
+  color: #28D146;
 }
 
 @media screen and (min-width: 550px) {

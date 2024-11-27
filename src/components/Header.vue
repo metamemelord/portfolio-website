@@ -14,14 +14,14 @@
           </div>
           <div class="main-header__item main-header__blogs">
             <router-link @click.native="contactMeDialogFunc(false)" to="/blogs" :class="{'inactive':contactMeDialog}" active-class="active">
-              <i class="fa fa-pencil-square-o" style="font-size:1.5rem"></i>
+              <i class="fa-solid fa-blog" style="font-size:1.5rem"></i>
               <span class="main-header__item-text">Blogs</span>
             </router-link>
           </div>
         </div>
         <div class="main-header__item main-header__email">
           <span @click="contactMeDialogFunc(true)" :class="{'active':contactMeDialog}">
-            <i class="fa fa-envelope-o" style="font-size:1.5rem"></i>
+            <i class="fa-regular fa-envelope" style="font-size:1.5rem"></i>
             <span class="main-header__item-text">Contact me!</span>
           </span>
         </div>
@@ -34,7 +34,7 @@
 
 export default {
   data() {
-    return { position: 0, currentColor: '#FFF', colorsEnum: ['#FFF', '#87FD05', '#FE02A2', '#FF3503', '#00A0A0', '#FB9214, #07D5E6'] };
+    return { position: 0, currentColor: '#F66', colorsEnum: ['#F66', '#87FD05', '#FE02A2', '#FFF', '#FF3503', '#00A0A0', '#FB9214, #07D5E6'] };
   },
   created() {
     let vm = this;
