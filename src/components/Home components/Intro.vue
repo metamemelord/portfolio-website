@@ -19,9 +19,9 @@
         <p>I learn things by doing.</p>
         <div class="main__intro-information">
           <span>
-            <a href="tel:+17788583884">
+            <a href="tel:+15872228270">
               <i class="fa fa-phone"></i>
-              <span>(778) 858-3884</span>
+              <span>(587) 222-8270</span>
             </a>
           </span>
           <span>
