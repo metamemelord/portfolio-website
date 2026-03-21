@@ -39,7 +39,6 @@
 
 ### 📚 API Documentation
 - **Swagger UI**: Complete interactive API documentation at `/swagger/index.html`
-- **28+ Documented Endpoints**: Full OpenAPI 3.0 specification coverage
 - **Auto-generated Docs**: Documentation automatically generated and embedded in Docker image
 - **CI/CD Integration**: Swagger docs regenerated on every deployment
 
