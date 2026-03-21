@@ -1,0 +1,83 @@
+version: '3.9'
+
+services:
+  # MongoDB - Required for blog posts, experiences, technologies, profile, redirections
+  mongodb:
+    image: mongo:latest
+    container_name: portfolio-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password123}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - portfolio
+
+  # Portfolio API Service
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio-app
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      # REQUIRED - Application will fail without these
+      APP_AUTH: ${APP_AUTH:-admin:password}
+      MONGO_URI: ${MONGO_URI:-mongodb://admin:password123@mongodb:27017/portfolio?authSource=admin}
+      
+      # Microsoft 365 Email Configuration (Required for email functionality)
+      MS_TENANT_ID: ${MS_TENANT_ID:-}
+      MS_CLIENT_ID: ${MS_CLIENT_ID:-}
+      MS_EMAIL_KEY: ${MS_EMAIL_KEY:-}
+      MS_GRAPH_SELF_USER_ID: ${MS_GRAPH_SELF_USER_ID:-}
+      SELF_EMAIL: ${SELF_EMAIL:-noreply@gaurav.dev}
+      
+      # Server Configuration (Optional with defaults)
+      PORT: ${PORT:-3000}
+      GIN_MODE: ${GIN_MODE:-release}
+      ENV: ${ENV:-release}
+      KEEP_ALIVE_CRON: ${KEEP_ALIVE_CRON:-false}
+      KEEP_ALIVE_BASE_URL: ${KEEP_ALIVE_BASE_URL:-http://localhost:3000}
+      
+      # TLS Configuration (Optional)
+      TLS_ENABLED: ${TLS_ENABLED:-false}
+      TLS_CERT_PATH: ${TLS_CERT_PATH:-}
+      TLS_KEY_PATH: ${TLS_KEY_PATH:-}
+    
+    volumes:
+      # Mount TLS certificates if enabled
+      - ${CERT_VOLUME_SOURCE:-.}:${CERT_VOLUME_TARGET:-/etc/portfolio/certs}:ro
+    
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    networks:
+      - portfolio
+
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+
+networks:
+  portfolio:
+    driver: bridge

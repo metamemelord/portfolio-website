@@ -13,11 +13,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/metamemelord/portfolio-website/db"
+	_ "github.com/metamemelord/portfolio-website/docs"
 	"github.com/metamemelord/portfolio-website/pkg/core"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var (
+	profileCollection      *mongo.Collection
+	socialsCollection      *mongo.Collection
 	blogPostCollection     *mongo.Collection
 	experiencesCollection  *mongo.Collection
 	technologiesCollection *mongo.Collection
@@ -43,6 +48,8 @@ func init() {
 	blogPostCollection = db.GetCollection("blog-posts")
 	experiencesCollection = db.GetCollection("experiences")
 	technologiesCollection = db.GetCollection("technologies")
+	socialsCollection = db.GetCollection("socials")
+	profileCollection = db.GetCollection("profile")
 
 	htmlBody, err = os.ReadFile(indexHtmlBasePath)
 	if err != nil {
@@ -51,8 +58,14 @@ func init() {
 }
 
 func Register(g *gin.Engine) {
+	// Swagger UI
+	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
 	api := g.Group("/api")
 	{
+		api.GET("/profile", getProfile)
+		api.GET("/socials", cacheSetter(720*time.Hour), getSocials)
+
 		api.GET("/blogs", cacheSetter(2*time.Hour), returnBlogPosts)
 		api.POST("/blog", verifyCredentials, addBlogPost)
 		api.PUT("/blog", verifyCredentials, updateBlogPost)
@@ -75,6 +88,12 @@ func Register(g *gin.Engine) {
 		api.POST("/admin/data/refresh", verifyCredentials, refreshData)
 	}
 
+	// @Summary Health check
+	// @Description Check if the API is running and healthy
+	// @Accept json
+	// @Produce json
+	// @Success 204
+	// @Router /health [get]
 	g.GET("/health", func(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNoContent)
 	})

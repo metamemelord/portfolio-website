@@ -4,6 +4,7 @@ node_modules
 keys.txt
 
 # local env files
+.env
 .env.local
 .env.*.local
 
@@ -25,3 +26,4 @@ portfolio-website
 model/metadataitemtype_enumer.go
 server
 certs/*
+

@@ -10,33 +10,33 @@ import (
 	"github.com/metamemelord/portfolio-website/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// getExperiences retrieves all work experiences
+// @Summary Get experiences
+// @Description Get all user work experiences sorted by most recent
+// @Accept json
+// @Produce json
+// @Success 200 {array} model.Experience
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /experiences [get]
 func getExperiences(c *gin.Context) {
-	experiences := []*model.Experience{}
-	findOptions := options.Find().SetSort(bson.M{"_id": -1})
-	cursor, err := experiencesCollection.Find(c.Request.Context(), bson.M{}, findOptions)
-	if err != nil {
-		log.Println(err)
-		respond(c, http.StatusInternalServerError, nil, ErrInternalServer)
-		return
-	}
-
-	for cursor.Next(c.Request.Context()) {
-		experience := &model.Experience{}
-		err = cursor.Decode(experience)
-		experiences = append(experiences, experience)
-	}
-
-	if err != nil {
-		respond(c, http.StatusInternalServerError, nil, ErrInternalServer)
-		return
-	}
-
-	respond(c, http.StatusOK, experiences, nil)
+	getResourcesBaseHandler[model.Experience](experiencesCollection, bson.M{"_id": -1})(c)
 }
 
+// addExperience adds a new work experience
+// @Summary Add a new experience
+// @Description Create a new work experience entry (requires authentication)
+// @Accept json
+// @Produce json
+// @Security BasicAuth
+// @Param experience body model.Experience true "Experience data"
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{} "Bad request"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 409 {object} map[string]interface{} "Entry already exists"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /experience [post]
 func addExperience(c *gin.Context) {
 	experience := &model.Experience{}
 
@@ -61,6 +61,18 @@ func addExperience(c *gin.Context) {
 	respond(c, http.StatusCreated, res, nil)
 }
 
+// updateExperience updates an existing work experience
+// @Summary Update an experience
+// @Description Update an existing work experience entry (requires authentication)
+// @Accept json
+// @Produce json
+// @Security BasicAuth
+// @Param experience body model.Experience true "Updated experience data"
+// @Success 200 {object} model.Experience
+// @Failure 400 {object} map[string]interface{} "Bad request"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /experience [put]
 func updateExperience(c *gin.Context) {
 	experience := &model.Experience{}
 
@@ -78,6 +90,18 @@ func updateExperience(c *gin.Context) {
 	respond(c, http.StatusOK, experience, nil)
 }
 
+// deleteExperience deletes a work experience
+// @Summary Delete an experience
+// @Description Delete a work experience entry (requires authentication)
+// @Accept json
+// @Produce json
+// @Security BasicAuth
+// @Param delete body map[string]interface{} true "Experience ID (_id required)"
+// @Success 200
+// @Failure 400 {object} map[string]interface{} "Bad request"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /experience [delete]
 func deleteExperience(c *gin.Context) {
 	expMap := make(map[string]string)
 
