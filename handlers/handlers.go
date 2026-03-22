@@ -59,7 +59,7 @@ func init() {
 
 func Register(g *gin.Engine) {
 	// Swagger UI
-	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	g.GET("/swaggerui/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	api := g.Group("/api")
 	{

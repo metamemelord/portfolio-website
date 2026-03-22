@@ -12,7 +12,8 @@ import (
 
 func getResourcesBaseHandler[T any](collection *mongo.Collection, sortOptions bson.M) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		resources := []*T{}
+		var resources []T
+
 		findOptions := options.Find().SetSort(sortOptions)
 		cursor, err := collection.Find(c.Request.Context(), bson.M{}, findOptions)
 		if err != nil {
@@ -20,14 +21,10 @@ func getResourcesBaseHandler[T any](collection *mongo.Collection, sortOptions bs
 			respond(c, http.StatusInternalServerError, nil, ErrInternalServer)
 			return
 		}
+		defer cursor.Close(c.Request.Context())
 
-		for cursor.Next(c.Request.Context()) {
-			resource := new(T)
-			err = cursor.Decode(resource)
-			resources = append(resources, resource)
-		}
-
-		if err != nil {
+		if err := cursor.All(c.Request.Context(), &resources); err != nil {
+			log.Println("[ERROR] failed to decode records", err)
 			respond(c, http.StatusInternalServerError, nil, ErrInternalServer)
 			return
 		}

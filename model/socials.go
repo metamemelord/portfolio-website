@@ -1,6 +1,6 @@
 package model
 
 type Social struct {
-	IconBase
-	Handle string `json:"handle" bson:"handle"`
+	IconBase `bson:",inline" json:",inline"`
+	Handle   string `json:"handle" bson:"handle"`
 }

@@ -21,7 +21,7 @@ import (
 // @Failure 500 {object} map[string]interface{} "Internal server error"
 // @Router /technologies [get]
 func getTechnologies(c *gin.Context) {
-	getResourcesBaseHandler[model.Technology](technologiesCollection, bson.M{"_id": 1})(c)
+	getResourcesBaseHandler[model.Technology](technologiesCollection, bson.M{"order": 1})(c)
 }
 
 // addTechnology adds a new technology

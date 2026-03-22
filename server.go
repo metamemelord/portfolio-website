@@ -1,12 +1,11 @@
 // @title Gaurav Saini Portfolio API
 // @version 1.0
 // @description Gaurav Saini's portfolio website API server
-// @termsOfService http://gaurav.dev/
-// @contact.url http://gaurav.dev
+// @termsOfService https://gaurav.dev/
+// @contact.url https://gaurav.dev
 // @contact.email hello@gaurav.dev
 // @license.name Apache 2.0
 // @license.url https://www.apache.org/licenses/LICENSE-2.0.html
-// @host gaurav.dev
 // @basePath /api
 // @securityDefinitions.basic BasicAuth
 // @in header
@@ -116,8 +115,7 @@ func main() {
 	log.Println("Portfolio running on port", PORT)
 	go func() {
 		for {
-			worker.RefreshData()
-			worker.CheckAndMarkRedirectionInactive()
+			worker.ExecuteWorkerOps()
 			time.Sleep(2 * time.Hour)
 		}
 	}()

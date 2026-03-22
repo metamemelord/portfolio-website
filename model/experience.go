@@ -10,3 +10,9 @@ type Experience struct {
 	FromDate         string             `bson:"from_date" json:"from_date" binding:"required"`
 	ToDate           string             `bson:"to_date" json:"to_date" binding:"required"`
 }
+
+type Occupation struct {
+	Title   string `json:"title" bson:"title"`
+	Company string `json:"company" bson:"company"`
+	Since   string `json:"since" bson:"since"`
+}

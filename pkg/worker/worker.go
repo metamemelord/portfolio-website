@@ -10,7 +10,8 @@ import (
 	"github.com/metamemelord/portfolio-website/model"
 )
 
-var githubWPMutex sync.Mutex
+var githubWPMutex sync.RWMutex
+var workerQueueRWMutex sync.RWMutex
 
 type Data struct {
 	GithubData    []*model.Repository
@@ -23,10 +24,28 @@ func GetData() *Data {
 	return data
 }
 
-func RefreshData() {
-	log.Println("Refreshing data")
-	go githubPackageRefresher()
-	go wordpressPostRefresher()
+var dataProcessingQueue = []func(){}
+
+func EnqueueWorkerOps(f func()) {
+	log.Println("Enqueuing new operation to run in worker")
+	workerQueueRWMutex.Lock()
+	defer workerQueueRWMutex.Unlock()
+	dataProcessingQueue = append(dataProcessingQueue, f)
+}
+
+func ExecuteWorkerOps() {
+	log.Println("Executing worker operations")
+	workerQueueRWMutex.RLock()
+	defer workerQueueRWMutex.RUnlock()
+	for _, f := range dataProcessingQueue {
+		go f()
+	}
+}
+
+func init() {
+	EnqueueWorkerOps(githubPackageRefresher)
+	EnqueueWorkerOps(wordpressPostRefresher)
+	EnqueueWorkerOps(CheckAndMarkRedirectionInactive)
 }
 
 func githubPackageRefresher() {

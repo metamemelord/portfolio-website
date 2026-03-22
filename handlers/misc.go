@@ -10,60 +10,60 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/metamemelord/portfolio-website/model"
 	"github.com/metamemelord/portfolio-website/pkg/communication"
 	"github.com/metamemelord/portfolio-website/pkg/worker"
 )
 
-type UserProfile struct {
-	ID             string         `json:"id" bson:"id"`
-	Name           string         `json:"name" bson:"name"`
-	Email          string         `json:"email" bson:"email"`
-	Location       string         `json:"location" bson:"location"`
-	PhoneNumber    string         `json:"phone_number" bson:"phone_number"`
-	DynamicContent map[string]any `json:"dynamic_content" bson:"dynamic_content"`
-	Occupation     Occupation     `json:"occupation" bson:"occupation"`
-}
-
-type Occupation struct {
-	Title   string `json:"title" bson:"title"`
-	Company string `json:"company" bson:"company"`
-	Since   int    `json:"since" bson:"since"`
-}
-
 var emailClient communication.EmailClient
-var userProfile *UserProfile
-var loadProfileOnce sync.Once
+var userProfile = &model.UserProfile{}
+var userProfileRWMutex = sync.RWMutex{}
 
 func init() {
 	emailClient = communication.NewMicrosoft365EmailClient()
-	loadProfileOnce.Do(func() {
-		go func() {
-			time.Sleep(time.Second * 5)
-			res := profileCollection.FindOne(context.Background(), bson.M{})
-			if res.Err() != nil {
-				log.Println("Failed to read profile data from mongo")
-				return
-			}
-			err := res.Decode(userProfile)
-			if err != nil {
-				log.Println("Could not load profile data")
-			}
-		}()
-	})
+	worker.EnqueueWorkerOps(RefreshProfileData)
+}
+
+func RefreshProfileData() {
+	time.Sleep(2 * time.Second)
+	userProfileRWMutex.Lock()
+	defer userProfileRWMutex.Unlock()
+	res := profileCollection.FindOne(context.Background(), bson.M{})
+	if res.Err() != nil {
+		log.Println("[ERROR] Failed to read profile data from mongo", res.Err())
+		return
+	}
+	err := res.Decode(userProfile)
+	if err != nil {
+		log.Println("[ERROR] Could not load profile data", err)
+	}
+	opts := options.FindOne().SetSort(bson.D{{Key: "_id", Value: -1}})
+	res = experiencesCollection.FindOne(context.Background(), bson.M{}, opts)
+	var experience = &model.Experience{}
+	if err = res.Decode(experience); err != nil {
+		log.Println("[ERROR] Could not load profile data", err)
+	}
+	userProfile.Occupation = model.Occupation{
+		Title:   experience.Title,
+		Company: experience.Company,
+		Since:   experience.FromDate,
+	}
 }
 
 // getProfile retrieves user profile information
 // @Summary Get user profile
-// @Description Get the user's profile information
+// @Description Get the user's profile information with latest occupation from experience
 // @Accept json
 // @Produce json
-// @Success 200 {object} UserProfile
+// @Success 200 {object} model.UserProfile
 // @Failure 500 {object} map[string]interface{} "Internal server error"
 // @Router /profile [get]
 func getProfile(c *gin.Context) {
-	respond(c, 200, userProfile, nil)
+	userProfileRWMutex.RLock()
+	defer userProfileRWMutex.RUnlock()
+	respond(c, http.StatusOK, userProfile, nil)
 }
 
 // sendEmail sends an email through the contact form
@@ -106,7 +106,7 @@ func sendEmail(c *gin.Context) {
 // @Router /admin/data/refresh [post]
 func refreshData(c *gin.Context) {
 	log.Println("Force refresh called")
-	worker.RefreshData()
+	worker.ExecuteWorkerOps()
 	respond(c, http.StatusAccepted, nil, nil)
 }
 
@@ -168,5 +168,5 @@ func getWordpressPostbyIDHandler(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Internal server error"
 // @Router /socials [get]
 func getSocials(c *gin.Context) {
-	getResourcesBaseHandler[model.Social](socialsCollection, bson.M{"_id": -1})(c)
+	getResourcesBaseHandler[model.Social](socialsCollection, bson.M{"order": 1})(c)
 }

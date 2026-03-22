@@ -1,5 +1,90 @@
 basePath: /api
 definitions:
+  model.BlogPost:
+    properties:
+      _id:
+        type: string
+      author:
+        type: string
+      author_contact:
+        type: string
+      content:
+        type: string
+      date:
+        type: string
+      subtitle:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      visible:
+        type: boolean
+    required:
+    - content
+    - date
+    - title
+    - visible
+    type: object
+  model.Experience:
+    properties:
+      _id:
+        type: string
+      company:
+        type: string
+      from_date:
+        type: string
+      responsibilities:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      to_date:
+        type: string
+    required:
+    - company
+    - from_date
+    - title
+    - to_date
+    type: object
+  model.Occupation:
+    properties:
+      company:
+        type: string
+      since:
+        type: string
+      title:
+        type: string
+    type: object
+  model.RedirectionItem:
+    properties:
+      _id:
+        type: string
+      active:
+        type: boolean
+      created_at:
+        type: string
+      expiry:
+        type: string
+      forward_path:
+        type: boolean
+      hit_count:
+        type: integer
+      metadata:
+        additionalProperties:
+          additionalProperties: true
+          type: object
+        type: object
+      permanent:
+        type: boolean
+      routing_key:
+        type: string
+      target:
+        type: string
+    type: object
   model.Social:
     properties:
       css_class:
@@ -46,20 +131,544 @@ definitions:
       url:
         type: string
     type: object
-host: localhost:3000
+  model.UserProfile:
+    properties:
+      dynamic_content:
+        additionalProperties: {}
+        type: object
+      email:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      occupation:
+        $ref: '#/definitions/model.Occupation'
+      phone_number:
+        type: string
+    type: object
 info:
   contact:
-    email: contact@gaurav.dev
+    email: hello@gaurav.dev
     url: http://gaurav.dev
-  description: API for portfolio website managing blogs, experiences, technologies,
-    and more
+  description: Gaurav Saini's portfolio website API server
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://gaurav.dev/
-  title: Portfolio API
+  title: Gaurav Saini Portfolio API
   version: "1.0"
 paths:
+  /admin/data/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Force a refresh of all portfolio data from external sources
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Refresh portfolio data
+  /blog:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete a blog post by marking it as invisible (requires authentication)
+      parameters:
+      - description: Post ID (_id required)
+        in: body
+        name: delete
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Post not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Delete a blog post
+    post:
+      consumes:
+      - application/json
+      description: Create a new blog post (requires authentication)
+      parameters:
+      - description: Blog post data
+        in: body
+        name: blogPost
+        required: true
+        schema:
+          $ref: '#/definitions/model.BlogPost'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Add a new blog post
+    put:
+      consumes:
+      - application/json
+      description: Update an existing blog post (requires authentication)
+      parameters:
+      - description: Blog post updates (must include _id)
+        in: body
+        name: update
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Post not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Update a blog post
+  /blogs:
+    get:
+      consumes:
+      - application/json
+      description: Get all visible blog posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.BlogPost'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all blog posts
+  /email:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Send an email message through the portfolio contact form
+      parameters:
+      - description: Sender's name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Sender's email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Date and time of submission
+        in: formData
+        name: datetime
+        required: true
+        type: string
+      - description: Email body/message
+        in: formData
+        name: body
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Send email
+  /experience:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a work experience entry (requires authentication)
+      parameters:
+      - description: Experience ID (_id required)
+        in: body
+        name: delete
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Delete an experience
+    post:
+      consumes:
+      - application/json
+      description: Create a new work experience entry (requires authentication)
+      parameters:
+      - description: Experience data
+        in: body
+        name: experience
+        required: true
+        schema:
+          $ref: '#/definitions/model.Experience'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Entry already exists
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Add a new experience
+    put:
+      consumes:
+      - application/json
+      description: Update an existing work experience entry (requires authentication)
+      parameters:
+      - description: Updated experience data
+        in: body
+        name: experience
+        required: true
+        schema:
+          $ref: '#/definitions/model.Experience'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Experience'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Update an experience
+  /experiences:
+    get:
+      consumes:
+      - application/json
+      description: Get all user work experiences sorted by most recent
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Experience'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get experiences
+  /profile:
+    get:
+      consumes:
+      - application/json
+      description: Get the user's profile information with latest occupation from
+        experience
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserProfile'
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get user profile
+  /redirect:
+    get:
+      consumes:
+      - application/json
+      description: Get all redirections or only active ones (requires authentication)
+      parameters:
+      - description: Include inactive redirections (true or 1)
+        in: query
+        name: all
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.RedirectionItem'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Service unavailable
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Get redirections
+    post:
+      consumes:
+      - application/json
+      description: Create a new URL redirection (requires authentication)
+      parameters:
+      - description: Redirection data
+        in: body
+        name: redirection
+        required: true
+        schema:
+          $ref: '#/definitions/model.RedirectionItem'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Route already exists
+          schema:
+            additionalProperties: true
+            type: object
+        "422":
+          description: Unprocessable entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Add a new redirection
+  /redirect/{routing_key}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a redirection by its routing key (requires authentication)
+      parameters:
+      - description: Routing key
+        in: path
+        name: routing_key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Service unavailable
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Delete redirection
+    get:
+      consumes:
+      - application/json
+      description: Get a specific redirection by its routing key (requires authentication)
+      parameters:
+      - description: Routing key
+        in: path
+        name: routing_key
+        required: true
+        type: string
+      - description: Only active redirections (true or 1)
+        in: query
+        name: active
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.RedirectionItem'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Service unavailable
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Get redirection by routing key
+  /repos:
+    get:
+      consumes:
+      - application/json
+      description: Get all GitHub repositories from the user's GitHub profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get GitHub repositories
   /socials:
     get:
       consumes:
@@ -100,6 +709,169 @@ paths:
             additionalProperties: true
             type: object
       summary: Get technologies
+  /technology:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a technology entry (requires authentication)
+      parameters:
+      - description: Technology ID (_id required)
+        in: body
+        name: delete
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Delete a technology
+    post:
+      consumes:
+      - application/json
+      description: Create a new technology entry (requires authentication)
+      parameters:
+      - description: Technology data
+        in: body
+        name: technology
+        required: true
+        schema:
+          $ref: '#/definitions/model.Technology'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Entry already exists
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Add a new technology
+    put:
+      consumes:
+      - application/json
+      description: Update an existing technology entry (requires authentication)
+      parameters:
+      - description: Updated technology data
+        in: body
+        name: technology
+        required: true
+        schema:
+          $ref: '#/definitions/model.Technology'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Technology'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Update a technology
+  /wordpress:
+    get:
+      consumes:
+      - application/json
+      description: Get all WordPress posts from the user's WordPress blog
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get WordPress posts
+  /wordpress/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a specific WordPress post by its ID
+      parameters:
+      - description: WordPress post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Post not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get WordPress post by ID
 securityDefinitions:
   BasicAuth:
     type: basic
